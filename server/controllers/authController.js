@@ -54,7 +54,11 @@ const registerUser = async (req, res) => {
             email,
             website: "",
             bio: "",
-            password: hashedPassword
+            password: hashedPassword,
+            activity: {
+                likes: [],
+                saves: []
+            }
         });
         await user.save();
 
