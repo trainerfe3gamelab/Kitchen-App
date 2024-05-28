@@ -1,24 +1,19 @@
+require("dotenv").config();
 const express = require("express");
-const dotenv = require("dotenv").config();
 const cors = require("cors");
-const { mongoose } = require("mongoose");
 const cookieParser = require("cookie-parser");
+require('./config/dbConfig')
 
 const app = express();
+const port = 3000;
 
 // middleware
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
-// Database Connection
-
-mongoose.connect(process.env.MONGO_URL)
-    .then(() => console.log("Database connected"))
-    .catch((err) => console.log(err));
-
-app.use("/", require("./routes/authRoutes"));
-
-const port = 8000;
+// Routes
+app.use("/api", require("./routes"));
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
