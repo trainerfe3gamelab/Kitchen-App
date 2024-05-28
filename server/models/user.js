@@ -23,14 +23,20 @@ const userSchema = new Schema({
     activity: {
         likes: [
             {
-                recipe_id: Schema.Types.ObjectId,
-                ref: "Recipe"
+                recipe_id: {
+                    type: Schema.Types.ObjectId,
+                    ref: "Recipe",
+                    required: true
+                }
             }
         ],
         saves: [
             {
-                recipe_id: Schema.Types.ObjectId,
-                ref: "Recipe"
+                recipe_id: {
+                    type: Schema.Types.ObjectId,
+                    ref: "Recipe",
+                    required: true
+                }
             }
         ],
     }
