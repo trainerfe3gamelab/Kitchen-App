@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const recipeSchema = new Schema({
+    user_id: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     title: {
         type: String,
         required: true
@@ -9,6 +14,7 @@ const recipeSchema = new Schema({
     image: String,
     description: String,
     total_time: String,
+    likes: Number,
     bahan: [String],
     steps: {
         video: String,

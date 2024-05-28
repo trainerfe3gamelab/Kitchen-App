@@ -19,6 +19,20 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    activity: {
+        likes: [
+            {
+                recipe_id: Schema.Types.ObjectId,
+                ref: "Recipe"
+            }
+        ],
+        saves: [
+            {
+                recipe_id: Schema.Types.ObjectId,
+                ref: "Recipe"
+            }
+        ],
     }
 });
 
