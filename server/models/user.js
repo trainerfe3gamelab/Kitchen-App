@@ -3,15 +3,23 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
     image: String,
-    username: String,
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
     fullName: String,
     email: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     website: String,
     bio: String,
-    password: String
+    password: {
+        type: String,
+        required: true
+    }
 });
 
 const userModel = mongoose.model("User", userSchema);
