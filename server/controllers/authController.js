@@ -11,10 +11,10 @@ const registerUser = async (req, res) => {
 
     try {
 
-        const { name, email, password } = req.body;
+        const { username, fullName, email, password } = req.body;
 
-        // Check if name was entered
-        if (!name) {
+        // Check if fullName was entered
+        if (!fullName) {
             return res.json({
                 error: "Name is required"
             });
@@ -25,6 +25,15 @@ const registerUser = async (req, res) => {
             return res.json({
                 error: "Password is required and should be at least 6 characters long"
             });
+        }
+
+        // Check if username was exists
+        const unameExist = await User.findOne({ username });
+
+        if (unameExist) {
+            return res.json({
+                error: "username already exists"
+            })
         }
 
         // Check if email was exists
@@ -39,8 +48,12 @@ const registerUser = async (req, res) => {
         const hashedPassword = await hashPassword(password);
         // Create new user
         const user = new User({
-            name,
+            image: "",
+            username,
+            fullName,
             email,
+            website: "",
+            bio: "",
             password: hashedPassword
         });
         await user.save();
@@ -48,7 +61,7 @@ const registerUser = async (req, res) => {
         res.json(
             {
                 message: "User created successfully!",
-                name,
+                fullName,
                 email,
                 hashedPassword
             }
@@ -79,7 +92,7 @@ const loginUser = async (req, res) => {
         const match = await comparePassword(password, user.password);
 
         if (match) {
-            jwt.sign({ email: user.email, id: user._id, name: user.name }, process.env.JWT_SECRET, {}, (err, token) => {
+            jwt.sign({ email: user.email, id: user._id, fullName: user.fullName }, process.env.JWT_SECRET, {}, (err, token) => {
                 if (err) throw err;
                 res.cookie("token", token).json(user)
             })
