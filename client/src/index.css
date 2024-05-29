@@ -1,20 +1,5 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -30,43 +15,6 @@ body {
   width: 100%;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
 /* Navbar */
 .navbar {
     position: fixed;
@@ -75,11 +23,16 @@ button:focus-visible {
     width: 100%;
     z-index: 100;
     display: flex;
+    justify-content: center;
+}
+
+.nav-logo {
+  margin: 10px 4em 0 10px;
 }
 
 a {
   font-weight: 500;
-  color: #666ef7;
+  color: #1A1F2B;
   justify-content: space-around;
   align-items: center;
   padding: 1em;
@@ -87,7 +40,7 @@ a {
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #000000;
 }
 
 
@@ -98,24 +51,16 @@ a:hover {
   align-items: center;
   text-align: center;
   justify-content: center;
-  gap: 1em;
-  padding: 2em;
- }
 
- h1 {
-  font-size: 2.4em;
-  font-weight: 600;
-  color: #646cff;
  }
 
  /* pages Register & Login */
- div {
+#Login,
+#Register {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1em;
-  padding: 2em;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -123,35 +68,97 @@ a:hover {
 form {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 25rem;
+  max-width: 600px;
+  padding: 2em;
+}
+.form-log {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20rem;
+  max-width: 600px;
+  padding: 2em;
+
+}
+.Welcome {
+  font-size: 2rem;
+  font-family: initial;
+}
+img {
+  margin: -20px 0 0 0;
+}
+.slogan {
+  margin: 40px 0 0 0;
+  font-size: 16px;
+  color: #1A1F2B;
+ font-family: initial;
+}
+.content0 {
+  margin: -20px 0 0 0;
+}
+.content1 {
   align-items: flex-start;
+  margin: 30px 0 0 0;
   gap: 1em;
-  width: 100%;
-  max-width: 400px;
 }
 
 label {
   font-size: 1.2em;
   font-weight: 600;
-  color: #646cff;
+  color: #1A1F2B;
 }
 
 input {
+  align-items: center;
   padding: 0.5em;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: 1px solid;
+  background-color: #D9D9D9;
   font-size: 1em;
+  color: #1A1F2B;
+  font-weight: inherit;
+  width: 20em;
+}
+
+.forget-pw {
+  font-size: 12px;
 }
 
 button {
   padding: 0.5em 1em;
   border-radius: 4px;
-  border: none;
-  background-color: #7d83ff;
-  color: white;
+  border: 1px solid ;
+  background-color: #D9D9D9;
+  font-family: inter;
+  color: #1A1F2B;
   font-size: 1em;
   cursor: pointer;
+  align-items: center;
+  width: 210px;
 }
 
 button:hover {
-  background-color: #535bf2;
+  background-color: rgb(185, 185, 185);
 }
+
+.Dont-have-account{
+  font-size: 12px;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.btn-reg {
+  margin: 40px 0 0 0;
+}
+.act-reg, .act-log {
+  color: #1A1F2B;
+  font-weight: bold;
+}
+.act-reg:hover, .act-log:hover {
+  color: #000000;
+} 

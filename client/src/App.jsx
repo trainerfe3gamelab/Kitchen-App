@@ -1,11 +1,11 @@
 import './App.css'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import axios from 'axios'
-import { Toaster } from 'react-hot-toast'
+// import { Toaster } from 'react-hot-toast'
 import { UserContextProvider } from '../context/userContext'
 import Dashboard from './pages/Dashboard'
 
@@ -13,11 +13,14 @@ axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true;
 
 function App() {
+  const location = useLocation();
+
+  const shouldShowNavbar = location.pathname !== '/login' && location.pathname !== '/register';
 
   return (
     <UserContextProvider>
-      <Navbar />
-      <Toaster position='top-center' toastOptions={{ duration: 2000 }} />
+      {shouldShowNavbar && <Navbar />}
+      {/* <Toaster position='top-center' toastOptions={{ duration: 2000 }} /> */}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
