@@ -48,8 +48,8 @@ export default function Register() {
         <div id="Register">
             <form onSubmit={registerUser}>
                 <div className="content0">
-                    <p className="Welcome">Welcome to</p>
-                    <img src="../src/assets/LOGO.png" alt="" />
+                    <h1 className="Welcome">Welcome to</h1>
+                    <img className="Logo-log-reg" src="../src/assets/LOGO.png" alt="Logo-reg" />
                     <p className="slogan">Time to cook, let’s Sign Up</p>
                 </div>
                 <div className="content1">

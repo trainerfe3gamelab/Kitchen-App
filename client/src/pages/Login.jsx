@@ -32,8 +32,8 @@ export default function Login() {
         <div id="Login">
             <form className="form-log" onSubmit={loginUser}>
                 <div className="content0">
-                    <p className="Welcome">Welcome to</p>
-                    <img src="../src/assets/LOGO.png" alt="" />
+                    <h1 className="Welcome">Welcome to</h1>
+                    <img className="Logo-log-reg" src="../src/assets/LOGO.png" alt="Logo-log" />
                     <p className="slogan">Time to cook, let’s Sign In</p>
                 </div>
                 <div className="content1">
