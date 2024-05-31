@@ -62,8 +62,7 @@ const registerUser = async (req, res) => {
             {
                 message: "User created successfully!",
                 fullName,
-                email,
-                hashedPassword
+                email
             }
         );
 
@@ -102,7 +101,7 @@ const loginUser = async (req, res) => {
         const match = await comparePassword(data.password, user.password);
 
         if (match) {
-            jwt.sign({ email: user.email, id: user._id, fullName: user.fullName }, process.env.JWT_SECRET, {}, (err, token) => {
+            jwt.sign({ username: user.username, email: user.email, id: user._id, fullName: user.fullName }, process.env.JWT_SECRET, {}, (err, token) => {
                 if (err) throw err;
                 res.cookie("token", token);
                 res.json({
