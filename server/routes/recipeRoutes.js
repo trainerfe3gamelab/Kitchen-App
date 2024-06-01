@@ -12,4 +12,7 @@ router.post("/", authenticate, createRecipe);
 // Edit recipe
 router.put("/:id", authenticate, editRecipe);
 
+// Delete recipe
+router.delete("/:id", authenticate, deleteRecipe);
+
 module.exports = router;
