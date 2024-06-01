@@ -44,17 +44,10 @@ const registerUser = async (req, res) => {
         const hashedPassword = await hashPassword(password);
         // Create new user
         const user = new User({
-            image: "",
             username,
             fullName,
             email,
-            website: "",
-            bio: "",
-            password: hashedPassword,
-            activity: {
-                likes: [],
-                saves: [],
-            }
+            password: hashedPassword
         });
         await user.save();
 
@@ -101,7 +94,7 @@ const loginUser = async (req, res) => {
         const match = await comparePassword(data.password, user.password);
 
         if (match) {
-            jwt.sign({ username: user.username, email: user.email, id: user._id, fullName: user.fullName }, process.env.JWT_SECRET, {}, (err, token) => {
+            jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, {}, (err, token) => {
                 if (err) throw err;
                 res.cookie("token", token);
                 res.json({
