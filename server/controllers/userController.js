@@ -1,5 +1,68 @@
 const User = require("../models/user");
-const { comparePassword } = require("../utils/hashPass");
+const { hashPassword, comparePassword } = require("../utils/hashPass");
+
+// Create new user
+const registerUser = async (req, res) => {
+
+    try {
+        const { username, fullName, email, password } = req.body;
+
+        // Check if fullName was entered
+        if (!fullName) {
+            return res.json({
+                error: "Name is required"
+            });
+        }
+
+        // Check if password is good
+        if (!password || password.length < 6) {
+            return res.json({
+                error: "Password is required and should be at least 6 characters long"
+            });
+        }
+
+        // Check if username was exists
+        const unameExist = await User.findOne({ username });
+
+        if (unameExist) {
+            return res.json({
+                error: "username already exists"
+            })
+        }
+
+        // Check if email was exists
+        const exist = await User.findOne({ email });
+
+        if (exist) {
+            return res.json({
+                error: "Email already exists"
+            })
+        }
+
+        const hashedPassword = await hashPassword(password);
+        // Create new user
+        const user = new User({
+            username,
+            fullName,
+            email,
+            password: hashedPassword
+        });
+        await user.save();
+
+        res.json(
+            {
+                message: "User created successfully!",
+                fullName,
+                email
+            }
+        );
+
+    } catch (error) {
+        res.json({
+            error: `Server error: ${error}`
+        })
+    }
+}
 
 // Get user profile by username
 const getUser = async (req, res) => {
@@ -97,6 +160,7 @@ const deleteUser = async (req, res) => {
 }
 
 module.exports = {
+    registerUser,
     getUser,
     editUser,
     deleteUser
