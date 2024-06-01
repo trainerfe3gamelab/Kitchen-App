@@ -4,6 +4,7 @@ router.get('/', (req, res) => {
     res.send('Welcome to the API');
 });
 router.use('/auth', require('./authRoutes'));
-router.use('/user', require('./userRoutes'));
+router.use('/users', require('./userRoutes'));
+router.use('/recipes', require('./recipeRoutes'));
 
 module.exports = router;
