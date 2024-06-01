@@ -1,4 +1,5 @@
 const Recipe = require("../models/recipe");
+const Like = require("../models/like");
 
 // Get all recipes
 
@@ -155,8 +156,63 @@ const deleteRecipe = async (req, res) => {
 
 }
 
+// Toggle like recipe
+const toggleLikeRecipe = async (req, res) => {
+
+    try {
+        const recipe = await Recipe.findById(req.params.id).select("likes");
+
+        if (!recipe) {
+            return res.status(404).json({
+                error: "Recipe not found"
+            });
+        }
+
+        const userLike = await Like.findOne({ recipe_id: req.params.id, user_id: req.user.id });
+
+        // Check if user has already liked the recipe
+        if (!userLike) {
+
+            // Create new like
+            const like = new Like({
+                recipe_id: req.params.id,
+                user_id: req.user.id
+            });
+
+            await like.save();
+
+            // Update recipe likes count
+            await recipe.updateOne({ likes: recipe.likes + 1 });
+
+            res.json({
+                message: "Recipe liked successfully"
+            });
+
+        } else {
+
+            // Unlike recipe
+            await userLike.deleteOne();
+
+            // Update recipe likes count
+            await recipe.updateOne({ likes: recipe.likes - 1 });
+
+            res.json({
+                message: "Recipe unliked successfully"
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: "Server error"
+        });
+    }
+
+}
+
 module.exports = {
     createRecipe,
     editRecipe,
-    deleteRecipe
+    deleteRecipe,
+    toggleLikeRecipe
 };
