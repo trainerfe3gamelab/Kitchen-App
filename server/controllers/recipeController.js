@@ -1,8 +1,42 @@
 const Recipe = require("../models/recipe");
 const Like = require("../models/like");
 
-// Get recipe by id
+// Get paginated recipes
+const getPaginatedRecipes = async (req, res) => {
+    try {
 
+        // Get page and limit from query params
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Get total recipes count
+        const totalRecipes = await Recipe.countDocuments();
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalRecipes / limit);
+
+        // Get paginated recipes
+        const recipes = await Recipe.find().select("user_id title image total_time likes category")
+            .sort({ createdAt: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        res.json({
+            recipes,
+            totalPages,
+            currentPage: page,
+            limit
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: "Server error"
+        });
+    }
+}
+
+// Get recipe by id
 const getRecipeById = async (req, res) => {
     try {
 
@@ -251,6 +285,7 @@ const toggleLikeRecipe = async (req, res) => {
 }
 
 module.exports = {
+    getPaginatedRecipes,
     getRecipeById,
     createRecipe,
     editRecipe,

@@ -16,6 +16,14 @@ const recipeSchema = new Schema({
         type: String,
         required: true
     },
+    createdAt: {
+        type: Date,
+        default: () => Date.now()
+    },
+    editedAt: {
+        type: Date,
+        default: () => Date.now()
+    },
     total_time: {
         type: String,
         required: true

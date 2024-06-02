@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { getRecipes, getRecipeById, createRecipe, editRecipe, deleteRecipe, toggleLikeRecipe } = require("../controllers/recipeController");
+const { getPaginatedRecipes, getRecipeById, createRecipe, editRecipe, deleteRecipe, toggleLikeRecipe } = require("../controllers/recipeController");
 const { authenticate, authCheck } = require("../middleware/auth");
 
-// // Get recipe by id
+// Get paginated recipes
+router.get("/", getPaginatedRecipes);
+
+// Get recipe by id
 router.get("/:id", authCheck, getRecipeById);
 
 // Create recipe
