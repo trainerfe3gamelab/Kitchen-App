@@ -1,7 +1,47 @@
 const Recipe = require("../models/recipe");
 const Like = require("../models/like");
 
-// Get all recipes
+// Get recipe by id
+
+const getRecipeById = async (req, res) => {
+    try {
+
+        // Find recipe by id
+        const recipe = await Recipe.findById(req.params.id);
+
+        if (!recipe) {
+            return res.status(404).json({
+                error: "Recipe not found"
+            });
+        }
+
+        // Check if user is authenticated
+        if (!req.user || !req.user.id) {
+            return res.json({
+                recipe: {
+                    ...recipe._doc,
+                    isLiked: false
+                }
+            });
+        } else {
+            // Check if user has liked the recipe
+            const userLike = await Like.findOne({ recipe_id: req.params.id, user_id: req.user.id });
+
+            res.json({
+                recipe: {
+                    ...recipe._doc,
+                    isLiked: !!userLike
+                }
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: "Server error"
+        });
+    }
+}
 
 // Create recipe
 const createRecipe = async (req, res) => {
@@ -211,6 +251,7 @@ const toggleLikeRecipe = async (req, res) => {
 }
 
 module.exports = {
+    getRecipeById,
     createRecipe,
     editRecipe,
     deleteRecipe,

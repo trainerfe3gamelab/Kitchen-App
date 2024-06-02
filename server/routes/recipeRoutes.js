@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { getRecipes, getRecipe, createRecipe, editRecipe, deleteRecipe, toggleLikeRecipe } = require("../controllers/recipeController");
-const { authenticate } = require("../middleware/auth");
+const { getRecipes, getRecipeById, createRecipe, editRecipe, deleteRecipe, toggleLikeRecipe } = require("../controllers/recipeController");
+const { authenticate, authCheck } = require("../middleware/auth");
 
 // // Get recipe by id
-// router.get("/:id", getRecipe);
+router.get("/:id", authCheck, getRecipeById);
 
 // Create recipe
 router.post("/", authenticate, createRecipe);

@@ -57,7 +57,45 @@ const authorize = (req, res, next) => {
     }
 }
 
+
+/**
+ * Middleware function to check the authentication status of a user.
+ *
+ * This middleware function checks if a token is provided in the request cookies.
+ * If no token is provided, it sets req.user to null and calls the next middleware function.
+ * If a token is provided, it verifies the token and decodes the payload.
+ * The decoded payload is then attached to the request object as req.user.
+ * If there is an error during the verification of the token, it sets req.user to null and calls the next middleware function.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
+const authCheck = (req, res, next) => {
+    const token = req.cookies.token;
+
+    // Check if token is provided
+    if (!token) {
+
+        req.user = null;
+        next();
+
+    } else {
+
+        try {
+            const decoded = jwt.verify(token, secret);
+            req.user = decoded;
+            next();
+        } catch (error) {
+            req.user = null;
+            next();
+        }
+
+    }
+}
+
 module.exports = {
     authenticate,
-    authorize
+    authorize,
+    authCheck
 };
