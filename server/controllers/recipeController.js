@@ -1,6 +1,9 @@
 const Recipe = require("../models/recipe");
 const Like = require("../models/like");
 const SaveRecipe = require("../models/saveRecipe");
+const Nutrition = require("../models/nutrition");
+const deepl = require('deepl-node');
+const axios = require('axios');
 
 // Get paginated recipes
 const getPaginatedRecipes = async (req, res) => {
@@ -125,7 +128,7 @@ const createRecipe = async (req, res) => {
             category
         } = req.body;
 
-        // Create new recipe
+        // Create new recipe instance
         const recipe = new Recipe({
             user_id: req.user.id,
             title,
@@ -143,7 +146,64 @@ const createRecipe = async (req, res) => {
             category
         });
 
+        // Ensure ingredients is in english
+        const translator = new deepl.Translator(process.env.DEEPL_AUTH_KEY);
+        const translatedIngredients = await translator.translateText(ingredients, "ID", "en-US");
+        const ingr = translatedIngredients.map(ingredient => ingredient.text);
+
+        // Edamam API request body
+        const edamamReqBody = {
+            title: "",
+            ingr,
+            url: "",
+            summary: "",
+            yield: "",
+            time: "",
+            img: "",
+            prep: ""
+        }
+
+        // Send request to get nutrition data
+        const edamamResponse = await axios.post(process.env.EDAMAM_API_URL, edamamReqBody, {
+            headers: {
+                "accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        const data = edamamResponse.data;
+
+        // Create new nutrition instance
+        const nutrition = new Nutrition({
+            recipe_id: recipe._id,
+            total_cal: data.totalNutrients.ENERC_KCAL.quantity,
+            total_fat: {
+                g: data.totalNutrients.FAT.quantity,
+                akg: data.totalDaily.FAT.quantity,
+            },
+            fatsat: {
+                g: data.totalNutrients.FASAT.quantity,
+                akg: data.totalDaily.FASAT.quantity,
+            },
+            protein: {
+                g: data.totalNutrients.PROCNT.quantity,
+                akg: data.totalDaily.PROCNT.quantity,
+            },
+            carb: {
+                g: data.totalNutrients.CHOCDF.quantity,
+                akg: data.totalDaily.CHOCDF.quantity,
+            },
+            sugar: {
+                g: data.totalNutrients.SUGAR.quantity
+            },
+            salt: {
+                g: data.totalNutrients.NA.quantity,
+                akg: data.totalDaily.NA.quantity,
+            }
+        })
+
+        // Save the recipe and nutrition to DB
         await recipe.save();
+        await nutrition.save();
 
         // Send response
         res.json({
