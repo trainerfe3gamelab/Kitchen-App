@@ -12,21 +12,52 @@ const recipeSchema = new Schema({
         required: true
     },
     image: String,
-    description: String,
-    total_time: String,
-    likes: Number,
-    bahan: [String],
-    steps: {
-        video: String,
-        step: [
-            {
-                description: String,
-                image: String
-            }
-        ]
+    description: {
+        type: String,
+        required: true
     },
-    category: [String]
+    created_at: {
+        type: Date,
+        default: () => Date.now()
+    },
+    edited_at: {
+        type: Date,
+        default: () => Date.now()
+    },
+    total_time: {
+        type: String,
+        required: true
+    },
+    likes: {
+        type: Number,
+        default: 0
+    },
+    ingredients: {
+        type: [String],
+        required: true
+    },
+    steps: {
+        video: {
+            type: String,
+            default: ""
+        },
+        step: {
+            type: [
+                {
+                    description: String,
+                    image: String
+                }
+            ],
+            required: true
+        }
+    },
+    category: {
+        type: [String],
+        default: []
+    }
 });
+
+recipeSchema.index({ title: "text" });
 
 const recipeModel = mongoose.model("Recipe", recipeSchema);
 
