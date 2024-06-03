@@ -16,11 +16,11 @@ const recipeSchema = new Schema({
         type: String,
         required: true
     },
-    createdAt: {
+    created_at: {
         type: Date,
         default: () => Date.now()
     },
-    editedAt: {
+    edited_at: {
         type: Date,
         default: () => Date.now()
     },

@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const likeSchema = new Schema({
-    recipe_id: {
-        type: Schema.Types.ObjectId,
-        ref: "Recipe",
-        required: true
-    },
+const saveRecipeSchema = new Schema({
     user_id: {
         type: Schema.Types.ObjectId,
         ref: "User",
+        required: true
+    },
+    recipe_id: {
+        type: Schema.Types.ObjectId,
+        ref: "Recipe",
         required: true
     },
     created_at: {
@@ -18,6 +18,6 @@ const likeSchema = new Schema({
     }
 });
 
-const likeModel = mongoose.model("Like", likeSchema);
+const saveRecipeModel = mongoose.model("SaveRecipe", saveRecipeSchema);
 
-module.exports = likeModel;
+module.exports = saveRecipeModel;

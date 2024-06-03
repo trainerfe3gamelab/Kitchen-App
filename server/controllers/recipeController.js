@@ -1,5 +1,6 @@
 const Recipe = require("../models/recipe");
 const Like = require("../models/like");
+const SaveRecipe = require("../models/saveRecipe");
 
 // Get paginated recipes
 const getPaginatedRecipes = async (req, res) => {
@@ -264,14 +265,18 @@ const deleteRecipe = async (req, res) => {
 const toggleLikeRecipe = async (req, res) => {
 
     try {
+
+        // Find recipe by id
         const recipe = await Recipe.findById(req.params.id).select("likes");
 
+        // Check if recipe exists
         if (!recipe) {
             return res.status(404).json({
                 error: "Recipe not found"
             });
         }
 
+        // Find user like
         const userLike = await Like.findOne({ recipe_id: req.params.id, user_id: req.user.id });
 
         // Check if user has already liked the recipe
@@ -314,11 +319,65 @@ const toggleLikeRecipe = async (req, res) => {
 
 }
 
+// Save/unsave recipe
+const saveRecipe = async (req, res) => {
+
+    try {
+
+        // Find recipe by id
+        const recipe = await Recipe.findById(req.params.id);
+
+        // Check if recipe exists
+        if (!recipe) {
+            return res.status(404).json({
+                error: "Recipe not found"
+            });
+        }
+
+        // Find user save recipe
+        const userSave = await SaveRecipe.findOne({ recipe_id: req.params.id, user_id: req.user.id });
+
+        // Check if user has already saved the recipe
+        if (!userSave) {
+
+            // Create new save recipe
+            const saveRecipe = new SaveRecipe({
+                recipe_id: req.params.id,
+                user_id: req.user.id
+            });
+
+            await saveRecipe.save();
+
+            res.json({
+                message: "Recipe saved successfully"
+            });
+
+        } else {
+
+            // Unsave recipe
+            await userSave.deleteOne();
+
+            res.json({
+                message: "Recipe unsaved successfully"
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: "Server error"
+        });
+    }
+
+}
+
+
 module.exports = {
     getPaginatedRecipes,
     getRecipeById,
     createRecipe,
     editRecipe,
     deleteRecipe,
-    toggleLikeRecipe
+    toggleLikeRecipe,
+    saveRecipe
 };

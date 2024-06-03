@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getPaginatedRecipes, getRecipeById, createRecipe, editRecipe, deleteRecipe, toggleLikeRecipe } = require("../controllers/recipeController");
+const { getPaginatedRecipes, getRecipeById, createRecipe, editRecipe, deleteRecipe, toggleLikeRecipe, saveRecipe } = require("../controllers/recipeController");
 const { authenticate, authCheck } = require("../middleware/auth");
 
 // Get paginated recipes
@@ -20,5 +20,8 @@ router.delete("/:id", authenticate, deleteRecipe);
 
 // Toggle like recipe
 router.post("/:id/like", authenticate, toggleLikeRecipe);
+
+// Save or unsave recipe
+router.post("/:id/save", authenticate, saveRecipe);
 
 module.exports = router;
