@@ -5,9 +5,39 @@ const Like = require("../models/like");
 const getPaginatedRecipes = async (req, res) => {
     try {
 
-        // Get page and limit from query params
+        // Get page, limit, category, sort and search query from request
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
+        const category = req.query.category;
+        const search = req.query.search;
+        const popular = req.query.popular;
+        const ingredients = req.query.ingredients;
+
+        // Create query and sort objects
+        let query = {};
+        let sort = { createdAt: -1 }; // Default sort by createdAt
+
+        // If category is provided, add it to query object
+        if (category) {
+            // const categories = category.split(",").map(cat => cat.trim());
+            // query.category = { $in: categories };
+            query.category = { $in: category.split(",") };
+        }
+
+        // If search query is provided, add it to query object
+        if (search) {
+            query.$text = { $search: search };
+        }
+
+        // If popular is "true", sort by likes in descending order
+        if (popular === "true") {
+            sort = { likes: -1 };
+        }
+
+        // If ingredients query is provided, add it to query object
+        if (ingredients) {
+            query.ingredients = { $all: ingredients.split(",") };
+        }
 
         // Get total recipes count
         const totalRecipes = await Recipe.countDocuments();
@@ -16,8 +46,8 @@ const getPaginatedRecipes = async (req, res) => {
         const totalPages = Math.ceil(totalRecipes / limit);
 
         // Get paginated recipes
-        const recipes = await Recipe.find().select("user_id title image total_time likes category")
-            .sort({ createdAt: -1 })
+        const recipes = await Recipe.find(query).select("user_id title image total_time likes category")
+            .sort(sort)
             .skip((page - 1) * limit)
             .limit(limit);
 
