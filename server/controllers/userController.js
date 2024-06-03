@@ -1,4 +1,7 @@
 const User = require("../models/user");
+const Recipe = require("../models/recipe");
+const SaveRecipe = require("../models/saveRecipe");
+const Like = require("../models/like");
 const { hashPassword, comparePassword } = require("../utils/hashPass");
 
 // Create new user
@@ -75,6 +78,88 @@ const getUser = async (req, res) => {
         }
         res.json(user);
     } catch (error) {
+        res.json({
+            error: "Server error"
+        });
+    }
+}
+
+// Get saved recipes
+const getUserSavedRecipes = async (req, res) => {
+    try {
+
+        // Get page, limit, category, sort and search query from request
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Get total saved recipes count
+        const totalSavedRecipes = await SaveRecipe.countDocuments({ user_id: req.user.id });
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalSavedRecipes / limit);
+
+        // Get paginated saved recipes
+        const savedRecipes = await SaveRecipe.find({ user_id: req.user.id }).select("recipe_id")
+            .sort({ created_at: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        // Get recipe ids
+        const recipeIds = savedRecipes.map(savedRecipe => savedRecipe.recipe_id);
+
+        // Get recipes by ids
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("user_id title image total_time likes category");
+
+        res.json({
+            recipes,
+            totalPages,
+            currentPage: page,
+            limit
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: "Server error"
+        });
+    }
+}
+
+// Get liked recipes
+const getUserLikedRecipes = async (req, res) => {
+    try {
+
+        // Get page, limit, category, sort and search query from request
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Get total liked recipes count
+        const totalLikedRecipes = await Like.countDocuments({ user_id: req.user.id });
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalLikedRecipes / limit);
+
+        // Get paginated liked recipes
+        const likedRecipes = await Like.find({ user_id: req.user.id }).select("recipe_id")
+            .sort({ created_at: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        // Get recipe ids
+        const recipeIds = likedRecipes.map(likedRecipe => likedRecipe.recipe_id);
+
+        // Get recipes by ids
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("user_id title image total_time likes category");
+
+        res.json({
+            recipes,
+            totalPages,
+            currentPage: page,
+            limit
+        });
+
+    } catch (error) {
+        console.log(error);
         res.json({
             error: "Server error"
         });
@@ -160,8 +245,10 @@ const deleteUser = async (req, res) => {
 }
 
 module.exports = {
-    registerUser,
     getUser,
+    getUserSavedRecipes,
+    getUserLikedRecipes,
+    registerUser,
     editUser,
     deleteUser
 };
