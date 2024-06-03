@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Recipe = require("../models/recipe");
 const SaveRecipe = require("../models/saveRecipe");
+const Like = require("../models/like");
 const { hashPassword, comparePassword } = require("../utils/hashPass");
 
 // Create new user
@@ -124,6 +125,47 @@ const getUserSavedRecipes = async (req, res) => {
     }
 }
 
+// Get liked recipes
+const getUserLikedRecipes = async (req, res) => {
+    try {
+
+        // Get page, limit, category, sort and search query from request
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Get total liked recipes count
+        const totalLikedRecipes = await Like.countDocuments({ user_id: req.user.id });
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalLikedRecipes / limit);
+
+        // Get paginated liked recipes
+        const likedRecipes = await Like.find({ user_id: req.user.id }).select("recipe_id")
+            .sort({ created_at: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        // Get recipe ids
+        const recipeIds = likedRecipes.map(likedRecipe => likedRecipe.recipe_id);
+
+        // Get recipes by ids
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("user_id title image total_time likes category");
+
+        res.json({
+            recipes,
+            totalPages,
+            currentPage: page,
+            limit
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: "Server error"
+        });
+    }
+}
+
 // Edit user profile by username
 const editUser = async (req, res) => {
     try {
@@ -205,6 +247,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
     getUser,
     getUserSavedRecipes,
+    getUserLikedRecipes,
     registerUser,
     editUser,
     deleteUser

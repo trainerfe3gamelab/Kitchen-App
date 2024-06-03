@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { getUser, getUserSavedRecipes, registerUser, editUser, deleteUser } = require("../controllers/userController");
+const { getUser, getUserSavedRecipes, getUserLikedRecipes, registerUser, editUser, deleteUser } = require("../controllers/userController");
 const { authenticate, authorize } = require("../middleware/auth");
 
-// Get user saved recipes by user id
-router.get("/:username/savedRecipes", authenticate, authorize, getUserSavedRecipes);
+// Get user saved recipes by username
+router.get("/:username/saved-recipes", authenticate, authorize, getUserSavedRecipes);
+
+// Get user liked recipes by username
+router.get("/:username/liked-recipes", authenticate, authorize, getUserLikedRecipes);
 
 // Get user profile by username
 router.get("/:username", getUser);
