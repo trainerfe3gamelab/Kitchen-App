@@ -22,7 +22,7 @@ function InputWbtn(props) {
 
   return (
     <div
-      className={`${props.className} flex min-w-40 items-center rounded-full outline outline-[1.5px] outline-primary focus-within:outline-[2px]`}
+      className={`${props.className} flex h-10 min-w-40 items-center rounded-full bg-bg outline outline-[1.5px] outline-primary focus-within:outline-[2px] hover:outline-[2px]`}
     >
       <input
         className="h-10 w-full rounded-l-full bg-bg pl-4 pr-1 outline-none"
@@ -31,10 +31,14 @@ function InputWbtn(props) {
         value={input}
         onChange={(e) => handleChange(e)}
         onKeyDown={(e) => e.key === "Enter" && handleClick()}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
       />
       <button
         className="group flex h-10 w-14 items-center justify-center rounded-r-full bg-primary text-bg"
         onClick={handleClick}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
       >
         <Icon
           icon={props.iconify}

@@ -4,15 +4,17 @@ import DefaultButton from "../common/RoundedButton";
 import { Icon } from "@iconify/react";
 import InputWbtn from "../common/InputWbtn";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Hamburger from "hamburger-react";
-import ModalProfile from "../features/ModalProfile";
+import {
+  ModalProfileContext,
+  ModalProfileProvider,
+} from "../features/ModalProfile";
 
 export default function Navbar() {
-  const [toggleProfile, setToggleProfile] = useState(false);
   const [toggleHamburger, setToggleHamburger] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  console.log(toggleHamburger);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [searchFocus, setSearchFocus] = useState(false);
 
   const handleSearch = (input) => {
     if (!input || input === "") {
@@ -21,35 +23,37 @@ export default function Navbar() {
     console.log(input);
   };
 
-  const handleProfileClick = () => {
-    setToggleProfile(!toggleProfile);
-    console.log("Profile: " + toggleProfile);
-  };
-
   const hoverNav = "hover:text-accent-2 transition-all";
 
   return (
-    <header className="flex h-24 w-full items-center justify-center bg-bg shadow">
-      <div className="mx-auto flex w-[380px] items-center justify-between sm:mx-10 sm:w-full lg:max-w-[1080px] lg:justify-center">
+    <header className="relative flex h-24 w-full items-center justify-center bg-bg shadow">
+      <MenuBar toggled={toggleHamburger} toggle={setToggleHamburger} />
+      <div className="mx-10 flex w-full min-w-[360px] items-center lg:mx-auto lg:max-w-[1080px] lg:justify-center">
         {/* Hamburger */}
-        <div className="z-20 lg:hidden">
+        <div className="z-20 mr-2 -translate-x-2 lg:hidden">
           <Hamburger
             toggled={toggleHamburger}
             toggle={setToggleHamburger}
             size={30}
             color="#1A1F2B"
-            direction="right"
+            direction="left"
             distance="sm"
-            duration={0.4}
+            duration={0}
             rounded
           />
         </div>
 
         {/* Logo */}
-        <img src={Logo} alt="Logo" className="w-24 sm:w-[118px]" />
+        <img
+          src={Logo}
+          alt="Logo"
+          className={`mx-auto w-[88px] sm:w-[118px] lg:mx-0 ${searchFocus ? "hidden" : ""}`}
+        />
 
         {/* Navigasi */}
-        <nav className="mx-14 hidden flex-wrap gap-8 font-semibold text-primary lg:flex">
+        <nav
+          className={`mx-14 hidden gap-8 font-semibold text-primary ${searchFocus ? "lg:hidden" : "lg:flex"}`}
+        >
           <NavLink
             className={({ isActive }) =>
               isActive ? `text-accent-1` : hoverNav
@@ -60,7 +64,9 @@ export default function Navbar() {
           </NavLink>
           <NavLink
             className={({ isActive }) =>
-              isActive ? `text-accent-1` : hoverNav
+              isActive
+                ? `w-fit whitespace-nowrap text-accent-1`
+                : hoverNav + "w-fit whitespace-nowrap"
             }
             to="/login"
           >
@@ -88,20 +94,68 @@ export default function Navbar() {
         <InputWbtn
           placeholder="Cari resep.."
           iconify="ri:search-line"
-          className="ml-6 mr-3 hidden w-56 sm:ml-auto lg:flex"
+          className={`ml-6 mr-3 hidden w-56 transition-[width] duration-300 sm:ml-auto lg:flex ${searchFocus ? "w-full" : ""} `}
           onClick={(input) => handleSearch(input)}
+          onFocus={() => setSearchFocus(true)}
+          onBlur={() => setSearchFocus(false)}
         />
 
-        <MenuBar show={toggleHamburger} />
+        <button className="pr-5 lg:hidden">
+          <Icon
+            icon="iconamoon:search-bold"
+            width={24}
+            className="text-primary"
+            onClick={() => setSearchFocus(true)}
+          />
+        </button>
+        {searchFocus && (
+          <div
+            className={`absolute left-0 z-40 flex h-full w-full items-center gap-3 bg-bg px-6 opacity-0 transition-opacity duration-300 sm:px-8 lg:hidden ${searchFocus ? "visible opacity-100" : "invisible"}`}
+          >
+            <button
+              className="rounded-full bg-primary bg-opacity-30 px-3 py-1 font-medium text-bg active:bg-opacity-15"
+              onClick={() => setSearchFocus(false)}
+            >
+              Batal
+            </button>
+            <InputWbtn
+              placeholder="Cari resep.."
+              iconify="ri:search-line"
+              className={"w-full"}
+              onClick={(input) => handleSearch(input)}
+              // onFocus={() => setSearchFocus(true)}
+              // onBlur={() => setSearchFocus(false)}
+            />
+          </div>
+        )}
 
         {/* Profile & Auth Button */}
         {isLoggedIn ? (
-          <Profile
-            toggle={toggleProfile}
-            onClick={() => handleProfileClick()}
-          />
+          <ModalProfileProvider>
+            <Profile />
+          </ModalProfileProvider>
         ) : (
-          <AuthButton />
+          <>
+            <AuthButton />
+            <div className="group">
+              <button className="text-primary lg:hidden">
+                <Icon icon="iconamoon:profile-fill" className="text-[34px]" />
+              </button>
+              <div className="absolute right-4 hidden flex-col gap-4 rounded border bg-bg p-5 shadow-md group-focus-within:flex">
+                <DefaultButton
+                  className="h-10"
+                  name="Masuk"
+                  btnStroke={true}
+                  onClick={() => console.log("Login")}
+                />
+                <DefaultButton
+                  className="h-10"
+                  name="Daftar"
+                  onClick={() => console.log("Daftar")}
+                />
+              </div>
+            </div>
+          </>
         )}
       </div>
     </header>
@@ -110,7 +164,7 @@ export default function Navbar() {
 
 function AuthButton() {
   return (
-    <div className="ml-3 flex flex-wrap gap-2 sm:ml-6">
+    <div className="ml-3 hidden gap-2 sm:ml-6 lg:flex">
       <DefaultButton
         className="h-10"
         name="Masuk"
@@ -126,38 +180,88 @@ function AuthButton() {
   );
 }
 
-function Profile(props) {
+function Profile() {
+  const { toggle, setToggle } = useContext(ModalProfileContext);
+
   return (
-    <>
+    <div className="flex w-fit min-w-fit cursor-pointer items-center gap-1 lg:ml-3">
+      <img
+        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+        alt="Profile"
+        className="aspect-square w-10 rounded-full bg-slate-300 object-cover sm:w-11"
+        onClick={() => setToggle(!toggle)}
+      />
+
       <div
-        className="ml-3 flex cursor-pointer items-center gap-1"
-        onClick={props.onClick}
+        className={"hidden text-lg text-primary hover:text-accent-1 sm:flex"}
+        onClick={() => setToggle(!toggle)}
       >
-        <img
-          src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
-          alt="Profile"
-          className="aspect-square w-11 rounded-full bg-slate-300 object-cover"
-        />
-        <div className={"text-lg text-primary"}>
-          {props.toggle ? (
-            <Icon icon="mingcute:up-fill" />
-          ) : (
-            <Icon icon="mingcute:down-fill" />
-          )}
-        </div>
-        {props.toggle && <ModalProfile />}
+        {toggle ? (
+          <Icon icon="mingcute:up-fill" />
+        ) : (
+          <Icon icon="mingcute:down-fill" />
+        )}
       </div>
-    </>
+    </div>
   );
 }
 
 function MenuBar(props) {
   return (
     <aside
-      className={`absolute right-0 top-0 z-10 h-svh w-full bg-bg transition-all duration-200 sm:px-10 ${props.show ? "bg-opacity-30 backdrop-blur-[2px]" : "invisible bg-opacity-0"} `}
+      className={`fixed left-0 top-0 h-svh w-0 border bg-bg shadow transition-all duration-200 ${props.toggled ? "z-50 w-[70%]" : "invisible"}`}
     >
       <div
-        className={`absolute left-0 mx-auto h-svh border border-primary border-opacity-10 bg-bg shadow-md transition-all duration-500 ${props.show ? "w-1/2" : "invisible w-0"} `}
+        className={`ml-7 mr-5 flex h-24 items-center justify-between lg:hidden ${!props.toggled ? "hidden" : ""}`}
+      >
+        <img src={Logo} alt="Logo" className={`w-[88px]`} />
+        <Hamburger
+          toggled={props.toggled}
+          toggle={(t) => props.toggle(t)}
+          size={30}
+          color="#1A1F2B"
+          direction="right"
+          distance="sm"
+          duration={0.9}
+          rounded
+        />
+      </div>
+      <hr />
+      <nav
+        className={`mx-7 mt-4 flex flex-col gap-6 ${!props.toggled ? "hidden" : ""}`}
+      >
+        <NavLink
+          className="font-medium text-primary hover:text-accent-1"
+          to="/"
+          onClick={() => props.toggle(false)}
+        >
+          Beranda
+        </NavLink>
+        <NavLink
+          className="w-fit whitespace-nowrap font-medium text-primary hover:text-accent-1"
+          to="/login"
+          onClick={() => props.toggle(false)}
+        >
+          Bahan Makanan
+        </NavLink>
+        <NavLink
+          className="font-medium text-primary hover:text-accent-1"
+          to="/register"
+          onClick={() => props.toggle(false)}
+        >
+          Kategori
+        </NavLink>
+        <NavLink
+          className="font-medium text-primary hover:text-accent-1"
+          to="/register"
+          onClick={() => props.toggle(false)}
+        >
+          Populer
+        </NavLink>
+      </nav>
+      <div
+        className={`absolute -right-full top-0 h-svh w-full bg-primary bg-opacity-5 backdrop-blur-[2px] ${!props.toggled ? "hidden" : ""}`}
+        onClick={() => props.toggle(false)}
       ></div>
     </aside>
   );
