@@ -2,43 +2,61 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    image: String,
+    image: {
+        type: String,
+        default: ""
+    },
     username: {
         type: String,
         unique: true,
         required: true
     },
-    fullName: String,
+    fullName: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         unique: true,
         required: true
     },
-    website: String,
-    bio: String,
+    website: {
+        type: String,
+        default: ""
+    },
+    bio: {
+        type: String,
+        default: ""
+    },
     password: {
         type: String,
         required: true
     },
     activity: {
-        likes: [
-            {
-                recipe_id: {
-                    type: Schema.Types.ObjectId,
-                    ref: "Recipe",
-                    required: true
+        likes: {
+            type: [
+                {
+                    recipe_id: {
+                        type: Schema.Types.ObjectId,
+                        ref: "Recipe",
+                        required: true
+                    }
                 }
-            }
-        ],
-        saves: [
-            {
-                recipe_id: {
-                    type: Schema.Types.ObjectId,
-                    ref: "Recipe",
-                    required: true
+            ],
+            default: []
+        },
+        saves: {
+            type: [
+                {
+                    recipe_id: {
+                        type: Schema.Types.ObjectId,
+                        ref: "Recipe",
+                        required: true
+                    }
                 }
-            }
-        ],
+            ],
+            default: []
+        },
     }
 });
 

@@ -1,78 +1,7 @@
 const User = require("../models/user");
-const { hashPassword, comparePassword } = require("../utils/hashPass");
+const { comparePassword } = require("../utils/hashPass");
 const jwt = require("jsonwebtoken");
 const validateRequest = require("../utils/validateRequest");
-
-// Register endpoint
-const registerUser = async (req, res) => {
-
-    try {
-        const { username, fullName, email, password } = req.body;
-
-        // Check if fullName was entered
-        if (!fullName) {
-            return res.json({
-                error: "Name is required"
-            });
-        }
-
-        // Check if password is good
-        if (!password || password.length < 6) {
-            return res.json({
-                error: "Password is required and should be at least 6 characters long"
-            });
-        }
-
-        // Check if username was exists
-        const unameExist = await User.findOne({ username });
-
-        if (unameExist) {
-            return res.json({
-                error: "username already exists"
-            })
-        }
-
-        // Check if email was exists
-        const exist = await User.findOne({ email });
-
-        if (exist) {
-            return res.json({
-                error: "Email already exists"
-            })
-        }
-
-        const hashedPassword = await hashPassword(password);
-        // Create new user
-        const user = new User({
-            image: "",
-            username,
-            fullName,
-            email,
-            website: "",
-            bio: "",
-            password: hashedPassword,
-            activity: {
-                likes: [],
-                saves: [],
-            }
-        });
-        await user.save();
-
-        res.json(
-            {
-                message: "User created successfully!",
-                fullName,
-                email,
-                hashedPassword
-            }
-        );
-
-    } catch (error) {
-        res.json({
-            error: `Server error: ${error}`
-        })
-    }
-}
 
 // Login endpoint
 const loginUser = async (req, res) => {
@@ -102,9 +31,11 @@ const loginUser = async (req, res) => {
         const match = await comparePassword(data.password, user.password);
 
         if (match) {
-            jwt.sign({ email: user.email, id: user._id, fullName: user.fullName }, process.env.JWT_SECRET, {}, (err, token) => {
+            jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, {}, (err, token) => {
                 if (err) throw err;
-                res.cookie("token", token);
+                res.cookie("token", token, {
+                    httpOnly: true
+                });
                 res.json({
                     id: user._id,
                     username: user.username,
@@ -127,7 +58,20 @@ const loginUser = async (req, res) => {
     }
 };
 
+// Logout
+const logoutUser = (req, res) => {
+
+    res.cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(0)
+    });
+
+    res.json({
+        message: "Logged out successfully"
+    });
+}
+
 module.exports = {
-    registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 }
