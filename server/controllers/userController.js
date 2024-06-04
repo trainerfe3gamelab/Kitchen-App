@@ -108,7 +108,7 @@ const getUserSavedRecipes = async (req, res) => {
         const recipeIds = savedRecipes.map(savedRecipe => savedRecipe.recipe_id);
 
         // Get recipes by ids
-        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("user_id title image total_time likes category");
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("_id user_id title image total_time likes category");
 
         res.json({
             recipes,
@@ -149,7 +149,7 @@ const getUserLikedRecipes = async (req, res) => {
         const recipeIds = likedRecipes.map(likedRecipe => likedRecipe.recipe_id);
 
         // Get recipes by ids
-        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("user_id title image total_time likes category");
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("_id user_id title image total_time likes category");
 
         res.json({
             recipes,
