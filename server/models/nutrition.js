@@ -29,7 +29,7 @@ const nutritionSchema = new Schema({
         g: String
     },
     salt: {
-        g: String,
+        mg: String,
         akg: String
     }
 });
