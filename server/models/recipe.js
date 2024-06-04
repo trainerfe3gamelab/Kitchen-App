@@ -58,6 +58,13 @@ const recipeSchema = new Schema({
 });
 
 recipeSchema.index({ title: "text" });
+recipeSchema.virtual('nutrition', 
+{
+    ref: 'Nutrition',
+    localField: '_id',
+    foreignField: 'recipe_id',
+    justOne: true
+})
 
 const recipeModel = mongoose.model("Recipe", recipeSchema);
 

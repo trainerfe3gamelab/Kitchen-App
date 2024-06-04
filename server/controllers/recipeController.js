@@ -76,7 +76,9 @@ const getRecipeById = async (req, res) => {
 
         // Find recipe by id
         const recipe = await Recipe.findById(req.params.id);
+        const nutrition = await Nutrition.find({ recipe_id: req.params.id });
 
+        
         if (!recipe) {
             return res.status(404).json({
                 error: "Recipe not found"
@@ -88,7 +90,8 @@ const getRecipeById = async (req, res) => {
             return res.json({
                 recipe: {
                     ...recipe._doc,
-                    isLiked: false
+                    isLiked: false,
+                    nutrition
                 }
             });
         } else {
@@ -98,8 +101,10 @@ const getRecipeById = async (req, res) => {
             res.json({
                 recipe: {
                     ...recipe._doc,
-                    isLiked: !!userLike
+                    isLiked: !!userLike,
+                    nutrition
                 }
+
             });
         }
 

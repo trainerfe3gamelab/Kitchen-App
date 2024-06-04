@@ -6,5 +6,7 @@ router.get('/', (req, res) => {
 router.use('/auth', require('./authRoutes'));
 router.use('/users', require('./userRoutes'));
 router.use('/recipes', require('./recipeRoutes'));
+router.use('/searchgizi', require('./searchgiziRoutes')); 
+router.use('/untuk_kamu', require('./foryouRoutes'));  
 
 module.exports = router;
