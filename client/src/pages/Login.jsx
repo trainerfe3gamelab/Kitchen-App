@@ -30,7 +30,7 @@ export default function Login() {
   return (
     <div>
       <form onSubmit={loginUser}>
-        <label>Email</label>
+        <label className="text-red-600">Email</label>
         <input
           type="email"
           placeholder="enter email..."
