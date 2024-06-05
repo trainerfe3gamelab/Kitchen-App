@@ -16,8 +16,12 @@
     "json-server": "^1.0.0-beta.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dragscroll": "^2.0.1",
     "react-hot-toast": "^2.4.1",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "resize-observer-polyfill": "^1.5.1",
+    "simplebar": "^6.2.6",
+    "simplebar-react": "^3.2.5"
   },
   "devDependencies": {
     "@iconify/react": "^5.0.1",

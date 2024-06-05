@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "/kitchen-craft-logo.svg";
-import DefaultButton from "../common/RoundedButton";
+import RoundedButton from "../common/RoundedButton";
 import { Icon } from "@iconify/react";
 import InputWbtn from "../common/InputWbtn";
 import toast from "react-hot-toast";
@@ -12,11 +12,10 @@ import {
 } from "../features/ModalProfile";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register";
-import Card from "../Card/Card";
 
 export default function Navbar() {
   const [toggleHamburger, setToggleHamburger] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [searchFocus, setSearchFocus] = useState(false);
 
   const handleSearch = (input) => {
@@ -29,9 +28,9 @@ export default function Navbar() {
   const hoverNav = "hover:text-accent-2 transition-all";
 
   return (
-    <header className="relative flex h-24 w-full items-center justify-center bg-bg shadow">
+    <header className="fixed top-0 z-10 flex h-24 w-full items-center bg-bg shadow lg:justify-center lg:px-0">
       <MenuBar toggled={toggleHamburger} toggle={setToggleHamburger} />
-      <div className="mx-10 flex w-full min-w-[360px] items-center lg:mx-auto lg:max-w-[1080px] lg:justify-center">
+      <div className="flex w-full min-w-[360px] items-center  px-5 lg:mx-auto lg:max-w-[1080px] lg:justify-center lg:px-0">
         {/* Hamburger */}
         <div className="z-20 mr-2 -translate-x-2 lg:hidden">
           <Hamburger
@@ -69,7 +68,7 @@ export default function Navbar() {
             className={({ isActive }) =>
               isActive
                 ? `w-fit whitespace-nowrap text-accent-1`
-                : hoverNav + " w-fit whitespace-nowrap"
+                : hoverNav + "w-fit whitespace-nowrap"
             }
             to="/login"
           >
@@ -143,13 +142,13 @@ export default function Navbar() {
                 <Icon icon="iconamoon:profile-fill" className="text-[34px]" />
               </button>
               <div className="absolute right-4 hidden flex-col gap-4 rounded border bg-bg p-5 shadow-md group-focus-within:flex">
-                <DefaultButton
+                <RoundedButton
                   className="h-10"
                   name="Masuk"
                   btnStroke={true}
                   onClick={() => console.log("Login")}
                 />
-                <DefaultButton
+                <RoundedButton
                   className="h-10"
                   name="Daftar"
                   onClick={() => console.log("Daftar")}
@@ -169,10 +168,7 @@ function AuthButton() {
 
   return (
     <div className="ml-3 hidden gap-2 sm:ml-6 lg:flex">
-      <DefaultButton
-        data-modal-target="default-modal"
-        data-modal-toggle="default-modal"
-        className="block text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 h-10"
+      <RoundedButton
         name="Masuk"
         btnStroke={true}
         onClick={() => setShowModal(true)}
@@ -185,7 +181,7 @@ function AuthButton() {
         </Modal>
       )}
 
-      <DefaultButton
+      <RoundedButton
         className="h-10"
         name="Daftar"
         onClick={() => setShowRegisterModal(true)}
@@ -201,16 +197,12 @@ function AuthButton() {
   );
 }
 
-
 // Desain Modal
 function Modal({ children, onClose }) {
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative w-full max-w-md p-1 mx-2 bg-white rounded-lg shadow-lg">
-        <button
-          className="absolute top-2 right-2 text-black"
-          onClick={onClose}
-        >
+      <div className="relative mx-2 w-full max-w-md rounded-lg bg-white p-1 shadow-lg">
+        <button className="absolute right-2 top-2 text-black" onClick={onClose}>
           <span>x</span>
         </button>
         {children}
