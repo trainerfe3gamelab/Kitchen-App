@@ -4,7 +4,6 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import RoundedButton from "../components/common/RoundedButton";
 import Logo from "/kitchen-craft-logo.svg";
-import Card from "../components/Card/Card";
 
 export default function Login() {
   const navigate = useNavigate();
