@@ -1,6 +1,9 @@
 const Recipe = require("../models/recipe");
 const Like = require("../models/like");
 const SaveRecipe = require("../models/saveRecipe");
+const Nutrition = require("../models/nutrition");
+const deepl = require('deepl-node');
+const axios = require('axios');
 
 // Get paginated recipes
 const getPaginatedRecipes = async (req, res) => {
@@ -47,7 +50,7 @@ const getPaginatedRecipes = async (req, res) => {
         const totalPages = Math.ceil(totalRecipes / limit);
 
         // Get paginated recipes
-        const recipes = await Recipe.find(query).select("user_id title image total_time likes category")
+        const recipes = await Recipe.find(query).select("_id user_id title image total_time likes category")
             .sort(sort)
             .skip((page - 1) * limit)
             .limit(limit);
@@ -73,7 +76,9 @@ const getRecipeById = async (req, res) => {
 
         // Find recipe by id
         const recipe = await Recipe.findById(req.params.id);
+        const nutrition = await Nutrition.find({ recipe_id: req.params.id });
 
+        
         if (!recipe) {
             return res.status(404).json({
                 error: "Recipe not found"
@@ -85,7 +90,8 @@ const getRecipeById = async (req, res) => {
             return res.json({
                 recipe: {
                     ...recipe._doc,
-                    isLiked: false
+                    isLiked: false,
+                    nutrition
                 }
             });
         } else {
@@ -95,8 +101,10 @@ const getRecipeById = async (req, res) => {
             res.json({
                 recipe: {
                     ...recipe._doc,
-                    isLiked: !!userLike
+                    isLiked: !!userLike,
+                    nutrition
                 }
+
             });
         }
 
@@ -125,7 +133,7 @@ const createRecipe = async (req, res) => {
             category
         } = req.body;
 
-        // Create new recipe
+        // Create new recipe instance
         const recipe = new Recipe({
             user_id: req.user.id,
             title,
@@ -143,7 +151,12 @@ const createRecipe = async (req, res) => {
             category
         });
 
+        // Get nutrition instance from ingredients
+        const nutrition = await getNutrition(recipe._id, ingredients);
+
+        // Save the recipe and nutrition to DB
         await recipe.save();
+        await nutrition.save();
 
         // Send response
         res.json({
@@ -176,8 +189,11 @@ const editRecipe = async (req, res) => {
             category
         } = req.body;
 
+        // Get recipe id from request params
+        const recipeId = req.params.id;
+
         // Find recipe by id
-        const recipe = await Recipe.findById(req.params.id);
+        const recipe = await Recipe.findById(recipeId);
 
         // Check if recipe exists
         if (!recipe) {
@@ -191,6 +207,29 @@ const editRecipe = async (req, res) => {
             return res.status(403).json({
                 error: "You are not authorized to edit this recipe"
             });
+        }
+
+        // Check if ingredients is same as before
+        let nutritionPromise;
+        if (ingredients.length > 0) {
+
+            // Get new nutrition data
+            const newNutrition = await getNutrition(recipeId, ingredients);
+
+            // Find nutrition by recipe id
+            const nutrition = await Nutrition.findOne({ recipe_id: recipeId });
+
+            // Update nutrition data
+            nutrition.total_cal = newNutrition.total_cal;
+            nutrition.total_fat = newNutrition.total_fat;
+            nutrition.fatsat = newNutrition.fatsat;
+            nutrition.protein = newNutrition.protein;
+            nutrition.carb = newNutrition.carb;
+            nutrition.sugar = newNutrition.sugar;
+            nutrition.salt = newNutrition.salt;
+
+            // Save updated nutrition data
+            nutritionPromise = nutrition.save();
         }
 
         // Update recipe data
@@ -208,7 +247,11 @@ const editRecipe = async (req, res) => {
         }
         recipe.category = category || recipe.category;
 
-        await recipe.save();
+        // Save updated recipe data
+        const recipePromise = recipe.save();
+
+        // Execute both promises
+        await Promise.all([recipePromise, nutritionPromise]);
 
         // Send response
         res.json({
@@ -371,6 +414,64 @@ const saveRecipe = async (req, res) => {
 
 }
 
+const getNutrition = async (recipeId, ingredients) => {
+    // Ensure ingredients is in english
+    const translator = new deepl.Translator(process.env.DEEPL_AUTH_KEY);
+    const translatedIngredients = await translator.translateText(ingredients, "ID", "en-US");
+    const ingr = translatedIngredients.map(ingredient => ingredient.text);
+
+    // Edamam API request body
+    const edamamReqBody = {
+        title: "",
+        ingr,
+        url: "",
+        summary: "",
+        yield: "",
+        time: "",
+        img: "",
+        prep: ""
+    }
+
+    // Send request to get nutrition data
+    const edamamResponse = await axios.post(process.env.EDAMAM_API_URL, edamamReqBody, {
+        headers: {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    });
+    const data = edamamResponse.data;
+
+    // Create new nutrition instance
+    const nutrition = new Nutrition({
+        recipe_id: recipeId,
+        total_cal: data.totalNutrients.ENERC_KCAL.quantity,
+        total_fat: {
+            g: data.totalNutrients.FAT.quantity,
+            akg: data.totalDaily.FAT.quantity,
+        },
+        fatsat: {
+            g: data.totalNutrients.FASAT.quantity,
+            akg: data.totalDaily.FASAT.quantity,
+        },
+        protein: {
+            g: data.totalNutrients.PROCNT.quantity,
+            akg: data.totalDaily.PROCNT.quantity,
+        },
+        carb: {
+            g: data.totalNutrients.CHOCDF.quantity,
+            akg: data.totalDaily.CHOCDF.quantity,
+        },
+        sugar: {
+            g: data.totalNutrients.SUGAR.quantity
+        },
+        salt: {
+            mg: data.totalNutrients.NA.quantity,
+            akg: data.totalDaily.NA.quantity,
+        }
+    });
+
+    return nutrition;
+}
 
 module.exports = {
     getPaginatedRecipes,
