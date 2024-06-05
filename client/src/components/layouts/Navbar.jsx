@@ -1,19 +1,22 @@
+import React, { useState, useContext } from 'react';
 import { NavLink } from "react-router-dom";
 import Logo from "/kitchen-craft-logo.svg";
 import DefaultButton from "../common/RoundedButton";
 import { Icon } from "@iconify/react";
 import InputWbtn from "../common/InputWbtn";
 import toast from "react-hot-toast";
-import { useState, useContext } from "react";
 import Hamburger from "hamburger-react";
 import {
   ModalProfileContext,
   ModalProfileProvider,
 } from "../features/ModalProfile";
+import Login from "../../pages/Login";
+import Register from "../../pages/Register";
+import Card from "../Card/Card";
 
 export default function Navbar() {
   const [toggleHamburger, setToggleHamburger] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
 
   const handleSearch = (input) => {
@@ -66,7 +69,7 @@ export default function Navbar() {
             className={({ isActive }) =>
               isActive
                 ? `w-fit whitespace-nowrap text-accent-1`
-                : hoverNav + "w-fit whitespace-nowrap"
+                : hoverNav + " w-fit whitespace-nowrap"
             }
             to="/login"
           >
@@ -94,7 +97,7 @@ export default function Navbar() {
         <InputWbtn
           placeholder="Cari resep.."
           iconify="ri:search-line"
-          className={`ml-6 mr-3 hidden w-56 transition-[width] duration-300 sm:ml-auto lg:flex ${searchFocus ? "w-full" : ""} `}
+          className={`ml-6 mr-3 hidden w-56 transition-[width] duration-300 sm:ml-auto lg:flex ${searchFocus ? "w-full" : ""}`}
           onClick={(input) => handleSearch(input)}
           onFocus={() => setSearchFocus(true)}
           onBlur={() => setSearchFocus(false)}
@@ -123,8 +126,6 @@ export default function Navbar() {
               iconify="ri:search-line"
               className={"w-full"}
               onClick={(input) => handleSearch(input)}
-              // onFocus={() => setSearchFocus(true)}
-              // onBlur={() => setSearchFocus(false)}
             />
           </div>
         )}
@@ -163,19 +164,57 @@ export default function Navbar() {
 }
 
 function AuthButton() {
+  const [showModal, setShowModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
   return (
     <div className="ml-3 hidden gap-2 sm:ml-6 lg:flex">
       <DefaultButton
-        className="h-10"
+        data-modal-target="default-modal"
+        data-modal-toggle="default-modal"
+        className="block text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 h-10"
         name="Masuk"
         btnStroke={true}
-        onClick={() => console.log("Login")}
+        onClick={() => setShowModal(true)}
       />
+
+      {/* Modal Login */}
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <Login />
+        </Modal>
+      )}
+
       <DefaultButton
         className="h-10"
         name="Daftar"
-        onClick={() => console.log("Daftar")}
+        onClick={() => setShowRegisterModal(true)}
       />
+
+      {/* Modal Register */}
+      {showRegisterModal && (
+        <Modal onClose={() => setShowRegisterModal(false)}>
+          <Register />
+        </Modal>
+      )}
+    </div>
+  );
+}
+
+
+// Desain Modal
+function Modal({ children, onClose }) {
+  return (
+    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="relative w-full max-w-md p-1 mx-2 bg-white rounded-lg shadow-lg">
+        <button
+          className="absolute top-2 right-2 text-black"
+          onClick={onClose}
+        >
+          <span>x</span>
+        </button>
+        {children}
+      </div>
     </div>
   );
 }
