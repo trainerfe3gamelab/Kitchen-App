@@ -19,6 +19,7 @@ export default {
         Outfit: ['Outfit', 'sans-serif'],
       },
     },
+
   },
   plugins: [],
 }
