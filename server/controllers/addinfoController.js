@@ -2,8 +2,8 @@ const AddInfo = require('../models/addinfo');
 
 const getIngredients = async (req, res) => {
     try {
-        const Ingredients = await AddInfo.find().select('ingredients');
-        res.status(200).json(Ingredients);
+        const Ingredients = await AddInfo.find().select('ingredients -_id');
+        res.status(200).json(Ingredients[0]);
     } catch (error) {
         console.log(error);
         res.json({
@@ -14,8 +14,8 @@ const getIngredients = async (req, res) => {
 
 const getCategory = async (req ,res) => {
     try {
-        const Category = await AddInfo.find().select('category');
-        res.status(200).json(Category);
+        const Category = await AddInfo.find().select('category -_id');
+        res.status(200).json(Category[0]);
     } catch (error) {
         console.log(error);
         res.json({
