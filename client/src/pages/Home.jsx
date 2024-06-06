@@ -13,7 +13,7 @@ export default function Home() {
         <img src={banner} alt="" />
       </section>
 
-      {/* Terpopuler */}
+      {/* SECTION Terpopuler */}
       <h1 className="mt-10 font-bold lg:text-lg">Resep Terpopuler</h1>
       <section className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
         <Card
@@ -54,9 +54,17 @@ export default function Home() {
         />
       </section>
 
-      {/* Kategori */}
+      {/* SECTION Kategori */}
       <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Kategori</h1>
       <CategorySection />
+
+      {/* SECTION Untuk Kamu */}
+      <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Kategori</h1>
+      <ForYouSection />
+
+      {/* SECTION Berdasarkan Bahan */}
+      <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Bahan</h1>
+      <BasedOnIngredients />
     </main>
   );
 }
@@ -85,29 +93,7 @@ function CategorySection() {
     fetchAddInfo();
   }, []);
 
-  if (loading) {
-    return (
-      <section
-        height={"h-fit"}
-        width={"w-full"}
-        className="no-scrollbar mt-2 h-fit w-full overflow-x-scroll"
-        {...events}
-        ref={ref}
-      >
-        <div className="flex w-full gap-3 whitespace-nowrap">
-          <CategoryCard isLoad={true} />
-          <CategoryCard isLoad={true} />
-          <CategoryCard isLoad={true} />
-          <CategoryCard isLoad={true} />
-          <CategoryCard isLoad={true} />
-          <CategoryCard isLoad={true} />
-          <CategoryCard isLoad={true} />
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
+  if (loading || error) {
     return (
       <section
         height={"h-fit"}
@@ -142,6 +128,23 @@ function CategorySection() {
           <CategoryCard key={index} title={item.title} image={item.image} />
         ))}
       </div>
+    </section>
+  );
+}
+
+function ForYouSection() {
+  return (
+    <section>
+      {/* Taruh kodingan section 'untuk kamu' disini */}
+      <div></div>
+    </section>
+  );
+}
+function BasedOnIngredients() {
+  return (
+    <section>
+      {/* Taruh kodingan section 'berdasarkan bahan' disini */}
+      <div></div>
     </section>
   );
 }
