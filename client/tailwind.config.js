@@ -10,6 +10,7 @@ export default {
       colors: {
         primary: "#1A1F2B",
         bg: "#FFFEFB",
+        footer: "#57BA280D",
         accent: {
           1: "#F21B1B",
           2: "#57BA28",
