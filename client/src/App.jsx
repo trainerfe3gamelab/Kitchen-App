@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import { useEffect } from "react";
 import Footer from "./components/layouts/Footer";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_MOCK;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 // axios.defaults.withCredentials = true;
 
 function App() {
