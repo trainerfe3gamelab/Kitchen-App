@@ -5,11 +5,12 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
-import { UserContextProvider } from "../context/userContext";
+import { UserContextProvider } from "./context/userContext";
 import Dashboard from "./pages/Dashboard";
+import { useEffect } from "react";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
-axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_MOCK;
+// axios.defaults.withCredentials = true;
 
 function App() {
   return (

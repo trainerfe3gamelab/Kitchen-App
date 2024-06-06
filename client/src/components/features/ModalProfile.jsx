@@ -14,7 +14,7 @@ function ModalProfileProvider({ children }) {
       {children}
       <div
         id="container"
-        className={`absolute right-0 top-0 z-30 h-svh w-full cursor-default bg-bg bg-opacity-30 opacity-0 backdrop-blur-[2px] transition-all ${toggle ? "opacity-100" : "invisible opacity-0"} `}
+        className={`fixed right-0 top-0 z-50 h-svh w-full cursor-default bg-bg bg-opacity-30 opacity-0 backdrop-blur-[2px] transition-all ${toggle ? "opacity-100" : "invisible opacity-0"} `}
         onClick={() => handleToggle()}
       >
         <div
