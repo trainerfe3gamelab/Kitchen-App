@@ -2,15 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import Card from "../components/common/Card.jsx";
 import CategoryCard from "../components/common/CategoryCard.jsx";
 import banner from "../assets/banner-1.png";
-import DragScroll from "react-dragscroll";
 import { additionalInfo } from "../services/getAdditionalInfo.js";
 import { useDraggable } from "react-use-draggable-scroll";
-import Footer from "../components/Footer.jsx";
-import Accordion from "../components/Accordion.jsx";
 
 export default function Home() {
   return (
-    <main className="mx-auto mt-24 w-full min-w-[360px] max-w-[1080px] px-5 py-1 lg:mx-auto lg:px-0">
+    <main className="mx-auto my-24 w-full min-w-[360px] max-w-[1080px] px-5 py-1 lg:mx-auto lg:px-0">
       {/* Banner */}
       <section className="mx-auto my-6 w-full">
         <img src={banner} alt="" />
