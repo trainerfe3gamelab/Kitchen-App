@@ -13,13 +13,6 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_MOCK;
 // axios.defaults.withCredentials = true;
 
 function App() {
-  let bahan = localStorage.getItem("bahan");
-  let kategori = localStorage.getItem("kategori");
-  useEffect(() => {
-    setAdditionalData(bahan, kategori);
-    console.log("effect");
-  }, [bahan, kategori]);
-
   return (
     <UserContextProvider>
       <Navbar />
@@ -36,16 +29,3 @@ function App() {
 }
 
 export default App;
-
-async function setAdditionalData(bahan, kategori) {
-  if (!bahan && !kategori) {
-    try {
-      const b = await axios.get("/bahan");
-      const k = await axios.get("/kategori");
-      localStorage.setItem("bahan", JSON.stringify(b.data.bahan));
-      localStorage.setItem("kategori", JSON.stringify(k.data.kategori));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-}

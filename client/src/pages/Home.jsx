@@ -1,15 +1,12 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Card from "../components/common/Card.jsx";
 import CategoryCard from "../components/common/CategoryCard.jsx";
 import banner from "../assets/banner-1.png";
 import DragScroll from "react-dragscroll";
+import { additionalInfo } from "../services/getAdditionalInfo.js";
+import { useDraggable } from "react-use-draggable-scroll";
 
 export default function Home() {
-  const additionalInfo = {
-    bahan: JSON.parse(localStorage.getItem("bahan")),
-    kategori: JSON.parse(localStorage.getItem("kategori")),
-  };
-
   return (
     <main className="mx-auto mt-24 w-full min-w-[360px] max-w-[1080px] px-5 py-1 lg:mx-auto lg:px-0">
       {/* Banner */}
@@ -60,17 +57,92 @@ export default function Home() {
 
       {/* Kategori */}
       <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Kategori</h1>
-      <DragScroll
+      <CategorySection />
+    </main>
+  );
+}
+
+function CategorySection() {
+  const ref = useRef();
+  const { events } = useDraggable(ref);
+  const [kategori, setKategori] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAddInfo = async () => {
+      try {
+        setLoading(true);
+        const data = await additionalInfo();
+        setKategori(data.kategori);
+      } catch (error) {
+        console.log(error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAddInfo();
+  }, []);
+
+  if (loading) {
+    return (
+      <section
         height={"h-fit"}
         width={"w-full"}
-        className="no-scrollbar mt-2 h-fit w-full"
+        className="no-scrollbar mt-2 h-fit w-full overflow-x-scroll"
+        {...events}
+        ref={ref}
       >
         <div className="flex w-full gap-3 whitespace-nowrap">
-          {additionalInfo.kategori.map((item, index) => (
-            <CategoryCard key={index} title={item.title} image={item.image} />
-          ))}
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
         </div>
-      </DragScroll>
-    </main>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section
+        height={"h-fit"}
+        width={"w-full"}
+        className="no-scrollbar mt-2 h-fit w-full overflow-x-scroll"
+        {...events}
+        ref={ref}
+      >
+        <div className="flex w-full gap-3 whitespace-nowrap">
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+          <CategoryCard isLoad={true} />
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section
+      height={"h-fit"}
+      width={"w-full"}
+      className="no-scrollbar mt-2 h-fit w-full overflow-x-scroll"
+      {...events}
+      ref={ref}
+    >
+      <div className="flex w-full gap-3 whitespace-nowrap">
+        {kategori.map((item, index) => (
+          <CategoryCard key={index} title={item.title} image={item.image} />
+        ))}
+      </div>
+    </section>
   );
 }
