@@ -3,6 +3,7 @@ import RoundedButton from "../components/common/RoundedButton.jsx";
 import Logo from "/kitchen-craft-logo.svg";
 import Banner from "/BannerM.svg";
 import Card from "../components/Card/Card.jsx"
+import Footer from "../components/Footer.jsx";
 
 export default function Home() {
   return (
@@ -41,7 +42,7 @@ export default function Home() {
         </Card>
       </div>
 
-
+      <Footer/>
     </>
 
 
