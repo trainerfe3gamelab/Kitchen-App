@@ -1,14 +1,19 @@
 import { Routes, Route } from "react-router-dom";
+import axios from "axios";
+import { Toaster } from "react-hot-toast";
+import { UserContextProvider } from "./context/userContext";
+import { useEffect } from "react";
+
+// Pages & Components
+import Dashboard from "./pages/Dashboard";
+import Footer from "./components/layouts/Footer";
 import Navbar from "./components/layouts/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import axios from "axios";
-import { Toaster } from "react-hot-toast";
-import { UserContextProvider } from "./context/userContext";
-import Dashboard from "./pages/Dashboard";
-import { useEffect } from "react";
-import Footer from "./components/layouts/Footer";
+import Search from "./pages/Search";
+import Recipe from "./pages/Recipe";
+import NotFound from "./pages/NotFound";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 // axios.defaults.withCredentials = true;
@@ -23,7 +28,10 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </UserContextProvider>
