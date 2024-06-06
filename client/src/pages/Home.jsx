@@ -4,6 +4,7 @@ import Logo from "/kitchen-craft-logo.svg";
 import Banner from "/BannerM.svg";
 import Card from "../components/Card/Card.jsx"
 import Footer from "../components/Footer.jsx";
+import Accordion from "../components/Accordion.jsx";
 
 export default function Home() {
   return (
@@ -41,6 +42,9 @@ export default function Home() {
           </Card.footer>
         </Card>
       </div>
+
+      <Accordion/>
+
 
       <Footer/>
     </>
