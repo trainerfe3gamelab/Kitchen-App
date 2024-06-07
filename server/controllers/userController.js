@@ -62,8 +62,9 @@ const registerUser = async (req, res) => {
         );
 
     } catch (error) {
-        res.json({
-            error: `Server error: ${error}`
+        console.log(error);
+        res.status(500).json({
+            error: "Internal server error"
         })
     }
 }
@@ -72,15 +73,29 @@ const registerUser = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select("-password");
+        const page = parseInt(req.query.page) || 1;
+        const limit = 16;
+        const skip = (page - 1) * limit; // calculate number of recipes to skip
+
+        const recipe = await Recipe.find({ user_id: user._id })
+            .select("_id user_id title image total_time likes category")
+            .skip(skip)
+            .limit(limit);
         if (!user) {
             return res.json({
                 error: "User not found"
             });
         }
-        res.json(user);
-    } catch (error) {
+
         res.json({
-            error: "Server error"
+            user,
+            recipe
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal server error"
         });
     }
 }
@@ -120,8 +135,8 @@ const getUserSavedRecipes = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.json({
-            error: "Server error"
+        res.status(500).json({
+            error: "Internal server error"
         });
     }
 }
@@ -161,8 +176,8 @@ const getUserLikedRecipes = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.json({
-            error: "Server error"
+        res.status(500).json({
+            error: "Internal server error"
         });
     }
 }
@@ -198,7 +213,7 @@ const editUser = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({
-            error: "Server error",
+            error: "Internal server error",
             message: error.message
         });
     }
@@ -248,8 +263,8 @@ const deleteUser = async (req, res) => {
     } catch (error) {
 
         console.log(error);
-        res.json({
-            error: "Server error"
+        res.status(500).json({
+            error: "Internal server error"
         });
 
     }
