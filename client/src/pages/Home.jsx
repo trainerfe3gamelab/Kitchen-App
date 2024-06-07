@@ -4,6 +4,8 @@ import CategoryCard from "../components/common/CategoryCard.jsx";
 import banner from "../assets/banner-1.png";
 import { additionalInfo } from "../services/getAdditionalInfo.js";
 import { useDraggable } from "react-use-draggable-scroll";
+import axios from "axios";
+import RoundedButton from "../components/common/RoundedButton.jsx";
 
 export default function Home() {
   return (
@@ -15,57 +17,76 @@ export default function Home() {
 
       {/* SECTION Terpopuler */}
       <h1 className="mt-10 font-bold lg:text-lg">Resep Terpopuler</h1>
-      <section className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
-        <Card
-          id="11111"
-          tittle="Martabak m"
-          image="https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/2021/12/14/578376422.jpg"
-          time="45 min"
-          likes="242"
-          creatorName="Harun Buaran"
-          creatorImage="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-        />
-        <Card
-          id="3333"
-          tittle="Martabak Manis Cokelat "
-          image="https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/2021/12/14/578376422.jpg"
-          time="30 min"
-          likes="134"
-          creatorName="Harun Buaran"
-          creatorImage="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-        />
-        <Card
-          id="22222"
-          tittle="Martabak Manis Cokelat Dengan Rasa yangg Lebih Nikmat dan Sangar"
-          image="https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/2021/12/14/578376422.jpg"
-          time="60 min"
-          likes="421"
-          creatorName="Harun Buaran"
-          creatorImage="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-        />
-        <Card
-          id="0000111"
-          tittle="Martabak Keju Cokelat Teflon"
-          image="https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/2021/12/14/578376422.jpg"
-          time="15 min"
-          likes="312"
-          creatorName="Harun Buaran"
-          creatorImage="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-        />
-      </section>
+      <PopularSection />
 
       {/* SECTION Kategori */}
       <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Kategori</h1>
       <CategorySection />
 
       {/* SECTION Untuk Kamu */}
-      <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Kategori</h1>
+      <h1 className="mt-10 font-bold lg:text-lg">Untuk Kamu</h1>
       <ForYouSection />
+      <div className="flex w-full justify-center">
+        <RoundedButton
+          className="mx-auto mt-10"
+          btnStroke
+          name="Lihat resep menarik lainya"
+        />
+      </div>
 
       {/* SECTION Berdasarkan Bahan */}
       <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Bahan</h1>
       <BasedOnIngredients />
     </main>
+  );
+}
+
+function PopularSection() {
+  const [popular, setPopular] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPopular = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get("/recipes?popular=true&limit=4");
+        setPopular(data.recipes);
+      } catch (error) {
+        console.error(error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPopular();
+  }, []);
+  if (loading || error)
+    return (
+      <section className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+        <Card isLoad />
+        <Card isLoad />
+        <Card isLoad />
+        <Card isLoad />
+      </section>
+    );
+
+  return (
+    <section className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+      {popular.map((item, index) => (
+        <Card
+          key={index}
+          id={item._id}
+          tittle={item.title}
+          image={item.image}
+          time={item.total_time}
+          likes={item.likes}
+          // creatorName={item.creator.name}
+          // creatorImage={item.creator.image}
+        />
+      ))}
+    </section>
   );
 }
 
@@ -133,10 +154,56 @@ function CategorySection() {
 }
 
 function ForYouSection() {
+  const [forYou, setForYou] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchPopular = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const { data } = await axios.get("/recipes?popular=true&limit=4");
+  //       setForYou(data.recipes);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setError(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchPopular();
+  // }, []);
+
+  if (error || loading) {
+    return (
+      <section className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+        {/* Taruh kodingan section 'untuk kamu' disini */}
+        <Card isLoad />
+        <Card isLoad />
+        <Card isLoad />
+        <Card isLoad />
+        <Card isLoad />
+        <Card isLoad />
+        <Card isLoad />
+        <Card isLoad />
+      </section>
+    );
+  }
   return (
-    <section>
-      {/* Taruh kodingan section 'untuk kamu' disini */}
-      <div></div>
+    <section className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+      {forYou.map((item, index) => (
+        <Card
+          key={index}
+          id={item._id}
+          tittle={item.title}
+          image={item.image}
+          time={item.total_time}
+          likes={item.likes}
+          // creatorName={item.creator.name}
+          // creatorImage={item.creator.image}
+        />
+      ))}
     </section>
   );
 }
