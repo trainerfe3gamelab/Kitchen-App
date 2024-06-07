@@ -5,7 +5,6 @@ import { UserContextProvider } from "./context/userContext";
 import { useEffect } from "react";
 
 // Pages & Components
-import Dashboard from "./pages/Dashboard";
 import Footer from "./components/layouts/Footer";
 import Navbar from "./components/layouts/Navbar";
 import Home from "./pages/Home";
@@ -30,7 +29,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
         <Route path="/recipe/:id" element={<Recipe />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
