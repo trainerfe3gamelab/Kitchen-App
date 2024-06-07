@@ -3,6 +3,7 @@ const Recipe = require("../models/recipe");
 const SaveRecipe = require("../models/saveRecipe");
 const Like = require("../models/like");
 const { hashPassword, comparePassword } = require("../utils/hashPass");
+const uploadImages = require("../utils/uploadImage");
 
 // Create new user
 const registerUser = async (req, res) => {
@@ -168,11 +169,20 @@ const getUserLikedRecipes = async (req, res) => {
 
 // Edit user profile by username
 const editUser = async (req, res) => {
+    let imageUrl
     try {
+        if (Object.keys(req.body).length === 0) {
+            return res.status(400).json({
+                error: "Please provide data to update"
+            });
+        }
+        if (req.file) {
+            const image = await uploadImages(`images/users/${req.params.username}.jpg`, req.file.buffer);
+            imageUrl = image;
+        }
         const user = await User.findOne({ username: req.params.username }).select("-activity");
-
         // Update user profile
-        user.image = req.body.image || user.image;
+        user.image = pp || user.image;
         user.username = req.body.username || user.username;
         user.fullName = req.body.fullName || user.fullName;
         user.email = req.body.email || user.email;
@@ -187,8 +197,9 @@ const editUser = async (req, res) => {
         });
 
     } catch (error) {
-        res.json({
-            error: "Server error"
+        res.status(500).json({
+            error: "Server error",
+            message: error.message
         });
     }
 }
