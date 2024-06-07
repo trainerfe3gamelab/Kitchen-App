@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Accordion2 from "/Accordion.svg";
 
-
 const Accordion = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -15,9 +14,9 @@ const Accordion = () => {
     };
 
     return (
-        <div className="w-full max-w-xs p-4 bg-gray-100 rounded-lg shadow-md">
+        <div className="relative max-w-xs  bg-gray-100 rounded-lg shadow-md w-48 lg:p-2 lg:w-full">
             {/* Mobile view button */}
-            <div className="lg:hidden flex items-center justify-between p-2 border rounded-lg">
+            <div className="lg:hidden w-full flex items-center justify-between p-2  rounded-full">
                 <button
                     className="flex items-center gap-3"
                     onClick={toggleMobileAccordion}
@@ -26,7 +25,7 @@ const Accordion = () => {
                     <span className="font-semibold">Filter</span>
                 </button>
                 <button
-                    className="flex items-center"
+                    className="flex items-center w-5 -ml-5"
                     onClick={toggleMobileAccordion}
                 >
                     {isMobileOpen ? (
@@ -64,7 +63,7 @@ const Accordion = () => {
             </div>
             {/* Mobile view accordion */}
             {isMobileOpen && (
-                <div className="lg:hidden mt-2">
+                <div className="lg:hidden mt-5 -ml-2 absolute z-10 bg-gray-100 p-4 rounded w-52 shadow-lg">
                     <div className="mb-4">
                         <ul>
                             <li><label><input type="radio" name="category" className="mr-2" />Makanan Ringan</label></li>
@@ -127,13 +126,14 @@ const Accordion = () => {
                                     strokeLinejoin="round"
                                     strokeWidth="2"
                                     d="M5 15l7-7 7 7"
+                                    
                                 ></path>
                             </svg>
                         )}
                     </span>
                 </button>
                 {isOpen && (
-                    <div className="mt-2">
+                    <div className="mt-5 absolute z-10 bg-gray-100 p-4 rounded shadow">
                         <div className="mb-4">
                             <ul>
                                 <li><label><input type="radio" name="category" className="mr-2" />Makanan Ringan</label></li>
