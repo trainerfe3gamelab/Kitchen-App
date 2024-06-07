@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET;
+const Recipe = require("../models/recipe");
 
 /**
  * Middleware function to authenticate user token.
@@ -28,7 +29,7 @@ const authenticate = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
-        res.status(400).json({
+        return res.status(400).json({
             error: "Invalid token"
         });
     }
@@ -51,7 +52,7 @@ const authorize = (req, res, next) => {
     if (req.user.username === req.params.username) {
         next();
     } else {
-        res.status(403).json({
+        return res.status(403).json({
             error: "You are not authorized to perform this action"
         });
     }
@@ -94,8 +95,50 @@ const authCheck = (req, res, next) => {
     }
 }
 
+/**
+ * Middleware function to verify the author of a recipe.
+ * 
+ * This middleware function checks if the user id in the decoded token (req.user.id)
+ * matches the user id of the recipe author.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} - The response object.
+ */
+const verifyRecipeAuthor = async (req, res, next) => {
+    try {
+        const recipe = await Recipe.findById(req.params.id);
+
+        // Check if recipe exists
+        if (!recipe) {
+            return res.status(404).json({
+                error: "Recipe not found"
+            });
+        }
+
+        // Check if user is the author of the recipe
+        if (req.user.id.toString() === recipe.user_id.toString()) {
+            // Attach recipe to request object
+            req.recipe = recipe;
+            next();
+        } else {
+            return res.status(403).json({
+                error: "You are not authorized to perform this action"
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+}
+
 module.exports = {
     authenticate,
     authorize,
-    authCheck
+    authCheck,
+    verifyRecipeAuthor
 };
