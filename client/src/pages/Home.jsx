@@ -42,9 +42,10 @@ export default function Home() {
 }
 
 function PopularSection() {
-  const [popular, setPopular] = useState(null);
+  const [popular, setPopular] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  console.log(popular);
 
   useEffect(() => {
     const fetchPopular = async () => {
@@ -82,8 +83,8 @@ function PopularSection() {
           image={item.image}
           time={item.total_time}
           likes={item.likes}
-          // creatorName={item.creator.name}
-          // creatorImage={item.creator.image}
+          creatorName={item.user_id.fullName}
+          creatorImage={item.user_id.image}
         />
       ))}
     </section>
