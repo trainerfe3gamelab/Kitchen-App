@@ -182,7 +182,7 @@ const editUser = async (req, res) => {
         }
         const user = await User.findOne({ username: req.params.username }).select("-activity");
         // Update user profile
-        user.image = pp || user.image;
+        user.image = imageUrl || user.image;
         user.username = req.body.username || user.username;
         user.fullName = req.body.fullName || user.fullName;
         user.email = req.body.email || user.email;
