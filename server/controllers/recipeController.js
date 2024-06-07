@@ -51,6 +51,7 @@ const getPaginatedRecipes = async (req, res) => {
 
         // Get paginated recipes
         const recipes = await Recipe.find(query).select("_id user_id title image total_time likes category")
+            .populate({ path: "user_id", select: "fullName image" })
             .sort(sort)
             .skip((page - 1) * limit)
             .limit(limit);
