@@ -51,6 +51,7 @@ const getPaginatedRecipes = async (req, res) => {
 
         // Get paginated recipes
         const recipes = await Recipe.find(query).select("_id user_id title image total_time likes category")
+            .populate({ path: "user_id", select: "fullName image" })
             .sort(sort)
             .skip((page - 1) * limit)
             .limit(limit);
@@ -78,7 +79,7 @@ const getRecipeById = async (req, res) => {
         const recipe = await Recipe.findById(req.params.id);
         const nutrition = await Nutrition.find({ recipe_id: req.params.id });
 
-        
+
         if (!recipe) {
             return res.status(404).json({
                 error: "Recipe not found"
@@ -189,25 +190,12 @@ const editRecipe = async (req, res) => {
             category
         } = req.body;
 
+
+        // Get recipe data from request
+        const recipe = req.recipe;
+
         // Get recipe id from request params
-        const recipeId = req.params.id;
-
-        // Find recipe by id
-        const recipe = await Recipe.findById(recipeId);
-
-        // Check if recipe exists
-        if (!recipe) {
-            return res.status(404).json({
-                error: "Recipe not found"
-            });
-        }
-
-        // Check if user is authorized to edit recipe
-        if (recipe.user_id.toString() !== req.user.id) {
-            return res.status(403).json({
-                error: "You are not authorized to edit this recipe"
-            });
-        }
+        const recipeId = recipe._id;
 
         // Check if ingredients is same as before
         let nutritionPromise;
@@ -271,23 +259,8 @@ const deleteRecipe = async (req, res) => {
 
     try {
 
-        // Find recipe by id
-        const recipe = await Recipe.findById(req.params.id);
-
-        // Check if recipe exists
-        if (!recipe) {
-            return res.status(404).json({
-                error: "Recipe not found"
-            });
-        }
-
-        // Check if user is authorized to delete recipe
-        if (recipe.user_id.toString() !== req.user.id) {
-            return res.status(403).json({
-                error: "You are not authorized to delete this recipe"
-            });
-        }
-
+        // Remove recipe from DB
+        const recipe = req.recipe;
         await recipe.deleteOne();
 
         // Send response
