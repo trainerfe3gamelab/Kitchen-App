@@ -1,11 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Card from "../components/common/Card.jsx";
 import CategoryCard from "../components/common/CategoryCard.jsx";
 import banner from "../assets/banner-1.png";
-import { additionalInfo } from "../services/getAdditionalInfo.js";
 import { useDraggable } from "react-use-draggable-scroll";
 import axios from "axios";
 import RoundedButton from "../components/common/RoundedButton.jsx";
+import {
+  AdditionalInfoContext,
+  AdditionalInfoProvider,
+} from "../context/additionalInfoContext.jsx";
 
 export default function Home() {
   return (
@@ -21,7 +24,9 @@ export default function Home() {
 
       {/* SECTION Kategori */}
       <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Kategori</h1>
-      <CategorySection />
+      <AdditionalInfoProvider>
+        <CategorySection />
+      </AdditionalInfoProvider>
 
       {/* SECTION Untuk Kamu */}
       <h1 className="mt-10 font-bold lg:text-lg">Untuk Kamu</h1>
@@ -36,7 +41,13 @@ export default function Home() {
 
       {/* SECTION Berdasarkan Bahan */}
       <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Bahan</h1>
-      <BasedOnIngredients />
+      <AdditionalInfoProvider>
+        <BasedOnIngredients />
+      </AdditionalInfoProvider>
+      <div className="flex w-full justify-center">        <button className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95">
+          Lihat Bahan Lainya
+        </button>
+      </div>
     </main>
   );
 }
@@ -93,28 +104,10 @@ function PopularSection() {
 function CategorySection() {
   const ref = useRef();
   const { events } = useDraggable(ref);
-  const [kategori, setKategori] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { additionalInfo, loading } = useContext(AdditionalInfoContext);
+  const kategori = additionalInfo?.kategori;
 
-  useEffect(() => {
-    const fetchAddInfo = async () => {
-      try {
-        setLoading(true);
-        const data = await additionalInfo();
-        setKategori(data.kategori);
-      } catch (error) {
-        console.log(error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAddInfo();
-  }, []);
-
-  if (loading || error) {
+  if (loading) {
     return (
       <section
         height={"h-fit"}
@@ -208,10 +201,26 @@ function ForYouSection() {
   );
 }
 function BasedOnIngredients() {
+  const { additionalInfo, loading } = useContext(AdditionalInfoContext);
+  const bahan = additionalInfo?.bahan;
+
+  if (loading) {
+    return (
+      <section className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+        <RoundedButton btnStroke />
+        <RoundedButton btnStroke />
+        <RoundedButton btnStroke />
+        <RoundedButton btnStroke />
+      </section>
+    );
+  }
+
   return (
-    <section>
+    <section className="mt-3 flex w-full flex-wrap justify-center gap-2">
       {/* Taruh kodingan section 'berdasarkan bahan' disini */}
-      <div></div>
+      {bahan.slice(0, 28).map((item, index) => (
+        <RoundedButton btnStroke key={index} name={item} />
+      ))}
     </section>
   );
 }
