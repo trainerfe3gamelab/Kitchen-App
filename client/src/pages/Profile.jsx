@@ -55,6 +55,7 @@ const Profile = () => {
                     name="image" 
                     id="image" 
                     onChange={changeHandler}
+                    hidden
                      />
                 <div>
                     <label 
