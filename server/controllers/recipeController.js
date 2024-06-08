@@ -288,6 +288,10 @@ const deleteRecipe = async (req, res) => {
             });
         }
 
+        // Delete nutrition data
+        await Nutrition.deleteMany({ recipe_id: req.params.id });
+
+        // Delete recipe
         await recipe.deleteOne();
 
         // Send response
