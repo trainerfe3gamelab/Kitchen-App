@@ -31,32 +31,6 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    },
-    activity: {
-        likes: {
-            type: [
-                {
-                    recipe_id: {
-                        type: Schema.Types.ObjectId,
-                        ref: "Recipe",
-                        required: true
-                    }
-                }
-            ],
-            default: []
-        },
-        saves: {
-            type: [
-                {
-                    recipe_id: {
-                        type: Schema.Types.ObjectId,
-                        ref: "Recipe",
-                        required: true
-                    }
-                }
-            ],
-            default: []
-        },
     }
 });
 

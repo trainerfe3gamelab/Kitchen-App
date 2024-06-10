@@ -1,10 +1,28 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
+import BlankProfile from "../../assets/blank_profile.webp";
 
 export default function Card(props) {
   const handleClick = () => {
     console.log(`${props.id} clicked`);
   };
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    console.log(`${props.id} edit clicked`);
+  };
+
+  if (props.isLoad) {
+    return (
+      <div className="flex aspect-[9/10] w-full max-w-[255px] animate-pulse flex-col gap-2 overflow-hidden rounded-lg">
+        <div className="h-[75%] w-full rounded-lg bg-gray-300"></div>
+        <div className="h-[6%] w-full rounded-lg bg-gray-300"></div>
+        <div className="flex items-center gap-3">
+          <div className="aspect-square w-[15%] rounded-full bg-gray-300"></div>
+          <div className="h-[35%] w-[50%] rounded-full bg-gray-300"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -25,6 +43,18 @@ export default function Card(props) {
           <p className="text-xs">{props.time}</p>
         </div>
 
+        {/* Edit */}
+        {props.editor === true && (
+          <div>
+            <button
+              className="absolute right-3 top-3 flex aspect-square w-9 items-center justify-center rounded-full bg-bg p-1 text-primary shadow-md transition-none hover:bg-gray-200 lg:w-10"
+              onClick={(e) => handleEditClick(e)}
+            >
+              <Icon className="text-lg" icon="material-symbols:edit-outline" />
+            </button>
+          </div>
+        )}
+
         {/* likes */}
         <div className="absolute bottom-3 right-3 flex w-fit items-center gap-1 rounded-full bg-bg px-2 py-1 text-primary shadow-lg">
           <Icon icon="icon-park-outline:like" />
@@ -38,14 +68,14 @@ export default function Card(props) {
         </h3>
 
         {/* creator */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <img
             className="aspect-square w-8 rounded-full object-cover"
-            src={props.creatorImage}
+            src={props.creatorImage || BlankProfile}
             alt="Creator Image"
           />
           <p className="line-clamp-1 text-accent-1 text-opacity-80 md:font-medium">
-            {props.creatorName}
+            {props.creatorName || "Creator"}
           </p>
         </div>
       </div>

@@ -15,7 +15,7 @@ import Register from "../../pages/Register";
 
 export default function Navbar() {
   const [toggleHamburger, setToggleHamburger] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchFocus, setSearchFocus] = useState(false);
 
   const handleSearch = (input) => {
@@ -28,7 +28,7 @@ export default function Navbar() {
   const hoverNav = "hover:text-accent-2 transition-all";
 
   return (
-    <header className="fixed top-0 z-10 flex h-24 w-full items-center bg-bg shadow lg:justify-center lg:px-0">
+    <header className="fixed top-0 z-20 flex h-24 w-full items-center bg-bg shadow lg:justify-center lg:px-0">
       <MenuBar toggled={toggleHamburger} toggle={setToggleHamburger} />
       <div className="flex w-full min-w-[360px] items-center  px-5 lg:mx-auto lg:max-w-[1080px] lg:justify-center lg:px-0">
         {/* Hamburger */}
