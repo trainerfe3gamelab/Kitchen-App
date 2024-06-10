@@ -6,6 +6,7 @@ import { Icon } from "@iconify/react";
 import InputWbtn from "../common/InputWbtn";
 import toast from "react-hot-toast";
 import Hamburger from "hamburger-react";
+import { UserContext } from "../../context/userContext";
 import {
   ModalProfileContext,
   ModalProfileProvider,
@@ -16,6 +17,7 @@ import Register from "../../pages/Register";
 export default function Navbar() {
   const [toggleHamburger, setToggleHamburger] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLogged } = useContext(UserContext);
   const [searchFocus, setSearchFocus] = useState(false);
 
   const handleSearch = (input) => {
@@ -30,7 +32,7 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 z-20 flex h-24 w-full items-center bg-bg shadow lg:justify-center lg:px-0">
       <MenuBar toggled={toggleHamburger} toggle={setToggleHamburger} />
-      <div className="flex w-full min-w-[360px] items-center  px-5 lg:mx-auto lg:max-w-[1080px] lg:justify-center lg:px-0">
+      <div className="flex w-full min-w-[360px] items-center px-5 lg:mx-auto lg:max-w-[1080px] lg:justify-center lg:px-0">
         {/* Hamburger */}
         <div className="z-20 mr-2 -translate-x-2 lg:hidden">
           <Hamburger
@@ -70,7 +72,7 @@ export default function Navbar() {
                 ? `w-fit whitespace-nowrap text-accent-1`
                 : hoverNav + "w-fit whitespace-nowrap"
             }
-            to="/login"
+            to="/"
           >
             Bahan Makanan
           </NavLink>
@@ -78,7 +80,7 @@ export default function Navbar() {
             className={({ isActive }) =>
               isActive ? `text-accent-1` : hoverNav
             }
-            to="/register"
+            to="/"
           >
             Kategori
           </NavLink>
@@ -86,7 +88,7 @@ export default function Navbar() {
             className={({ isActive }) =>
               isActive ? `text-accent-1` : hoverNav
             }
-            to="/register"
+            to="/"
           >
             Populer
           </NavLink>
@@ -130,7 +132,7 @@ export default function Navbar() {
         )}
 
         {/* Profile & Auth Button */}
-        {isLoggedIn ? (
+        {isLogged ? (
           <ModalProfileProvider>
             <Profile />
           </ModalProfileProvider>

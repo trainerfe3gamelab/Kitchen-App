@@ -5,16 +5,22 @@ export const UserContext = createContext();
 
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isLogged, setIsLogged] = useState(false);
   useEffect(() => {
-    // if (!user) {
-    //     axios.get("/profile").then(({ data }) => {
-    //         setUser(data);
-    //     })
-    // }
-  }, []);
+    axios
+      .get("/auth")
+      .then(({ data }) => {
+        console.log(data);
+        setIsLogged(true);
+        setUser(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [isLogged]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, isLogged, setIsLogged }}>
       {children}
     </UserContext.Provider>
   );

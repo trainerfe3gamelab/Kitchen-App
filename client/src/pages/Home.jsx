@@ -44,7 +44,8 @@ export default function Home() {
       <AdditionalInfoProvider>
         <BasedOnIngredients />
       </AdditionalInfoProvider>
-      <div className="flex w-full justify-center">        <button className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95">
+      <div className="flex w-full justify-center">
+        <button className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95">
           Lihat Bahan Lainya
         </button>
       </div>
@@ -151,22 +152,22 @@ function ForYouSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchPopular = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const { data } = await axios.get("/recipes?popular=true&limit=4");
-  //       setForYou(data.recipes);
-  //     } catch (error) {
-  //       console.error(error);
-  //       setError(error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchForYou = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get("/for-you");
+        setForYou(data.recipes);
+      } catch (error) {
+        console.error(error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   fetchPopular();
-  // }, []);
+    fetchForYou();
+  }, []);
 
   if (error || loading) {
     return (
@@ -193,8 +194,8 @@ function ForYouSection() {
           image={item.image}
           time={item.total_time}
           likes={item.likes}
-          // creatorName={item.creator.name}
-          // creatorImage={item.creator.image}
+          creatorName={item.user.fullName}
+          creatorImage={item.user.image}
         />
       ))}
     </section>
