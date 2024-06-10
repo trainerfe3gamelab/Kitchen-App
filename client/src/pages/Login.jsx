@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import RoundedButton from "../components/common/RoundedButton";
 import Logo from "/kitchen-craft-logo.svg";
+import { UserContext } from "../context/userContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setIsLogged } = useContext(UserContext);
   const [data, setData] = useState({ email: "", password: "" });
 
   const loginUser = async (e) => {
@@ -20,11 +22,13 @@ export default function Login() {
       if (data.error) {
         toast.error(data.error);
       } else {
+        console.log(data);
         setData({}); // Clear input fields
         toast.success("Login successful!");
-        navigate("/dashboard");
+        setIsLogged(true);
       }
     } catch (error) {
+      console.log(error);
       toast.error("Server error!");
     }
   };
@@ -32,7 +36,7 @@ export default function Login() {
   return (
     <div className="">
       <form
-        onSubmit={loginUser}
+        onSubmit={(e) => loginUser(e)}
         className="m-20 flex flex-col items-center justify-center"
       >
         <h2 className="text-center font-serif text-2xl font-semibold text-black">
@@ -75,7 +79,6 @@ export default function Login() {
         </a>
         <RoundedButton
           name="Sign In"
-          onClick={() => console.log("JMBT")}
           className="mt-2 w-60 rounded text-white"
         />
 
