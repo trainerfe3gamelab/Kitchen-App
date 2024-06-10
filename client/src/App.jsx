@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import Search from "./pages/Search";
 import Recipe from "./pages/Recipe";
 import NotFound from "./pages/NotFound";
+import Simpan from "./pages/Simpan";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/Simpan" element={<Simpan />} />
         <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/edit-profile" element={<EditProfile/>}/>
         <Route path="/profile" element={<Profile/>}/>
