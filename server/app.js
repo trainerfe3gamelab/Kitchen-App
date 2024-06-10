@@ -8,7 +8,10 @@ const app = express();
 const port = 3000;
 
 // middleware
-app.use(cors());
+app.use(cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
