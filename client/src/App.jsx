@@ -14,6 +14,8 @@ import Search from "./pages/Search";
 import Recipe from "./pages/Recipe";
 import NotFound from "./pages/NotFound";
 import Simpan from "./pages/Simpan";
+import EditProfile from "./pages/EditProfile";
+import Profile from "./pages/Profile";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 // axios.defaults.withCredentials = true;
@@ -31,6 +33,8 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/Simpan" element={<Simpan />} />
         <Route path="/recipe/:id" element={<Recipe />} />
+        <Route path="/edit-profile" element={<EditProfile/>}/>
+        <Route path="/profile" element={<Profile/>}/>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
