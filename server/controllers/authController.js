@@ -31,7 +31,7 @@ const loginUser = async (req, res) => {
         const match = await comparePassword(data.password, user.password);
 
         if (match) {
-            jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, {}, (err, token) => {
+            jwt.sign({ username: user.username, id: user._id, preferences: user.preferences }, process.env.JWT_SECRET, {}, (err, token) => {
                 if (err) throw err;
                 res.cookie("token", token, {
                     httpOnly: true
