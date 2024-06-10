@@ -9,7 +9,7 @@ const uploadImages = require("../utils/uploadImage");
 const registerUser = async (req, res) => {
 
     try {
-        const { username, fullName, email, password } = req.body;
+        const { username, fullName, email, password, preferences } = req.body;
 
         // Check if fullName was entered
         if (!fullName) {
@@ -49,7 +49,8 @@ const registerUser = async (req, res) => {
             username,
             fullName,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            preferences
         });
         await user.save();
 
