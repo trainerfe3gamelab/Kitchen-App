@@ -16,6 +16,7 @@ import Recipe from "./pages/Recipe";
 import NotFound from "./pages/NotFound";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
+import Resep from "./pages/Resep";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 // axios.defaults.withCredentials = true;
@@ -35,6 +36,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/edit-profile" element={<EditProfile/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/resep" element={<Resep/>}/>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
