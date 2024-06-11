@@ -15,11 +15,22 @@ const forYouController = async (req, res) => {
             const preferences = userPreferences.preferences;
             // res.json({ preferences })
 
-            recipes = await Recipe.find({ category: { $in: preferences } }).select("_id user_id title image total_time likes category")
+            const rawRecipes = await Recipe.find({ category: { $in: preferences } }).select("_id user_id title image total_time likes category")
                 .populate({ path: "user_id", select: "fullName image" })
                 .sort({ createdAt: -1 })
                 .skip(0)
                 .limit(8);
+
+            recipes = rawRecipes.map(recipe => (
+                {
+                    ...recipe._doc,
+                    user_id: recipe.user_id._id,
+                    user: {
+                        fullName: recipe.user_id.fullName,
+                        image: recipe.user_id.image
+                    }
+                }
+            ))
 
         } else {
 
