@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-scroll";
 import Logo from "/kitchen-craft-logo.svg";
 import RoundedButton from "../common/RoundedButton";
 import { Icon } from "@iconify/react";
@@ -58,40 +59,46 @@ export default function Navbar() {
         <nav
           className={`mx-14 hidden gap-8 font-semibold text-primary ${searchFocus ? "lg:hidden" : "lg:flex"}`}
         >
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? `text-accent-1` : hoverNav
-            }
-            to="/"
+          <Link
+            activeClass="text-accent-2"
+            to="banner"
+            spy={true}
+            smooth={true}
+            offset={-150}
+            className="cursor-pointer"
           >
             Beranda
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              isActive
-                ? `w-fit whitespace-nowrap text-accent-1`
-                : hoverNav + "w-fit whitespace-nowrap"
-            }
-            to="/"
+          </Link>
+          <Link
+            activeClass="text-accent-2"
+            to="popular"
+            spy={true}
+            smooth={true}
+            offset={-110}
+            className="cursor-pointer"
           >
-            Bahan Makanan
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? `text-accent-1` : hoverNav
-            }
-            to="/"
+            Terpopuler
+          </Link>
+          <Link
+            activeClass="text-accent-2"
+            to="category"
+            spy={true}
+            smooth={true}
+            offset={-110}
+            className="cursor-pointer"
           >
             Kategori
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? `text-accent-1` : hoverNav
-            }
-            to="/"
+          </Link>
+          <Link
+            activeClass="text-accent-2"
+            to="ingredients"
+            spy={true}
+            smooth={true}
+            offset={-120}
+            className="cursor-pointer whitespace-nowrap"
           >
-            Populer
-          </NavLink>
+            Bahan Makanan
+          </Link>
         </nav>
 
         {/* Search Input */}
@@ -263,34 +270,50 @@ function MenuBar(props) {
       <nav
         className={`mx-7 mt-4 flex flex-col gap-6 ${!props.toggled ? "hidden" : ""}`}
       >
-        <NavLink
-          className="font-medium text-primary hover:text-accent-1"
-          to="/"
+        <Link
+          activeClass="text-accent-2"
+          to="banner"
+          spy={true}
+          smooth={true}
+          offset={-150}
+          className="cursor-pointer"
           onClick={() => props.toggle(false)}
         >
           Beranda
-        </NavLink>
-        <NavLink
-          className="w-fit whitespace-nowrap font-medium text-primary hover:text-accent-1"
-          to="/login"
+        </Link>
+        <Link
+          activeClass="text-accent-2"
+          to="popular"
+          spy={true}
+          smooth={true}
+          offset={-110}
+          className="cursor-pointer"
           onClick={() => props.toggle(false)}
         >
-          Bahan Makanan
-        </NavLink>
-        <NavLink
-          className="font-medium text-primary hover:text-accent-1"
-          to="/register"
+          Terpopuler
+        </Link>
+        <Link
+          activeClass="text-accent-2"
+          to="category"
+          spy={true}
+          smooth={true}
+          offset={-110}
+          className="cursor-pointer"
           onClick={() => props.toggle(false)}
         >
           Kategori
-        </NavLink>
-        <NavLink
-          className="font-medium text-primary hover:text-accent-1"
-          to="/register"
+        </Link>
+        <Link
+          activeClass="text-accent-2"
+          to="ingredients"
+          spy={true}
+          smooth={true}
+          offset={-120}
+          className="cursor-pointer"
           onClick={() => props.toggle(false)}
         >
-          Populer
-        </NavLink>
+          Bahan Makanan
+        </Link>
       </nav>
       <div
         className={`absolute -right-full top-0 h-svh w-full bg-primary bg-opacity-5 backdrop-blur-[2px] ${!props.toggled ? "hidden" : ""}`}

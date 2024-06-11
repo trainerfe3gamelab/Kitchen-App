@@ -17,17 +17,17 @@ import Simpan from "./pages/Simpan";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
 axios.defaults.withCredentials = true;
 
 function App() {
+  const showNavFoot = window.location.pathname !== "/edit-profile";
   return (
     <UserContextProvider>
-      <Navbar />
+      {showNavFoot && <Navbar />}
       <Toaster position="top-center" toastOptions={{ duration: 1200 }} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
@@ -37,7 +37,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
+      {showNavFoot && <Footer />}
     </UserContextProvider>
   );
 }

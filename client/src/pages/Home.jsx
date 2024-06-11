@@ -14,41 +14,49 @@ export default function Home() {
   return (
     <main className="mx-auto my-24 w-full min-w-[360px] max-w-[1080px] px-5 py-1 lg:mx-auto lg:px-0">
       {/* Banner */}
-      <section className="mx-auto my-6 w-full">
+      <section id="banner" className="mx-auto my-6 w-full">
         <img src={banner} alt="" />
       </section>
 
       {/* SECTION Terpopuler */}
-      <h1 className="mt-10 font-bold lg:text-lg">Resep Terpopuler</h1>
-      <PopularSection />
+      <section id="popular">
+        <h1 className="mt-10 font-bold lg:text-lg">Resep Terpopuler</h1>
+        <PopularSection />
+      </section>
 
       {/* SECTION Kategori */}
-      <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Kategori</h1>
-      <AdditionalInfoProvider>
-        <CategorySection />
-      </AdditionalInfoProvider>
+      <section id="category">
+        <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Kategori</h1>
+        <AdditionalInfoProvider>
+          <CategorySection />
+        </AdditionalInfoProvider>
+      </section>
 
       {/* SECTION Untuk Kamu */}
-      <h1 className="mt-10 font-bold lg:text-lg">Untuk Kamu</h1>
-      <ForYouSection />
-      <div className="flex w-full justify-center">
-        <RoundedButton
-          className="mx-auto mt-10"
-          btnStroke
-          name="Lihat resep menarik lainya"
-        />
-      </div>
+      <section id="for-you">
+        <h1 className="mt-10 font-bold lg:text-lg">Untuk Kamu</h1>
+        <ForYouSection />
+        <div className="flex w-full justify-center">
+          <RoundedButton
+            className="mx-auto mt-10"
+            btnStroke
+            name="Lihat resep menarik lainya"
+          />
+        </div>
+      </section>
 
       {/* SECTION Berdasarkan Bahan */}
-      <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Bahan</h1>
-      <AdditionalInfoProvider>
-        <BasedOnIngredients />
-      </AdditionalInfoProvider>
-      <div className="flex w-full justify-center">
-        <button className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95">
-          Lihat Bahan Lainya
-        </button>
-      </div>
+      <section id="ingredients">
+        <h1 className="mt-10 font-bold lg:text-lg">Berdasarkan Bahan</h1>
+        <AdditionalInfoProvider>
+          <BasedOnIngredients />
+        </AdditionalInfoProvider>
+        <div className="flex w-full justify-center">
+          <button className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95">
+            Lihat Bahan Lainya
+          </button>
+        </div>
+      </section>
     </main>
   );
 }
@@ -76,16 +84,16 @@ function PopularSection() {
   }, []);
   if (loading || error)
     return (
-      <section className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+      <div className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
         <Card isLoad />
         <Card isLoad />
         <Card isLoad />
         <Card isLoad />
-      </section>
+      </div>
     );
 
   return (
-    <section className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+    <div className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
       {popular.map((item, index) => (
         <Card
           key={index}
@@ -98,7 +106,7 @@ function PopularSection() {
           creatorImage={item.user_id.image}
         />
       ))}
-    </section>
+    </div>
   );
 }
 
@@ -110,7 +118,7 @@ function CategorySection() {
 
   if (loading) {
     return (
-      <section
+      <div
         height={"h-fit"}
         width={"w-full"}
         className="no-scrollbar mt-2 h-fit w-full overflow-x-scroll"
@@ -126,12 +134,12 @@ function CategorySection() {
           <CategoryCard isLoad={true} />
           <CategoryCard isLoad={true} />
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section
+    <div
       height={"h-fit"}
       width={"w-full"}
       className="no-scrollbar mt-2 h-fit w-full overflow-x-scroll"
@@ -143,7 +151,7 @@ function CategorySection() {
           <CategoryCard key={index} title={item.title} image={item.image} />
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -171,7 +179,7 @@ function ForYouSection() {
 
   if (error || loading) {
     return (
-      <section className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+      <div className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
         {/* Taruh kodingan section 'untuk kamu' disini */}
         <Card isLoad />
         <Card isLoad />
@@ -181,11 +189,11 @@ function ForYouSection() {
         <Card isLoad />
         <Card isLoad />
         <Card isLoad />
-      </section>
+      </div>
     );
   }
   return (
-    <section className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+    <div className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
       {forYou.map((item, index) => (
         <Card
           key={index}
@@ -194,11 +202,11 @@ function ForYouSection() {
           image={item.image}
           time={item.total_time}
           likes={item.likes}
-          creatorName={item.user.fullName}
-          creatorImage={item.user.image}
+          creatorName={item.user_id.fullName}
+          creatorImage={item.user_id.image}
         />
       ))}
-    </section>
+    </div>
   );
 }
 function BasedOnIngredients() {
@@ -207,21 +215,21 @@ function BasedOnIngredients() {
 
   if (loading) {
     return (
-      <section className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+      <div className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
         <RoundedButton btnStroke />
         <RoundedButton btnStroke />
         <RoundedButton btnStroke />
         <RoundedButton btnStroke />
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className="mt-3 flex w-full flex-wrap justify-center gap-2">
+    <div className="mt-3 flex w-full flex-wrap justify-center gap-2">
       {/* Taruh kodingan section 'berdasarkan bahan' disini */}
       {bahan.slice(0, 28).map((item, index) => (
         <RoundedButton btnStroke key={index} name={item} />
       ))}
-    </section>
+    </div>
   );
 }
