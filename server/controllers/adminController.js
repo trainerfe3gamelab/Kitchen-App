@@ -39,6 +39,15 @@ const getAdmin = async (req, res) => {
     }
 }
 
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({}).select("-password");
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
 const loginAdmin = async (req, res) => {
     try {
         let data
@@ -110,6 +119,7 @@ module.exports = {
     deleteUser,
     deleteRecipe,
     getAdmin,
+    getUsers,
     loginAdmin,
     logoutAdmin 
 };
