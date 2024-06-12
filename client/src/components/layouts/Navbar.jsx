@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Link } from "react-scroll";
 import Logo from "/kitchen-craft-logo.svg";
 import RoundedButton from "../common/RoundedButton";
@@ -17,9 +17,10 @@ import Register from "../../pages/Register";
 
 export default function Navbar() {
   const [toggleHamburger, setToggleHamburger] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { isLogged } = useContext(UserContext);
   const [searchFocus, setSearchFocus] = useState(false);
+  const showNav = window.location.pathname === "/";
+  const navigate = useNavigate();
 
   const handleSearch = (input) => {
     if (!input || input === "") {
@@ -52,54 +53,67 @@ export default function Navbar() {
         <img
           src={Logo}
           alt="Logo"
-          className={`mx-auto w-[88px] sm:w-[118px] lg:mx-0 ${searchFocus ? "hidden" : ""}`}
+          onClick={() => navigate("/")}
+          className={`mx-auto w-[88px] cursor-pointer sm:w-[118px] lg:mx-0 ${searchFocus ? "hidden" : ""}`}
         />
 
         {/* Navigasi */}
-        <nav
-          className={`mx-14 hidden gap-8 font-semibold text-primary ${searchFocus ? "lg:hidden" : "lg:flex"}`}
-        >
-          <Link
-            activeClass="text-accent-2"
-            to="banner"
-            spy={true}
-            smooth={true}
-            offset={-150}
-            className="cursor-pointer"
+        {showNav ? (
+          <nav
+            className={`mx-14 hidden gap-8 font-semibold text-primary ${searchFocus ? "lg:hidden" : "lg:flex"}`}
           >
-            Beranda
-          </Link>
-          <Link
-            activeClass="text-accent-2"
-            to="popular"
-            spy={true}
-            smooth={true}
-            offset={-110}
-            className="cursor-pointer"
+            <Link
+              activeClass="text-accent-2"
+              to="banner"
+              spy={true}
+              smooth={true}
+              offset={-150}
+              className="cursor-pointer"
+            >
+              Beranda
+            </Link>
+            <Link
+              activeClass="text-accent-2"
+              to="popular"
+              spy={true}
+              smooth={true}
+              offset={-110}
+              className="cursor-pointer"
+            >
+              Terpopuler
+            </Link>
+            <Link
+              activeClass="text-accent-2"
+              to="category"
+              spy={true}
+              smooth={true}
+              offset={-110}
+              className="cursor-pointer"
+            >
+              Kategori
+            </Link>
+            <Link
+              activeClass="text-accent-2"
+              to="ingredients"
+              spy={true}
+              smooth={true}
+              offset={-120}
+              className="cursor-pointer whitespace-nowrap"
+            >
+              Bahan Makanan
+            </Link>
+          </nav>
+        ) : (
+          <div
+            className="mx-14 hidden items-end lg:flex"
+            onClick={() => navigate("/")}
           >
-            Terpopuler
-          </Link>
-          <Link
-            activeClass="text-accent-2"
-            to="category"
-            spy={true}
-            smooth={true}
-            offset={-110}
-            className="cursor-pointer"
-          >
-            Kategori
-          </Link>
-          <Link
-            activeClass="text-accent-2"
-            to="ingredients"
-            spy={true}
-            smooth={true}
-            offset={-120}
-            className="cursor-pointer whitespace-nowrap"
-          >
-            Bahan Makanan
-          </Link>
-        </nav>
+            <button className="rounded-lg border-[1.5px] border-gray-300 p-2 font-bold text-primary transition-all hover:bg-gray-100 active:bg-primary active:text-bg">
+              <Icon icon="heroicons:home-16-solid" width={22} />
+              {/* Beranda */}
+            </button>
+          </div>
+        )}
 
         {/* Search Input */}
         <InputWbtn

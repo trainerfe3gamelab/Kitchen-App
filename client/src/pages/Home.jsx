@@ -159,6 +159,7 @@ function ForYouSection() {
   const [forYou, setForYou] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  console.log(forYou);
 
   useEffect(() => {
     const fetchForYou = async () => {
@@ -202,8 +203,8 @@ function ForYouSection() {
           image={item.image}
           time={item.total_time}
           likes={item.likes}
-          creatorName={item.user_id.fullName}
-          creatorImage={item.user_id.image}
+          creatorName={item.user.fullName}
+          creatorImage={item.user.image}
         />
       ))}
     </div>
