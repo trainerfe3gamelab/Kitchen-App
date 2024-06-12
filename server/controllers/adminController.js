@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Recipe = require('../models/recipe');
+const Nutrition = require('../models/nutrition');
 const Admin = require('../models/admin');
 const { comparePassword } = require("../utils/hashPass");
 const jwt = require("jsonwebtoken");
@@ -7,8 +8,19 @@ const validateRequest = require("../utils/validateRequest");
 
 const deleteUser = async (req, res) => {
     try {
-        await User.findByIdAndDelete(req.params.id);
-        res.status(200).json({ message: 'User deleted' });
+        const userId = req.params.id;
+        await User.findByIdAndDelete(userId);
+
+        // Get all recipes of the user and delete them
+        const recipes = await Recipe.find({ userId });
+        const recipeIds = recipes.map(recipe => recipe._id);
+        await Recipe.deleteMany({ userId });
+
+        // Delete all nutrition data associated with the deleted recipes
+        await Nutrition.deleteMany({ recipeId: { $in: recipeIds }});
+
+        res.status(200).json({ message: 'User and associated data deleted' });
+
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
@@ -16,8 +28,12 @@ const deleteUser = async (req, res) => {
 
     const deleteRecipe = async (req, res) => {
     try {
+        
         await Recipe.findByIdAndDelete(req.params.id);
+        await Nutrition.findOneAndDelete({ recipeId: req.params.id });
+        
         res.status(200).json({ message: 'Recipe deleted' });
+
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
