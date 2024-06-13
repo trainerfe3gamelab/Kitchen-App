@@ -26,16 +26,34 @@ const deleteUser = async (req, res) => {
     }
 }
 
-    const deleteRecipe = async (req, res) => {
+const deleteRecipeAdmin = async (req, res) => {
     try {
-        
-        await Recipe.findByIdAndDelete(req.params.id);
-        await Nutrition.findOneAndDelete({ recipeId: req.params.id });
-        
-        res.status(200).json({ message: 'Recipe deleted' });
+        // Find recipe by id
+        const recipe = await Recipe.findById(req.params.id);
+
+        // Check if recipe exists
+        if (!recipe) {
+            return res.status(404).json({
+                error: "Recipe not found"
+            });
+        }
+
+        // Delete nutrition data
+        await Nutrition.deleteOne({ recipe_id: req.params.id });
+
+        // Delete recipe
+        await recipe.deleteOne();
+
+        // Send response
+        res.json({
+            message: "Recipe deleted successfully"
+        });
 
     } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        console.log(error);
+        res.json({
+            error: "Server error"
+        });
     }
 }
 
@@ -133,7 +151,7 @@ const logoutAdmin = (req, res) => {
 
 module.exports = {
     deleteUser,
-    deleteRecipe,
+    deleteRecipeAdmin,
     getAdmin,
     getUsers,
     loginAdmin,
