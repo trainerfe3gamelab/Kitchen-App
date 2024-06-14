@@ -1,12 +1,26 @@
-import { useState, createContext } from "react";
+import axios from "axios";
+import { useState, createContext, useContext } from "react";
+import { UserContext } from "../../context/userContext";
 
 const ModalProfileContext = createContext();
 
 function ModalProfileProvider({ children }) {
   const [toggle, setToggle] = useState(false);
+  const { setIsLogged } = useContext(UserContext);
 
   const handleToggle = () => {
     setToggle(!toggle);
+  };
+  const logout = () => {
+    axios
+      .post("/auth/logout")
+      .then((res) => {
+        console.log(res.data);
+        setIsLogged(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -33,7 +47,10 @@ function ModalProfileProvider({ children }) {
             <button className="flex w-full justify-start text-primary hover:text-opacity-60">
               Pengaturan
             </button>
-            <button className="flex w-full justify-start text-accent-1 hover:text-opacity-60">
+            <button
+              className="flex w-full justify-start text-accent-1 hover:text-opacity-60"
+              onClick={() => logout()}
+            >
               Keluar
             </button>
           </div>
