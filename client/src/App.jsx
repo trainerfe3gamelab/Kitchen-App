@@ -16,12 +16,16 @@ import NotFound from "./pages/NotFound";
 import Simpan from "./pages/Simpan";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
+import InputRecipe from "./pages/InputRecipe";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
 axios.defaults.withCredentials = true;
 
 function App() {
-  const showNavFoot = window.location.pathname !== "/edit-profile";
+  const showNavFoot =
+    window.location.pathname !== "/edit-profile" &&
+    window.location.pathname !== "/recipe/input";
+
   return (
     <UserContextProvider>
       {showNavFoot && <Navbar />}
@@ -35,6 +39,7 @@ function App() {
         <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/recipe/input" element={<InputRecipe />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {showNavFoot && <Footer />}
