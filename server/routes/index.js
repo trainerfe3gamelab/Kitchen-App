@@ -7,6 +7,8 @@ router.use('/auth', require('./authRoutes'));
 router.use('/users', require('./userRoutes'));
 router.use('/recipes', require('./recipeRoutes'));
 router.use('/searchgizi', require('./searchgiziRoutes')); 
-router.use('/untuk_kamu', require('./foryouRoutes'));  
+router.use('/forYou', require('./foryouRoutes'));
+router.use('/', require('./addinfoRoutes'))
+router.use('/admin', require('./adminRoutes'));
 
 module.exports = router;
