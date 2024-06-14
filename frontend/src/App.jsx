@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import Simpan from "./pages/Simpan";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
+import Resep from "./pages/Resep";
 import InputRecipe from "./pages/InputRecipe";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
@@ -40,6 +41,7 @@ function App() {
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/recipe/input" element={<InputRecipe />} />
+        <Route path="/resep" element={<Resep />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {showNavFoot && <Footer />}
