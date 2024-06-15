@@ -1,4 +1,5 @@
 import axios from "axios";
+import data from "./addData.json"
 
 const additionalInfo = async () => {
     if (!localStorage.getItem("additionalInfo")) {
@@ -9,7 +10,7 @@ const additionalInfo = async () => {
             localStorage.setItem("additionalInfo", JSON.stringify(additionalInfo));
             return JSON.parse(localStorage.getItem("additionalInfo"));
         } catch (error) {
-            console.error(error);
+            return data;
             throw error;
         }
     } else {
