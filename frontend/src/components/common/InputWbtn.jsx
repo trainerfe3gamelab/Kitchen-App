@@ -1,9 +1,12 @@
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
 function InputWbtn(props) {
   const [input, setInput] = useState("");
+  useEffect(() => {
+    setInput(props.value);
+  }, [props.value]);
 
   const handleClick = () => {
     props.onClick(input);
@@ -17,6 +20,7 @@ function InputWbtn(props) {
       setInput(value.trimStart());
       return;
     }
+    props.onChange && props.onChange(value);
     setInput(e.target.value);
   };
 
@@ -33,9 +37,10 @@ function InputWbtn(props) {
         onKeyDown={(e) => e.key === "Enter" && handleClick()}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
+        required={props.required}
       />
       <button
-        className="group flex h-10 w-14 items-center justify-center rounded-r-full bg-primary text-bg"
+        className="group flex h-full w-14 items-center justify-center rounded-r-full bg-primary text-bg"
         onClick={handleClick}
         onFocus={props.onFocus}
         onBlur={props.onBlur}

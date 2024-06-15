@@ -9,8 +9,11 @@ import {
   AdditionalInfoContext,
   AdditionalInfoProvider,
 } from "../context/additionalInfoContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
     <main className="mx-auto my-24 w-full min-w-[360px] max-w-[1080px] px-5 py-1 lg:mx-auto lg:px-0">
       {/* Banner */}
@@ -41,6 +44,7 @@ export default function Home() {
             className="mx-auto mt-10"
             btnStroke
             name="Lihat resep menarik lainya"
+            onClick={() => navigate("/search")}
           />
         </div>
       </section>
@@ -52,7 +56,10 @@ export default function Home() {
           <BasedOnIngredients />
         </AdditionalInfoProvider>
         <div className="flex w-full justify-center">
-          <button className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95">
+          <button
+            className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95"
+            onClick={() => navigate("/search")}
+          >
             Lihat Bahan Lainya
           </button>
         </div>
