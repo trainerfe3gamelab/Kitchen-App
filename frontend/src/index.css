@@ -20,3 +20,6 @@ html {
 [role="dialog"] {
   height: fit-content;
 }
+[aria-label="sidebar-filter"] nav {
+  background-color: transparent;
+}
