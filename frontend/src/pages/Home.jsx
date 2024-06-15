@@ -65,7 +65,7 @@ function PopularSection() {
   const [popular, setPopular] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(popular);
+  // console.log(popular);
 
   useEffect(() => {
     const fetchPopular = async () => {
@@ -160,7 +160,7 @@ function ForYouSection() {
   const [forYou, setForYou] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(forYou);
+  // console.log(forYou);
 
   useEffect(() => {
     const fetchForYou = async () => {
