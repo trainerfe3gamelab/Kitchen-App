@@ -12,12 +12,12 @@ const deleteUser = async (req, res) => {
         await User.findByIdAndDelete(userId);
 
         // Get all recipes of the user and delete them
-        const recipes = await Recipe.find({ userId });
+        const recipes = await Recipe.find({ user_id: userId});
         const recipeIds = recipes.map(recipe => recipe._id);
-        await Recipe.deleteMany({ userId });
+        await Recipe.deleteMany({ user_id: userId});
 
         // Delete all nutrition data associated with the deleted recipes
-        await Nutrition.deleteMany({ recipeId: { $in: recipeIds }});
+        await Nutrition.deleteMany({ recipe_id: { $in: recipeIds }});
 
         res.status(200).json({ message: 'User and associated data deleted' });
 

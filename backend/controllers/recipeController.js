@@ -167,7 +167,9 @@ const createRecipe = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.json({
-            error: "Server error"
+            error: "Server error",
+            message: (error.message || error)
+            
         });
     }
 }
