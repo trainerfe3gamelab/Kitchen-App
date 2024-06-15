@@ -16,18 +16,23 @@ import NotFound from "./pages/NotFound";
 import Simpan from "./pages/Simpan";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
+import Resep from "./pages/Resep";
+import InputRecipe from "./pages/InputRecipe";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
 axios.defaults.withCredentials = true;
 
 function App() {
+  const showNavFoot =
+    window.location.pathname !== "/edit-profile" &&
+    window.location.pathname !== "/recipe/input";
+
   return (
     <UserContextProvider>
-      <Navbar />
+      {showNavFoot && <Navbar />}
       <Toaster position="top-center" toastOptions={{ duration: 1200 }} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
@@ -35,9 +40,11 @@ function App() {
         <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/recipe/input" element={<InputRecipe />} />
+        <Route path="/resep" element={<Resep />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
+      {showNavFoot && <Footer />}
     </UserContextProvider>
   );
 }

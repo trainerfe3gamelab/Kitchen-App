@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Link } from "react-scroll";
 import Logo from "/kitchen-craft-logo.svg";
 import RoundedButton from "../common/RoundedButton";
 import { Icon } from "@iconify/react";
@@ -16,9 +17,10 @@ import Register from "../../pages/Register";
 
 export default function Navbar() {
   const [toggleHamburger, setToggleHamburger] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { isLogged } = useContext(UserContext);
   const [searchFocus, setSearchFocus] = useState(false);
+  const showNav = window.location.pathname === "/";
+  const navigate = useNavigate();
 
   const handleSearch = (input) => {
     if (!input || input === "") {
@@ -51,48 +53,67 @@ export default function Navbar() {
         <img
           src={Logo}
           alt="Logo"
-          className={`mx-auto w-[88px] sm:w-[118px] lg:mx-0 ${searchFocus ? "hidden" : ""}`}
+          onClick={() => navigate("/")}
+          className={`mx-auto w-[88px] cursor-pointer sm:w-[118px] lg:mx-0 ${searchFocus ? "hidden" : ""}`}
         />
 
         {/* Navigasi */}
-        <nav
-          className={`mx-14 hidden gap-8 font-semibold text-primary ${searchFocus ? "lg:hidden" : "lg:flex"}`}
-        >
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? `text-accent-1` : hoverNav
-            }
-            to="/"
+        {showNav ? (
+          <nav
+            className={`mx-14 hidden gap-8 font-semibold text-primary ${searchFocus ? "lg:hidden" : "lg:flex"}`}
           >
-            Beranda
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              isActive
-                ? `w-fit whitespace-nowrap text-accent-1`
-                : hoverNav + "w-fit whitespace-nowrap"
-            }
-            to="/"
+            <Link
+              activeClass="text-accent-2"
+              to="banner"
+              spy={true}
+              smooth={true}
+              offset={-150}
+              className="cursor-pointer"
+            >
+              Beranda
+            </Link>
+            <Link
+              activeClass="text-accent-2"
+              to="popular"
+              spy={true}
+              smooth={true}
+              offset={-110}
+              className="cursor-pointer"
+            >
+              Terpopuler
+            </Link>
+            <Link
+              activeClass="text-accent-2"
+              to="category"
+              spy={true}
+              smooth={true}
+              offset={-110}
+              className="cursor-pointer"
+            >
+              Kategori
+            </Link>
+            <Link
+              activeClass="text-accent-2"
+              to="ingredients"
+              spy={true}
+              smooth={true}
+              offset={-120}
+              className="cursor-pointer whitespace-nowrap"
+            >
+              Bahan Makanan
+            </Link>
+          </nav>
+        ) : (
+          <div
+            className="mx-14 hidden items-end lg:flex"
+            onClick={() => navigate("/")}
           >
-            Bahan Makanan
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? `text-accent-1` : hoverNav
-            }
-            to="/"
-          >
-            Kategori
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? `text-accent-1` : hoverNav
-            }
-            to="/"
-          >
-            Populer
-          </NavLink>
-        </nav>
+            <button className="rounded-lg border-[1.5px] border-gray-300 p-2 font-bold text-primary transition-all hover:bg-gray-100 active:bg-primary active:text-bg">
+              <Icon icon="heroicons:home-16-solid" width={22} />
+              {/* Beranda */}
+            </button>
+          </div>
+        )}
 
         {/* Search Input */}
         <InputWbtn
@@ -263,34 +284,50 @@ function MenuBar(props) {
       <nav
         className={`mx-7 mt-4 flex flex-col gap-6 ${!props.toggled ? "hidden" : ""}`}
       >
-        <NavLink
-          className="font-medium text-primary hover:text-accent-1"
-          to="/"
+        <Link
+          activeClass="text-accent-2"
+          to="banner"
+          spy={true}
+          smooth={true}
+          offset={-150}
+          className="cursor-pointer"
           onClick={() => props.toggle(false)}
         >
           Beranda
-        </NavLink>
-        <NavLink
-          className="w-fit whitespace-nowrap font-medium text-primary hover:text-accent-1"
-          to="/login"
+        </Link>
+        <Link
+          activeClass="text-accent-2"
+          to="popular"
+          spy={true}
+          smooth={true}
+          offset={-110}
+          className="cursor-pointer"
           onClick={() => props.toggle(false)}
         >
-          Bahan Makanan
-        </NavLink>
-        <NavLink
-          className="font-medium text-primary hover:text-accent-1"
-          to="/register"
+          Terpopuler
+        </Link>
+        <Link
+          activeClass="text-accent-2"
+          to="category"
+          spy={true}
+          smooth={true}
+          offset={-110}
+          className="cursor-pointer"
           onClick={() => props.toggle(false)}
         >
           Kategori
-        </NavLink>
-        <NavLink
-          className="font-medium text-primary hover:text-accent-1"
-          to="/register"
+        </Link>
+        <Link
+          activeClass="text-accent-2"
+          to="ingredients"
+          spy={true}
+          smooth={true}
+          offset={-120}
+          className="cursor-pointer"
           onClick={() => props.toggle(false)}
         >
-          Populer
-        </NavLink>
+          Bahan Makanan
+        </Link>
       </nav>
       <div
         className={`absolute -right-full top-0 h-svh w-full bg-primary bg-opacity-5 backdrop-blur-[2px] ${!props.toggled ? "hidden" : ""}`}
