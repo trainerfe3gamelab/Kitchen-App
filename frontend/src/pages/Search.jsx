@@ -189,7 +189,7 @@ function SidebarFilter() {
       >
         <Sidebar.Items>
           {/* Filter Header */}
-          <Sidebar.ItemGroup className="m-0 p-0">
+          <Sidebar.ItemGroup className="m-0 border-none p-0">
             <Sidebar.Item className="justify-start">
               <div className="flex items-center gap-2">
                 <Icon className="text-primary" icon="uil:filter" width={22} />
@@ -199,7 +199,7 @@ function SidebarFilter() {
           </Sidebar.ItemGroup>
           <hr className="my-2 border border-gray-300" />
           {/* Filter Berdasarkan Kategori */}
-          <Sidebar.ItemGroup className="m-0 p-0">
+          <Sidebar.ItemGroup className="m-0 border-none p-0">
             <Sidebar.Collapse
               className="gap-4 font-medium hover:bg-gray-200"
               label="Berdasarkan Kategori"
@@ -223,7 +223,7 @@ function SidebarFilter() {
           </Sidebar.ItemGroup>
           <hr className="my-1 border border-gray-200" />
           {/* Filter Berdasarkan Bahan */}
-          <Sidebar.ItemGroup className="m-0 p-0">
+          <Sidebar.ItemGroup className="m-0 border-none p-0">
             <Sidebar.Item className="justify-start">
               <div className="flex flex-col gap-4">
                 <h1 className="font-medium">Berdasarkan Bahan</h1>
@@ -249,7 +249,7 @@ function SidebarFilter() {
           </Sidebar.ItemGroup>
           <hr className="my-2 border border-gray-200" />
           {/* Button Terapkan */}
-          <Sidebar.ItemGroup className="m-0 p-0">
+          <Sidebar.ItemGroup className="m-0 border-none p-0">
             <Sidebar.Item>
               <button
                 className="rounded-full border border-gray-300 bg-primary px-4 py-2 text-bg shadow-sm hover:bg-opacity-90 active:scale-95"
@@ -312,7 +312,7 @@ function Autocomplete({ data, onDone }) {
         required
       />
       {showSuggestions && (
-        <ul className="absolute z-20 mt-2 w-full list-none overflow-hidden rounded-lg bg-bg shadow-lg">
+        <ul className="absolute z-50 mt-2 w-full list-none overflow-hidden rounded-lg bg-bg shadow-lg">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}

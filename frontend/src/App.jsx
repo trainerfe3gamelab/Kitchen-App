@@ -18,8 +18,11 @@ import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
 import Resep from "./pages/Resep";
 import InputRecipe from "./pages/InputRecipe";
+import About from "./pages/About";
+import KontakSaran from "./pages/KontakSaran";
+import Privasi from "./pages/Privasi";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -33,8 +36,6 @@ function App() {
       <Toaster position="top-center" toastOptions={{ duration: 1200 }} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
         <Route path="/Simpan" element={<Simpan />} />
         <Route path="/recipe/:id" element={<Recipe />} />
@@ -43,9 +44,9 @@ function App() {
         <Route path="/recipe/input" element={<InputRecipe />} />
         <Route path="/resep" element={<Resep />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/about" element={<About/>}/>
-        <Route path="/about/privasi" element={<Privasi/>}/>
-        <Route path="/about/Kontak-saran" element={<KontakSaran/>}/>
+        <Route path="/about" element={<About />} />
+        <Route path="/about/privasi" element={<Privasi />} />
+        <Route path="/about/Kontak-saran" element={<KontakSaran />} />
       </Routes>
       {showNavFoot && <Footer />}
     </UserContextProvider>

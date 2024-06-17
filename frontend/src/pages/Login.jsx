@@ -6,6 +6,7 @@ import RoundedButton from "../components/common/RoundedButton";
 import Logo from "/kitchen-craft-logo.svg";
 import { UserContext } from "../context/userContext";
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
+import "flowbite/dist/flowbite.min.css";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -36,10 +37,10 @@ export default function Login() {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
-      <form
-        onSubmit={(e) => loginUser(e)}
-         >
+      <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+        Sign in to our platform
+      </h3>
+      <form onSubmit={(e) => loginUser(e)}>
         <div className="mb-5">
           <div className="mb-2 block">
             <Label htmlFor="email" value="Your email" />
@@ -57,30 +58,39 @@ export default function Login() {
           <div className="mb-2 block">
             <Label htmlFor="password" value="Your password" />
           </div>
-          <TextInput id="password" type="password" required 
+          <TextInput
+            id="password"
+            type="password"
+            required
             value={data.password}
             onChange={(e) => setData({ ...data, password: e.target.value })}
           />
         </div>
 
-        <div className="flex justify-between gap-5 mb-4">
+        <div className="mb-4 flex justify-between gap-5">
           <div className="flex items-center gap-2">
             <Checkbox id="remember" />
             <Label htmlFor="remember">Remember me</Label>
           </div>
-          <a href="#" className="text-sm text-cyan-700 hover:underline dark:text-cyan-500">
+          <a
+            href="#"
+            className="text-sm text-cyan-700 hover:underline dark:text-cyan-500"
+          >
             Lost Password?
           </a>
         </div>
 
         <RoundedButton
           name="Sign In to your account"
-          className="mt-2 rounded-lg text-white w-48 mb-4 text-sm py-2"
+          className="mb-4 mt-2 w-48 rounded-lg py-2 text-sm text-white"
         />
 
         <div className="flex justify-between text-sm font-medium text-gray-500 dark:text-gray-300">
           Not registered?&nbsp;
-          <a href="#" className="text-cyan-700 hover:underline dark:text-cyan-500">
+          <a
+            href="#"
+            className="text-cyan-700 hover:underline dark:text-cyan-500"
+          >
             Create account
           </a>
         </div>
