@@ -23,10 +23,22 @@ const Footer = () => {
 
                     <div className="text-sm">
                         <h6 className="font-semibold">Informasi & Layanan</h6>
-                        <p className="mt-1">Tentang Kami</p>
-                        <p>Kontak</p>
-                        <p>Kirim Saran</p>
-                        <p>Kebijakan Privasi</p>
+                        <a className='mt-1' href='/about'>
+                            Tentang Kami
+                        </a>
+                        <p><a href='/about/kontak-saran'>
+                            Kontak
+                        </a></p>
+                        <p>
+                            <a href='/about/kontak-saran'>
+                                Kirim Saran
+                            </a>
+                        </p>
+                        <p>
+                            <a href='/about/privasi'>
+                                Kebijakan Privasi
+                            </a>
+                        </p>
                     </div>
 
                     <div className="text-sm">
