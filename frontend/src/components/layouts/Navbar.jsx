@@ -28,6 +28,8 @@ export default function Navbar() {
     if (!input || input === "") {
       toast.error("Masukkan kata kunci pencarian");
     }
+    navigate(`/search?recipe=${encodeURIComponent(input)}`);
+    setSearchFocus(!searchFocus);
     console.log(input);
   };
 
@@ -110,10 +112,12 @@ export default function Navbar() {
           </nav>
         ) : (
           <div
-            className="mx-14 hidden items-end lg:flex"
+            className={`mx-14 hidden items-end lg:flex ${searchFocus ? "hidden" : ""}`}
             onClick={() => navigate("/")}
           >
-            <button className="rounded-lg border-[1.5px] border-gray-300 p-2 font-bold text-primary transition-all hover:bg-gray-100 active:bg-primary active:text-bg">
+            <button
+              className={`hidden rounded-lg border-[1.5px] border-gray-300 p-2 font-bold text-primary transition-all hover:bg-gray-100 active:bg-primary active:text-bg lg:block ${searchFocus ? "lg:hidden" : ""}`}
+            >
               <Icon icon="heroicons:home-16-solid" width={22} />
               {/* Beranda */}
             </button>

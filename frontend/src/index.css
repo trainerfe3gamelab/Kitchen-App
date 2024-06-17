@@ -30,3 +30,8 @@ html {
   backdrop-filter: blur(10px);
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+[aria-label="sidebar-filter"] nav {
+  background-color: transparent;
+}
+
