@@ -1,26 +1,35 @@
 import axios from "axios";
 import { useState, createContext, useContext } from "react";
 import { UserContext } from "../../context/userContext";
+import { toast } from "react-hot-toast";
+import { Icon } from "@iconify/react";
 
 const ModalProfileContext = createContext();
 
 function ModalProfileProvider({ children }) {
   const [toggle, setToggle] = useState(false);
   const { setIsLogged } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
   const handleToggle = () => {
     setToggle(!toggle);
   };
-  const logout = () => {
-    axios
-      .post("/auth/logout")
-      .then((res) => {
-        console.log(res.data);
-        setIsLogged(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const logout = async () => {
+    try {
+      setLoading(true);
+      const logout = await axios.post("/auth/logout");
+      if (logout.status != 200) {
+        toast.error("Erorr logout");
+        return;
+      }
+      toast.success("Berhasil Logout");
+      setIsLogged(false);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.error || error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -56,6 +65,14 @@ function ModalProfileProvider({ children }) {
           </div>
         </div>
       </div>
+      {loading && (
+        <div className="fixed left-1/2 top-1/2 z-50 flex h-svh w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-primary bg-opacity-50">
+          <div className="flex h-40 w-40 flex-col items-center justify-center gap-2 rounded bg-bg font-medium">
+            <Icon icon="svg-spinners:180-ring-with-bg" width={40} />
+            <h1>Loading...</h1>
+          </div>
+        </div>
+      )}
     </ModalProfileContext.Provider>
   );
 }

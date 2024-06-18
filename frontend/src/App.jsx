@@ -22,7 +22,7 @@ import About from "./pages/About";
 import KontakSaran from "./pages/KontakSaran";
 import Privasi from "./pages/Privasi";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
   return (
     <UserContextProvider>
       {showNavFoot && <Navbar />}
-      <Toaster position="top-center" toastOptions={{ duration: 1200 }} />
+      <Toaster position="top-center" toastOptions={{ duration: 1600 }} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
