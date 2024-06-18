@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-scroll";
 import Logo from "/kitchen-craft-logo.svg";
 import RoundedButton from "../common/RoundedButton";
@@ -19,6 +19,7 @@ import axios from "axios";
 import { Modal, Button, Checkbox, Label, TextInput } from "flowbite-react";
 
 export default function Navbar() {
+  const urlSearchParams = new URLSearchParams(useLocation().search);
   const [toggleHamburger, setToggleHamburger] = useState(false);
   const { isLogged } = useContext(UserContext);
   const [searchFocus, setSearchFocus] = useState(false);
@@ -28,8 +29,10 @@ export default function Navbar() {
   const handleSearch = (input) => {
     if (!input || input === "") {
       toast.error("Masukkan kata kunci pencarian");
+      return;
     }
-    navigate(`/search?recipe=${encodeURIComponent(input)}`);
+    urlSearchParams.set("recipe", input);
+    navigate(`/search?${urlSearchParams.toString()}`);
     setSearchFocus(!searchFocus);
     console.log(input);
   };

@@ -9,7 +9,7 @@ import {
   AdditionalInfoContext,
   AdditionalInfoProvider,
 } from "../context/additionalInfoContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -119,10 +119,17 @@ function PopularSection() {
 }
 
 function CategorySection() {
+  const navigate = useNavigate();
+  const urlSearchParams = new URLSearchParams(useLocation().search);
   const ref = useRef();
   const { events } = useDraggable(ref);
   const { additionalInfo, loading } = useContext(AdditionalInfoContext);
   const kategori = additionalInfo?.kategori;
+
+  const handleClick = (title) => {
+    urlSearchParams.set("category", title);
+    navigate(`/search?${urlSearchParams.toString()}`);
+  };
 
   if (loading) {
     return (
@@ -156,7 +163,12 @@ function CategorySection() {
     >
       <div className="flex w-full gap-3 whitespace-nowrap">
         {kategori.map((item, index) => (
-          <CategoryCard key={index} title={item.title} image={item.image} />
+          <CategoryCard
+            onClick={() => handleClick(item.title)}
+            key={index}
+            title={item.title}
+            image={item.image}
+          />
         ))}
       </div>
     </div>
