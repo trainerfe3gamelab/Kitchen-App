@@ -15,7 +15,6 @@ export default function Profile() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const [activeTab, setActiveTab] = useState("recipes");
-  console.log("🚀 ~ Profile ~ activeTab:", activeTab);
 
   useEffect(() => {
     const tab = urlSearchParams.get("tab");
@@ -27,7 +26,6 @@ export default function Profile() {
     }
     if (tab !== "saved") {
       urlSearchParams.set("tab", "recipes");
-      //   navigate(`/profile/${username}?${urlSearchParams.toString()}`);
       setActiveTab("recipes");
     }
   }, [useLocation().search]);
@@ -39,7 +37,6 @@ export default function Profile() {
         const response = await axios.get(`/users/${username}`);
         const data = response.data;
         setUser(data);
-        console.log("🚀 ~ fetchUser ~ data:", data);
       } catch (error) {
         console.log("🚀 ~ fetchUser ~ error:", error);
         toast.error("Error fetching user data.");
@@ -79,7 +76,7 @@ export default function Profile() {
           </div>
         </div>
       )}
-      <main className="mt-32 min-h-svh px-5 lg:px-0">
+      <main className="mb-24 mt-32 min-h-svh px-5 lg:px-0">
         <section className="mx-auto flex w-full max-w-[1080px] flex-col gap-4 sm:flex-row">
           <img
             className="aspect-square h-fit w-24 rounded-full"
@@ -108,7 +105,10 @@ export default function Profile() {
         </section>
         <hr className="mx-auto mt-6 w-full max-w-[1080px]" />
         <div className="mx-auto mt-6 flex w-full max-w-[1080px] justify-end">
-          <button className="bo flex items-center gap-2 rounded-full border bg-primary px-4 py-2 text-bg transition-all hover:border-primary hover:bg-bg hover:text-primary active:scale-95">
+          <button
+            onClick={() => navigate("/recipe/input")}
+            className="bo flex items-center gap-2 rounded-full border bg-primary px-4 py-2 text-bg transition-all hover:border-primary hover:bg-bg hover:text-primary active:scale-95"
+          >
             Tambah Resep Baru
             <Icon icon="fluent:add-12-filled" />
           </button>
@@ -186,7 +186,7 @@ function RecipesTab({ user, loading }) {
 function SaveTab() {
   const { username } = useParams();
   const [savedRecipes, setSavedRecipes] = useState(null);
-  console.log("🚀 ~ SaveTab ~ savedRecipes:", savedRecipes);
+  // console.log("🚀 ~ SaveTab ~ savedRecipes:", savedRecipes);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -243,8 +243,8 @@ function SaveTab() {
           image={item.image}
           time={item.total_time}
           likes={item.likes}
-          creatorName={item.user?.fullName || "User Full Name"}
-          creatorImage={item.user?.image || ""}
+          creatorName={item.user_id?.fullName || "User Full Name"}
+          creatorImage={item.user_id?.image || ""}
         />
       ))}
     </div>

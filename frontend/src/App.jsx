@@ -22,14 +22,17 @@ import About from "./pages/About";
 import KontakSaran from "./pages/KontakSaran";
 import Privasi from "./pages/Privasi";
 import User from "./pages/User";
+import { useLocation } from "react-router-dom";
+import EditRecipe from "./pages/EditRecipe";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
 axios.defaults.withCredentials = true;
 
 function App() {
   const showNavFoot =
-    window.location.pathname !== "/edit-profile" &&
-    window.location.pathname !== "/recipe/input";
+    useLocation().pathname !== "/edit-profile" &&
+    useLocation().pathname !== "/recipe/input" &&
+    !useLocation().pathname.startsWith("/recipe/edit/");
 
   return (
     <UserContextProvider>
@@ -41,6 +44,7 @@ function App() {
         <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/recipe/input" element={<InputRecipe />} />
+        <Route path="/recipe/edit/:idRecipe" element={<EditRecipe />} />
         <Route path="/about" element={<About />} />
         <Route path="/about/privasi" element={<Privasi />} />
         <Route path="/about/kontak-saran" element={<KontakSaran />} />

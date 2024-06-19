@@ -139,7 +139,7 @@ const createRecipe = async (req, res) => {
             ingredients, // Array of ingredients
             video, // Recipe video
             stepDescription, // Array of step descriptions
-            stepImage, // Array of step images
+            // stepImage, // Array of step images
             category // Array of categories
         } = req.body;
 
@@ -155,7 +155,7 @@ const createRecipe = async (req, res) => {
                 video,
                 step: stepDescription.map((description, index) => ({
                     description,
-                    image: stepImage[index]
+                    // image: stepImage[index]
                 })),
             },
             category
