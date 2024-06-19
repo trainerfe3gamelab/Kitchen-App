@@ -77,7 +77,7 @@ const getRecipeById = async (req, res) => {
     try {
 
         // Find recipe by id
-        const recipe = await Recipe.findById(req.params.id);
+        const recipe = await Recipe.findById(req.params.id).populate({ path: "user_id", select: "fullName image" });
         const nutrition = await Nutrition.find({ recipe_id: req.params.id });
 
 
@@ -99,11 +99,13 @@ const getRecipeById = async (req, res) => {
         } else {
             // Check if user has liked the recipe
             const userLike = await Like.findOne({ recipe_id: req.params.id, user_id: req.user.id });
+            const userSave = await SaveRecipe.findOne({ recipe_id: req.params.id, user_id: req.user.id });
 
             res.status(200).json({
                 recipe: {
                     ...recipe._doc,
                     isLiked: !!userLike,
+                    isSaved: !!userSave,
                     nutrition
                 }
 
