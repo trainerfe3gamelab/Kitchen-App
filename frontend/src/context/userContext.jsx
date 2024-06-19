@@ -10,13 +10,12 @@ export function UserContextProvider({ children }) {
     axios
       .get("/auth")
       .then(({ data }) => {
-        console.log(data);
         setIsLogged(true);
         setUser(data);
       })
       .catch((error) => {
         setIsLogged(false);
-        console.error(error);
+        console.error(error.response?.data.error);
         if (error.code === "ERR_NETWORK") {
           toast.error(error.message);
           return;
