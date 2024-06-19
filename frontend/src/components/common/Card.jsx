@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import BlankProfile from "../../assets/blank_profile.webp";
+import { useNavigate } from "react-router-dom";
 
 export default function Card(props) {
+  const navigate = useNavigate();
   const handleClick = () => {
-    console.log(`${props.id} clicked`);
+    // console.log(`${props.id} clicked`);
+    if (props.id) {
+      navigate(`/recipe/${props.id}`);
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
   };
   const handleEditClick = (e) => {
     e.stopPropagation();

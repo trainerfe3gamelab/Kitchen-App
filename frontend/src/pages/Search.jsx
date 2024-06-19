@@ -105,7 +105,7 @@ function ResultSearch() {
       {resultSearch.recipes?.length === 0 ? (
         <div className="mb-4 mt-16 flex flex-col items-center justify-center text-gray-400">
           <Icon icon="hugeicons:album-not-found-01" width={50} />
-          <h1 className="text-lg font-medium">Data tidak ditemukan</h1>
+          <h1 className="text-lg font-medium">Resep tidak ditemukan</h1>
           <p className="text-sm">Coba gunakan kata kunci lain</p>
         </div>
       ) : (
@@ -155,7 +155,15 @@ function SearchPagination({ totalPages }) {
         onPageChange={onPageChange}
         showIcons
       />
-      <p className="text-sm text-gray-400">Current page {currentPage}</p>
+      <div className="flex items-center gap-4">
+        <p className="text-sm text-gray-500">
+          Halaman saat ini <strong>{currentPage}</strong>
+        </p>
+        <p className="text-sm text-gray-500">-</p>
+        <p className="text-sm text-gray-400">
+          Total Halaman <strong>{totalPages}</strong>
+        </p>
+      </div>
     </div>
   );
 }

@@ -32,6 +32,7 @@ export default function Navbar() {
       return;
     }
     urlSearchParams.set("recipe", input);
+    urlSearchParams.set("page", 1);
     navigate(`/search?${urlSearchParams.toString()}`);
     setSearchFocus(!searchFocus);
     console.log(input);
@@ -299,7 +300,7 @@ function AuthButton() {
 
 function Profile() {
   const { toggle, setToggle } = useContext(ModalProfileContext);
-  const { user } = useContext(UserContext);
+  const { user, isLogged } = useContext(UserContext);
   const [profile, setProfile] = useState({});
   useEffect(() => {
     const getUser = async () => {
@@ -311,7 +312,7 @@ function Profile() {
       }
     };
     getUser();
-  }, [user]);
+  }, [isLogged, user]);
 
   return (
     <div className="flex w-fit min-w-fit cursor-pointer items-center gap-1 lg:ml-3">

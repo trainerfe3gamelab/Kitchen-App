@@ -5,7 +5,7 @@ export const UserContext = createContext();
 
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(null);
   useEffect(() => {
     axios
       .get("/auth")

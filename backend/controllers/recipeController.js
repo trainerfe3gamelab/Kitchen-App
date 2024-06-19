@@ -16,6 +16,8 @@ const getPaginatedRecipes = async (req, res) => {
         const category = req.query.category;
         const search = req.query.search;
         const popular = req.query.popular;
+        const ingredients = req.query.ingredients;
+        const textSearch = `${search} ${ingredients}`
 
         // Create query and sort objects
         let query = {};
@@ -29,8 +31,8 @@ const getPaginatedRecipes = async (req, res) => {
         }
 
         // If search query is provided, add it to query object
-        if (search) {
-            query.$text = { $search: search };
+        if (search || ingredients) {
+            query.$text = { $search: textSearch };
         }
 
         // If popular is "true", sort by likes in descending order
@@ -142,7 +144,7 @@ const createRecipe = async (req, res) => {
             ingredients, // Array of ingredients
             video, // Recipe video
             stepDescription, // Array of step descriptions
-            stepImage, // Array of step images
+            // stepImage, // Array of step images
             category // Array of categories
         } = req.body;
 
@@ -158,7 +160,7 @@ const createRecipe = async (req, res) => {
                 video,
                 step: stepDescription.map((description, index) => ({
                     description,
-                    image: stepImage[index]
+                    // image: stepImage[index]
                 })),
             },
             category
