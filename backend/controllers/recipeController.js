@@ -52,9 +52,9 @@ const getPaginatedRecipes = async (req, res) => {
             .limit(limit);
 
         // Handle total recipes count and total pages
-        const totalRecipes = await Recipe.countDocuments(); // Total recipes count
+        const recipesCount = await Recipe.countDocuments(query); // Recipes count
         let totalPages;
-        if (recipes.length < limit) {
+        if (page === 1 && recipes.length < limit) {
 
             // Total pages is 1 if recipes length is less than limit
             totalPages = 1;
@@ -62,15 +62,14 @@ const getPaginatedRecipes = async (req, res) => {
         } else {
 
             // Calculate total pages
-            totalPages = Math.ceil(totalRecipes / limit);
+            totalPages = Math.ceil(recipesCount / limit);
 
         }
-
-
 
         res.status(200).json({
             recipes,
             totalPages,
+            recipesCount,
             currentPage: page,
             limit
         });
