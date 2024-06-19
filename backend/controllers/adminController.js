@@ -107,6 +107,25 @@ const getAllRecipesAdmin = async (req, res) => {
     }
 }
 
+// Get recipe by ID
+const getRecipeById = async (req, res) => {
+    try {
+        const recipe = await Recipe.findById(req.params.id)
+        const nutrition = await Nutrition.findOne({ recipe_id: req.params.id });
+        if (!recipe) {
+            return res.status(404).json({
+                error: "Recipe not found"
+            });
+        }
+        res.json({recipe, nutrition});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+}
+
 const deleteRecipeAdmin = async (req, res) => {
     try {
         // Find recipe by id
@@ -236,6 +255,7 @@ module.exports = {
     deleteUser,
     getRecipeByIdOrTitle,
     getAllRecipesAdmin,
+    getRecipeById,
     deleteRecipeAdmin,
     getAdmin,
     getUsers,
