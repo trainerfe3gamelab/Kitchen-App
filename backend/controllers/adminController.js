@@ -94,6 +94,19 @@ const getRecipeByIdOrTitle = async (req, res) => {
     }
 }
 
+// Get all recipes
+const getAllRecipesAdmin = async (req, res) => {
+    try {
+        const recipes = await Recipe.find();
+        res.json(recipes);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+}
+
 const deleteRecipeAdmin = async (req, res) => {
     try {
         // Find recipe by id
@@ -222,6 +235,7 @@ module.exports = {
     getUserByUsername,
     deleteUser,
     getRecipeByIdOrTitle,
+    getAllRecipesAdmin,
     deleteRecipeAdmin,
     getAdmin,
     getUsers,
