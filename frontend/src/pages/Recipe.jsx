@@ -223,44 +223,49 @@ export default function Recipe() {
           </section>
           <hr className="my-4 border-gray-300" />
           {/* Informasi Nilai Gizi */}
-          <section>
-            <h1 className="mb-4 font-semibold">Informasi Nilai Gizi</h1>
-            <div className="grid w-full grid-cols-2 items-start gap-4 rounded border border-gray-300 bg-gray-100 px-6 py-4 sm:grid-cols-5 lg:grid-cols-7">
-              <div className="flex flex-col items-center">
-                <h1 className="text-center">Energi Total</h1>
-                <p className="font-semibold">{nutrition?.energi} kkal</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <h1 className="text-center">Lemak Total</h1>
-                <p className="font-semibold">{nutrition?.lemakTotal} g</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <h1 className="text-center">Lemak Jenuh</h1>
-                <p className="font-semibold">{nutrition?.lemakJenuh} g</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <h1 className="text-center">Protein</h1>
-                <p className="font-semibold">{nutrition?.protein} g</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <h1 className="text-center">Karbohidrat</h1>
-                <p className="font-semibold">{nutrition?.karb} g</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <h1 className="text-center">Gula</h1>
-                <p className="font-semibold">{nutrition?.gula} g</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <h1 className="text-center">Garam</h1>
-                <p className="font-semibold">{nutrition?.garam} mg</p>
-              </div>
-            </div>
-            <p className="mt-2 text-xs italic text-gray-500">
-              *Nilai gizi yang ditampilkan merupakan perkiraan dan mungkin tidak
-              sepenuhnya akurat.
-            </p>
-          </section>
-          <hr className="my-4 border-gray-300" />
+          {nutrition.energi && (
+            <>
+              <section>
+                <h1 className="mb-4 font-semibold">Informasi Nilai Gizi</h1>
+                <div className="grid w-full grid-cols-2 items-start gap-4 rounded border border-gray-300 bg-gray-100 px-6 py-4 sm:grid-cols-5 lg:grid-cols-7">
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-center">Energi Total</h1>
+                    <p className="font-semibold">{nutrition?.energi} kkal</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-center">Lemak Total</h1>
+                    <p className="font-semibold">{nutrition?.lemakTotal} g</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-center">Lemak Jenuh</h1>
+                    <p className="font-semibold">{nutrition?.lemakJenuh} g</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-center">Protein</h1>
+                    <p className="font-semibold">{nutrition?.protein} g</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-center">Karbohidrat</h1>
+                    <p className="font-semibold">{nutrition?.karb} g</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-center">Gula</h1>
+                    <p className="font-semibold">{nutrition?.gula} g</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h1 className="text-center">Garam</h1>
+                    <p className="font-semibold">{nutrition?.garam} mg</p>
+                  </div>
+                </div>
+                <p className="mt-2 text-xs italic text-gray-500">
+                  *Nilai gizi yang ditampilkan merupakan perkiraan dan mungkin
+                  tidak sepenuhnya akurat.
+                </p>
+              </section>
+              <hr className="my-4 border-gray-300" />
+            </>
+          )}
+
           {/* Langkah */}
           <section className="flex flex-col gap-4">
             <h1 className="mt-4 font-semibold">Langkah-langkah</h1>
