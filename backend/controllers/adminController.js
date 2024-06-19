@@ -6,6 +6,42 @@ const { comparePassword } = require("../utils/hashPass");
 const jwt = require("jsonwebtoken");
 const validateRequest = require("../utils/validateRequest");
 
+// Get user by ID
+const getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({
+                error: "User not found"
+            });
+        }
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+}
+
+// Get user by username
+const getUserByUsername = async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username });
+        if (!user) {
+            return res.status(404).json({
+                error: "User not found"
+            });
+        }
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+}
+
 const deleteUser = async (req, res) => {
     try {
         const userId = req.params.id;
@@ -23,6 +59,38 @@ const deleteUser = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
+    }
+}
+
+// Get recipe by id or title
+const getRecipeByIdOrTitle = async (req, res) => {
+    try {
+        const { id, title } = req.query;
+
+        let recipe;
+        if (id) {
+            // Find recipe by id
+            recipe = await Recipe.findById(id);
+        } else if (title) {
+            // Find recipe by title
+            recipe = await Recipe.findOne({ title: title });
+        }
+
+        if (!recipe) {
+            return res.status(404).json({
+                error: "Recipe not found"
+            });
+        }
+
+        res.status(200).json({
+            recipe
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal server error"
+        });
     }
 }
 
@@ -150,7 +218,10 @@ const logoutAdmin = (req, res) => {
 }
 
 module.exports = {
+    getUserById,
+    getUserByUsername,
     deleteUser,
+    getRecipeByIdOrTitle,
     deleteRecipeAdmin,
     getAdmin,
     getUsers,
