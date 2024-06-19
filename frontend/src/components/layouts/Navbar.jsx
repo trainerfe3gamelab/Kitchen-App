@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useRef, useState, useContext, useEffect } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-scroll";
 import Logo from "/kitchen-craft-logo.svg";
 import RoundedButton from "../common/RoundedButton";
@@ -8,14 +8,18 @@ import InputWbtn from "../common/InputWbtn";
 import toast from "react-hot-toast";
 import Hamburger from "hamburger-react";
 import { UserContext } from "../../context/userContext";
+import BlankProfile from "../../assets/blank_profile.webp";
 import {
   ModalProfileContext,
   ModalProfileProvider,
 } from "../features/ModalProfile";
 import Login from "../../pages/Login";
 import Register from "../../pages/Register";
+import axios from "axios";
+import { Modal, Button, Checkbox, Label, TextInput } from "flowbite-react";
 
 export default function Navbar() {
+  const urlSearchParams = new URLSearchParams(useLocation().search);
   const [toggleHamburger, setToggleHamburger] = useState(false);
   const { isLogged } = useContext(UserContext);
   const [searchFocus, setSearchFocus] = useState(false);
@@ -25,9 +29,16 @@ export default function Navbar() {
   const handleSearch = (input) => {
     if (!input || input === "") {
       toast.error("Masukkan kata kunci pencarian");
+      return;
     }
+    urlSearchParams.set("recipe", input);
+    navigate(`/search?${urlSearchParams.toString()}`);
+    setSearchFocus(!searchFocus);
     console.log(input);
   };
+
+  const [openLogin, setOpenLogin] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
 
   const hoverNav = "hover:text-accent-2 transition-all";
 
@@ -105,10 +116,12 @@ export default function Navbar() {
           </nav>
         ) : (
           <div
-            className="mx-14 hidden items-end lg:flex"
+            className={`mx-14 hidden items-end lg:flex ${searchFocus ? "hidden" : ""}`}
             onClick={() => navigate("/")}
           >
-            <button className="rounded-lg border-[1.5px] border-gray-300 p-2 font-bold text-primary transition-all hover:bg-gray-100 active:bg-primary active:text-bg">
+            <button
+              className={`hidden rounded-lg border-[1.5px] border-gray-300 p-2 font-bold text-primary transition-all hover:bg-gray-100 active:bg-primary active:text-bg lg:block ${searchFocus ? "lg:hidden" : ""}`}
+            >
               <Icon icon="heroicons:home-16-solid" width={22} />
               {/* Beranda */}
             </button>
@@ -169,13 +182,51 @@ export default function Navbar() {
                   className="h-10"
                   name="Masuk"
                   btnStroke={true}
-                  onClick={() => console.log("Login")}
+                  onClick={() => setOpenLogin(true)}
                 />
                 <RoundedButton
                   className="h-10"
                   name="Daftar"
-                  onClick={() => console.log("Daftar")}
+                  onClick={() => setOpenRegister(true)}
                 />
+
+                <Modal
+                  show={openLogin}
+                  size="md"
+                  popup
+                  onClose={() => setOpenLogin(false)}
+                  className="bg-black bg-opacity-65 shadow"
+                >
+                  <Modal.Header />
+                  <Modal.Body>
+                    <Login
+                      toRegister={(val) => {
+                        setOpenRegister(val);
+                        setOpenLogin(!openLogin);
+                      }}
+                    />
+                  </Modal.Body>
+                </Modal>
+
+                <Modal
+                  show={openRegister}
+                  size="md"
+                  popup
+                  onClose={() => setOpenRegister(false)}
+                  className="fixed bg-black bg-opacity-65 shadow"
+                >
+                  <Modal.Header>
+                    <h1 className="m-4 font-semibold">Buat Akun Baru.</h1>
+                  </Modal.Header>
+                  <Modal.Body className="max-h-[80vh] overflow-y-scroll">
+                    <Register
+                      toLogin={(val) => {
+                        setOpenLogin(val);
+                        setOpenRegister(!openRegister);
+                      }}
+                    />
+                  </Modal.Body>
+                </Modal>
               </div>
             </div>
           </>
@@ -185,62 +236,87 @@ export default function Navbar() {
   );
 }
 
+// Modal Login & Register
 function AuthButton() {
-  const [showModal, setShowModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
 
   return (
-    <div className="ml-3 hidden gap-2 sm:ml-6 lg:flex">
-      <RoundedButton
-        name="Masuk"
-        btnStroke={true}
-        onClick={() => setShowModal(true)}
-      />
-
-      {/* Modal Login */}
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <Login />
-        </Modal>
-      )}
-
-      <RoundedButton
-        className="h-10"
-        name="Daftar"
-        onClick={() => setShowRegisterModal(true)}
-      />
-
-      {/* Modal Register */}
-      {showRegisterModal && (
-        <Modal onClose={() => setShowRegisterModal(false)}>
-          <Register />
-        </Modal>
-      )}
-    </div>
-  );
-}
-
-// Desain Modal
-function Modal({ children, onClose }) {
-  return (
-    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative mx-2 w-full max-w-md rounded-lg bg-white p-1 shadow-lg">
-        <button className="absolute right-2 top-2 text-black" onClick={onClose}>
-          <span>x</span>
-        </button>
-        {children}
+    <div>
+      <div className="ml-3 hidden gap-2 sm:ml-6 lg:flex">
+        <RoundedButton
+          name="Masuk"
+          btnStroke={true}
+          onClick={() => setOpenLogin(true)}
+        />
+        <RoundedButton
+          className="h-10"
+          name="Daftar"
+          onClick={() => setOpenRegister(true)}
+        />
       </div>
+      <Modal
+        show={openLogin}
+        size="md"
+        popup
+        onClose={() => setOpenLogin(false)}
+        className="bg-black bg-opacity-65 shadow"
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <Login
+            toRegister={(val) => {
+              setOpenRegister(val);
+              setOpenLogin(!openLogin);
+            }}
+          />
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={openRegister}
+        size="md"
+        popup
+        onClose={() => setOpenRegister(false)}
+        className="fixed bg-black bg-opacity-65 shadow"
+      >
+        <Modal.Header>
+          <h1 className="m-4 font-semibold">Buat Akun Baru.</h1>
+        </Modal.Header>
+        <Modal.Body className="max-h-[80vh] overflow-y-scroll">
+          <Register
+            toLogin={(val) => {
+              setOpenLogin(val);
+              setOpenRegister(!openRegister);
+            }}
+          />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
+// Akhir Modal Login & Register
 
 function Profile() {
   const { toggle, setToggle } = useContext(ModalProfileContext);
+  const { user } = useContext(UserContext);
+  const [profile, setProfile] = useState({});
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axios.get(`/users/${user.username}`);
+        setProfile(response.data.user);
+      } catch (error) {
+        console.error(error.response?.data);
+      }
+    };
+    getUser();
+  }, [user]);
 
   return (
     <div className="flex w-fit min-w-fit cursor-pointer items-center gap-1 lg:ml-3">
       <img
-        src="https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"
+        src={profile.image ? profile.image : BlankProfile}
         alt="Profile"
         className="aspect-square w-10 rounded-full bg-slate-300 object-cover sm:w-11"
         onClick={() => setToggle(!toggle)}
