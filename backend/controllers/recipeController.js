@@ -44,18 +44,29 @@ const getPaginatedRecipes = async (req, res) => {
             query.ingredients = { $all: ingredients.split(",") };
         }
 
-        // Get total recipes count
-        const totalRecipes = await Recipe.countDocuments();
-
-        // Calculate total pages
-        const totalPages = Math.ceil(totalRecipes / limit);
-
         // Get paginated recipes
         const recipes = await Recipe.find(query).select("_id user_id title image total_time likes category")
             .populate({ path: "user_id", select: "fullName image" })
             .sort(sort)
             .skip((page - 1) * limit)
             .limit(limit);
+
+        // Handle total recipes count and total pages
+        const totalRecipes = await Recipe.countDocuments(); // Total recipes count
+        let totalPages;
+        if (recipes.length < limit) {
+
+            // Total pages is 1 if recipes length is less than limit
+            totalPages = 1;
+
+        } else {
+
+            // Calculate total pages
+            totalPages = Math.ceil(totalRecipes / limit);
+
+        }
+
+
 
         res.status(200).json({
             recipes,
