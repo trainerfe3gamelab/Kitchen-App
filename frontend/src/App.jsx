@@ -21,6 +21,7 @@ import InputRecipe from "./pages/InputRecipe";
 import About from "./pages/About";
 import KontakSaran from "./pages/KontakSaran";
 import Privasi from "./pages/Privasi";
+import User from "./pages/User";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
 axios.defaults.withCredentials = true;
@@ -37,16 +38,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/Simpan" element={<Simpan />} />
         <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/recipe/input" element={<InputRecipe />} />
         <Route path="/resep" element={<Resep />} />
-        <Route path="*" element={<NotFound />} />
         <Route path="/about" element={<About />} />
         <Route path="/about/privasi" element={<Privasi />} />
         <Route path="/about/Kontak-saran" element={<KontakSaran />} />
+        <Route path="/user/:username" element={<User />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       {showNavFoot && <Footer />}
     </UserContextProvider>

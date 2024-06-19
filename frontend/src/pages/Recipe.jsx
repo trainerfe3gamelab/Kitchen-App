@@ -28,6 +28,7 @@ export default function Recipe() {
         const data = response.data.recipe;
         setRecipe(data);
         setToggleActivity((val) => ({ ...val, like: data.isLiked }));
+        setToggleActivity((val) => ({ ...val, save: data.isSaved }));
         console.log("🚀 ~ fetchRecipe ~ response:", response);
       } catch (error) {
         navigate("/recipe");
@@ -37,7 +38,7 @@ export default function Recipe() {
       }
     };
     fetchRecipe();
-  }, [id]);
+  }, [id, isLogged]);
 
   useEffect(() => {
     const nutrisi = recipe.nutrition ? recipe.nutrition[0] : "";
@@ -92,12 +93,19 @@ export default function Recipe() {
       }
     }
   };
-  const toggleSave = () => {
+  const toggleSave = async () => {
     if (!isLogged) {
       toast.error("Silahkan login terlebih dahulu untuk menyimpan resep");
       return;
     }
     setToggleActivity((val) => ({ ...val, save: !toggleActivity.save }));
+    try {
+      const response = await axios.post(`/recipes/${id}/save`);
+      console.log("🚀 ~ toggleLike ~ response:", response);
+    } catch (error) {
+      toast.error("Gagal menyimpan resep");
+      setToggleActivity((val) => ({ ...val, save: false }));
+    }
   };
 
   if (loading) {
@@ -182,11 +190,11 @@ export default function Recipe() {
           <section className="flex flex-col items-start gap-2">
             <div className="flex items-center gap-2">
               <img
-                src={recipe.user_image || BlankProfile}
+                src={recipe.user_id?.image || BlankProfile}
                 alt="user"
                 className="aspect-square w-11 rounded-full object-cover"
               />
-              <p>{recipe.user_name || "User Creator"}</p>
+              <p>{recipe.user_id?.fullName || "User Creator"}</p>
             </div>
             <p>{recipe.description}</p>
           </section>

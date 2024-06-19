@@ -74,19 +74,14 @@ const registerUser = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select("-password");
-        const page = parseInt(req.query.page) || 1;
-        const limit = 16;
-        const skip = (page - 1) * limit; // calculate number of recipes to skip
 
-        const recipe = await Recipe.find({ user_id: user._id })
-            .select("_id user_id title image total_time likes category")
-            .skip(skip)
-            .limit(limit);
         if (!user) {
             return res.status(404).json({
                 error: "User not found"
             });
         }
+        const recipe = await Recipe.find({ user_id: user._id })
+            .select("_id user_id title image total_time likes category")
 
         res.status(200).json({
             user,

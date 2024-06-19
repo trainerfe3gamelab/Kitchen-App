@@ -32,6 +32,7 @@ export default function Navbar() {
       return;
     }
     urlSearchParams.set("recipe", input);
+    urlSearchParams.set("page", 1);
     navigate(`/search?${urlSearchParams.toString()}`);
     setSearchFocus(!searchFocus);
     console.log(input);
