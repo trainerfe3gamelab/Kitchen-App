@@ -50,18 +50,7 @@ export default function User() {
               {user.user?.website}
             </a>
           )}
-          {user.user?.bio && (
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque
-              recusandae labore harum? Tempore dicta reprehenderit perferendis
-              excepturi doloremque necessitatibus? Mollitia cumque possimus id
-              quis unde quos, voluptatum dolore ab ipsum. Lorem ipsum dolor sit
-              amet consectetur adipisicing elit. Eligendi perspiciatis sunt
-              reprehenderit dolor. Minus molestiae voluptate odio quia nesciunt
-              ipsum, iusto cupiditate quod, commodi vitae veniam qui, ex
-              voluptatem obcaecati.
-            </p>
-          )}
+          {user.user?.bio && <p>{user.user?.bio}</p>}
         </div>
       </section>
       <hr className="mx-auto mt-6 w-full max-w-[1080px]" />
