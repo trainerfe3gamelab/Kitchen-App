@@ -16,6 +16,8 @@ const getPaginatedRecipes = async (req, res) => {
         const category = req.query.category;
         const search = req.query.search;
         const popular = req.query.popular;
+        const ingredients = req.query.ingredients;
+        const textSearch = `${search} ${ingredients}`
 
         // Create query and sort objects
         let query = {};
@@ -29,8 +31,8 @@ const getPaginatedRecipes = async (req, res) => {
         }
 
         // If search query is provided, add it to query object
-        if (search) {
-            query.$text = { $search: search };
+        if (search || ingredients) {
+            query.$text = { $search: textSearch };
         }
 
         // If popular is "true", sort by likes in descending order

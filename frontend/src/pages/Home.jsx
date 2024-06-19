@@ -180,13 +180,13 @@ function ForYouSection() {
   const [forYou, setForYou] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // console.log(forYou);
 
   useEffect(() => {
     const fetchForYou = async () => {
       try {
         setLoading(true);
         const { data } = await axios.get("/for-you");
+        console.log("🚀 ~ fetchForYou ~ data:", data);
         setForYou(data.recipes);
       } catch (error) {
         console.error(error);

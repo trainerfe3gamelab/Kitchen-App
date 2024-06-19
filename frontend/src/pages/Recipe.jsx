@@ -185,7 +185,6 @@ export default function Recipe() {
             </div>
           </header>
           <hr className="my-4 border-gray-300" />
-
           {/* User Info */}
           <section className="flex flex-col items-start gap-2">
             <div className="flex items-center gap-2">
@@ -199,7 +198,6 @@ export default function Recipe() {
             <p>{recipe.description}</p>
           </section>
           <hr className="my-4 border-gray-300" />
-
           {/* Bahan Bahan */}
           <section className="flex flex-col gap-3">
             <h1 className="font-semibold">Bahan-bahan</h1>
@@ -209,12 +207,21 @@ export default function Recipe() {
                 className="flex h-11 w-full max-w-[90%] items-center justify-between rounded border border-gray-300 bg-gray-100 px-4 py-2 md:max-w-[80%]"
               >
                 <p>{item}</p>
-                <button className="font-medium text-accent-1">Cek Harga</button>
+                <button
+                  onClick={() =>
+                    window.open(
+                      `https://mart.grab.com/id/id/search?keyword=${item}`,
+                      "_blank",
+                    )
+                  }
+                  className="font-medium text-accent-1"
+                >
+                  Cek Harga
+                </button>
               </div>
             ))}
           </section>
           <hr className="my-4 border-gray-300" />
-
           {/* Informasi Nilai Gizi */}
           <section>
             <h1 className="mb-4 font-semibold">Informasi Nilai Gizi</h1>
@@ -254,7 +261,6 @@ export default function Recipe() {
             </p>
           </section>
           <hr className="my-4 border-gray-300" />
-
           {/* Langkah */}
           <section className="flex flex-col gap-4">
             <h1 className="mt-4 font-semibold">Langkah-langkah</h1>

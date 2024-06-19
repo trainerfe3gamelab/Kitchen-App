@@ -40,13 +40,12 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/recipe/:id" element={<Recipe />} />
         <Route path="/edit-profile" element={<EditProfile />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/recipe/input" element={<InputRecipe />} />
-        <Route path="/resep" element={<Resep />} />
         <Route path="/about" element={<About />} />
         <Route path="/about/privasi" element={<Privasi />} />
-        <Route path="/about/Kontak-saran" element={<KontakSaran />} />
+        <Route path="/about/kontak-saran" element={<KontakSaran />} />
         <Route path="/user/:username" element={<User />} />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {showNavFoot && <Footer />}
