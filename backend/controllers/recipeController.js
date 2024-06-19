@@ -84,9 +84,14 @@ const getRecipeById = async (req, res) => {
 
         // Find recipe by id
         const recipe = await Recipe.findById(req.params.id).populate({ path: "user_id", select: "fullName image" });
-        const nutrition = await Nutrition.find({ recipe_id: req.params.id });
+        let nutrition = await Nutrition.find({ recipe_id: req.params.id });
 
+        // Check if nutrition exists
+        if (!nutrition[0]?.total_cal) {
+            nutrition = null;
+        }
 
+        // Check if recipe exists
         if (!recipe) {
             return res.status(404).json({
                 error: "Recipe not found"
@@ -215,7 +220,7 @@ const editRecipe = async (req, res) => {
             ingredients,
             video,
             stepDescription,
-            stepImage,
+            // stepImage,
             category
         } = req.body;
 
@@ -228,25 +233,47 @@ const editRecipe = async (req, res) => {
 
         // Check if ingredients is same as before
         let nutritionPromise;
-        if (ingredients.length > 0) {
+        if (ingredients?.length > 0) {
 
             // Get new nutrition data
             const newNutrition = await getNutrition(recipeId, ingredients);
 
-            // Find nutrition by recipe id
-            const nutrition = await Nutrition.findOne({ recipe_id: recipeId });
 
-            // Update nutrition data
-            nutrition.total_cal = newNutrition.total_cal;
-            nutrition.total_fat = newNutrition.total_fat;
-            nutrition.fatsat = newNutrition.fatsat;
-            nutrition.protein = newNutrition.protein;
-            nutrition.carb = newNutrition.carb;
-            nutrition.sugar = newNutrition.sugar;
-            nutrition.salt = newNutrition.salt;
+            // Check if new nutrition data is available
+            if (newNutrition?.total_cal) {
 
-            // Save updated nutrition data
-            nutritionPromise = nutrition.save();
+                // Find nutrition by recipe id
+                const nutrition = await Nutrition.findOne({ recipe_id: recipeId });
+
+                // Update nutrition data
+                nutrition.total_cal = newNutrition.total_cal;
+                nutrition.total_fat = newNutrition.total_fat;
+                nutrition.fatsat = newNutrition.fatsat;
+                nutrition.protein = newNutrition.protein;
+                nutrition.carb = newNutrition.carb;
+                nutrition.sugar = newNutrition.sugar;
+                nutrition.salt = newNutrition.salt;
+
+                // Save updated nutrition data
+                nutritionPromise = nutrition.save();
+
+            } else {
+
+                // Unset some fields if new nutrition data is not available
+                await Nutrition.updateOne({ recipe_id: recipeId }, {
+                    $unset: {
+                        total_cal: "",
+                        total_fat: "",
+                        fatsat: "",
+                        protein: "",
+                        carb: "",
+                        sugar: "",
+                        salt: ""
+                    }
+                });
+
+            }
+
         }
 
         // Update recipe data
@@ -256,16 +283,35 @@ const editRecipe = async (req, res) => {
         recipe.total_time = total_time || recipe.total_time;
         recipe.ingredients = ingredients || recipe.ingredients;
         recipe.steps.video = video || recipe.steps.video;
-        if (stepDescription && stepImage && stepDescription.length === stepImage.length) {
-            recipe.steps.step = stepDescription.map((description, index) => ({
+        if (stepDescription?.length > 0) {
+            recipe.steps.step = stepDescription.map((description) => ({
                 description,
-                image: stepImage[index]
+                // image: stepImage[index]
             }));
         }
         recipe.category = category || recipe.category;
 
         // Save updated recipe data
         const recipePromise = recipe.save();
+
+        // Handle image upload
+        if (req.files) {
+            const images = req.files;
+
+            if (images.image?.length === 1) {
+                const image = await uploadImage(`images/recipes/${recipe._id}/main.jpg`, images.image[0].buffer);
+                recipe.image = image;
+            }
+
+            if (images.stepImages?.length > 0) {
+                const stepImagesPromise = images.stepImages.map((image, order) => (uploadImage(`images/recipes/${recipe._id}/step-${order}.jpg`, image.buffer)));
+                const stepImages = await Promise.all(stepImagesPromise);
+                recipe.steps.step = recipe.steps.step.map((step, index) => ({
+                    ...step,
+                    image: stepImages[index]
+                }))
+            }
+        }
 
         // Execute both promises
         await Promise.all([recipePromise, nutritionPromise]);
@@ -436,62 +482,69 @@ const saveRecipe = async (req, res) => {
 }
 
 const getNutrition = async (recipeId, ingredients) => {
-    // Ensure ingredients is in english
-    const translator = new deepl.Translator(process.env.DEEPL_AUTH_KEY);
-    const translatedIngredients = await translator.translateText(ingredients, "ID", "en-US");
-    const ingr = translatedIngredients.map(ingredient => ingredient.text);
+    try {
 
-    // Edamam API request body
-    const edamamReqBody = {
-        title: "",
-        ingr,
-        url: "",
-        summary: "",
-        yield: "",
-        time: "",
-        img: "",
-        prep: ""
+        // Ensure ingredients is in english
+        const translator = new deepl.Translator(process.env.DEEPL_AUTH_KEY);
+        const translatedIngredients = await translator.translateText(ingredients, "ID", "en-US");
+        const ingr = translatedIngredients.map(ingredient => ingredient.text);
+
+        // Edamam API request body
+        const edamamReqBody = {
+            title: "",
+            ingr,
+            url: "",
+            summary: "",
+            yield: "",
+            time: "",
+            img: "",
+            prep: ""
+        }
+
+        // Send request to get nutrition data
+        const edamamResponse = await axios.post(process.env.EDAMAM_API_URL, edamamReqBody, {
+            headers: {
+                "accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        const data = edamamResponse.data;
+
+        // Create new nutrition instance
+        return new Nutrition({
+            recipe_id: recipeId,
+            total_cal: data.totalNutrients.ENERC_KCAL.quantity,
+            total_fat: {
+                g: data.totalNutrients.FAT.quantity,
+                akg: data.totalDaily.FAT.quantity,
+            },
+            fatsat: {
+                g: data.totalNutrients.FASAT.quantity,
+                akg: data.totalDaily.FASAT.quantity,
+            },
+            protein: {
+                g: data.totalNutrients.PROCNT.quantity,
+                akg: data.totalDaily.PROCNT.quantity,
+            },
+            carb: {
+                g: data.totalNutrients.CHOCDF.quantity,
+                akg: data.totalDaily.CHOCDF.quantity,
+            },
+            sugar: {
+                g: data.totalNutrients.SUGAR.quantity
+            },
+            salt: {
+                mg: data.totalNutrients.NA.quantity,
+                akg: data.totalDaily.NA.quantity,
+            }
+        });
+
+    } catch (_) {
+        return new Nutrition({
+            recipe_id: recipeId
+        });
     }
 
-    // Send request to get nutrition data
-    const edamamResponse = await axios.post(process.env.EDAMAM_API_URL, edamamReqBody, {
-        headers: {
-            "accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    });
-    const data = edamamResponse.data;
-
-    // Create new nutrition instance
-    const nutrition = new Nutrition({
-        recipe_id: recipeId,
-        total_cal: data.totalNutrients.ENERC_KCAL.quantity,
-        total_fat: {
-            g: data.totalNutrients.FAT.quantity,
-            akg: data.totalDaily.FAT.quantity,
-        },
-        fatsat: {
-            g: data.totalNutrients.FASAT.quantity,
-            akg: data.totalDaily.FASAT.quantity,
-        },
-        protein: {
-            g: data.totalNutrients.PROCNT.quantity,
-            akg: data.totalDaily.PROCNT.quantity,
-        },
-        carb: {
-            g: data.totalNutrients.CHOCDF.quantity,
-            akg: data.totalDaily.CHOCDF.quantity,
-        },
-        sugar: {
-            g: data.totalNutrients.SUGAR.quantity
-        },
-        salt: {
-            mg: data.totalNutrients.NA.quantity,
-            akg: data.totalDaily.NA.quantity,
-        }
-    });
-
-    return nutrition;
 }
 
 module.exports = {
