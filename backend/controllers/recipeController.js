@@ -16,7 +16,6 @@ const getPaginatedRecipes = async (req, res) => {
         const category = req.query.category;
         const search = req.query.search;
         const popular = req.query.popular;
-        const ingredients = req.query.ingredients;
 
         // Create query and sort objects
         let query = {};
@@ -37,11 +36,6 @@ const getPaginatedRecipes = async (req, res) => {
         // If popular is "true", sort by likes in descending order
         if (popular === "true") {
             sort = { likes: -1 };
-        }
-
-        // If ingredients query is provided, add it to query object
-        if (ingredients) {
-            query.ingredients = { $all: ingredients.split(",") };
         }
 
         // Get paginated recipes
