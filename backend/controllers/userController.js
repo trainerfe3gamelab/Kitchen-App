@@ -100,33 +100,23 @@ const getUser = async (req, res) => {
 const getUserSavedRecipes = async (req, res) => {
     try {
 
-        // Get page, limit, category, sort and search query from request
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-
         // Get total saved recipes count
         const totalSavedRecipes = await SaveRecipe.countDocuments({ user_id: req.user.id });
-
-        // Calculate total pages
-        const totalPages = Math.ceil(totalSavedRecipes / limit);
 
         // Get paginated saved recipes
         const savedRecipes = await SaveRecipe.find({ user_id: req.user.id }).select("recipe_id")
             .sort({ created_at: -1 })
-            .skip((page - 1) * limit)
-            .limit(limit);
 
         // Get recipe ids
         const recipeIds = savedRecipes.map(savedRecipe => savedRecipe.recipe_id);
 
         // Get recipes by ids
-        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("_id user_id title image total_time likes category");
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("_id user_id title image total_time likes category")
+            .populate({ path: 'user_id', select: 'fullName image' });
 
         res.status(200).json({
-            recipes,
-            totalPages,
-            currentPage: page,
-            limit
+            totalSavedRecipes,
+            recipes
         });
 
     } catch (error) {
@@ -141,33 +131,23 @@ const getUserSavedRecipes = async (req, res) => {
 const getUserLikedRecipes = async (req, res) => {
     try {
 
-        // Get page, limit, category, sort and search query from request
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-
         // Get total liked recipes count
         const totalLikedRecipes = await Like.countDocuments({ user_id: req.user.id });
 
-        // Calculate total pages
-        const totalPages = Math.ceil(totalLikedRecipes / limit);
-
         // Get paginated liked recipes
         const likedRecipes = await Like.find({ user_id: req.user.id }).select("recipe_id")
-            .sort({ created_at: -1 })
-            .skip((page - 1) * limit)
-            .limit(limit);
+            .sort({ created_at: -1 });
 
         // Get recipe ids
         const recipeIds = likedRecipes.map(likedRecipe => likedRecipe.recipe_id);
 
         // Get recipes by ids
-        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("_id user_id title image total_time likes category");
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).select("_id user_id title image total_time likes category")
+            .populate({ path: 'user_id', select: 'fullName image' });
 
         res.status(200).json({
+            totalLikedRecipes,
             recipes,
-            totalPages,
-            currentPage: page,
-            limit
         });
 
     } catch (error) {
