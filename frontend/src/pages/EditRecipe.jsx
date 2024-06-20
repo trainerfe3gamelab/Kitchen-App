@@ -34,9 +34,12 @@ const unitBahan = {
     "liter",
     "ml",
     "gelas",
+    "piring",
     "butir",
     "siung",
     "batang",
+    "buah",
+    "potong",
     "secukupnya",
   ],
 };
@@ -815,6 +818,7 @@ function FormLangkah({ getSteps }) {
 }
 
 function FormTambahan({ getCategory, setCategory }) {
+  console.log("🚀 ~ FormTambahan ~ setCategory:", setCategory);
   const { additionalInfo } = useContext(AdditionalInfoContext);
   const [checkedCategories, setCheckedCategories] = useState(
     additionalInfo?.kategori?.reduce((acc, category) => {

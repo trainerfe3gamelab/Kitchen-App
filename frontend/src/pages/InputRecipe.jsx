@@ -34,9 +34,12 @@ const unitBahan = {
     "liter",
     "ml",
     "gelas",
+    "piring",
     "butir",
     "siung",
     "batang",
+    "buah",
+    "potong",
     "secukupnya",
   ],
 };

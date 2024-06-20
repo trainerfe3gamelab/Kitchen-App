@@ -181,7 +181,7 @@ export default function Recipe() {
             </div>
             <div className="ml-auto flex h-fit w-fit items-center gap-1 rounded-full bg-accent-2 px-3 py-1 text-bg">
               <Icon width={19} icon="mingcute:time-line" />
-              <p className="">{recipe.total_time}</p>
+              <p className="">{formatMinute(parseInt(recipe.total_time))}</p>
             </div>
           </header>
           <hr className="my-4 border-gray-300" />
@@ -391,4 +391,16 @@ function extractYouTubeID(url) {
   }
 
   return null;
+}
+function formatMinute(menit) {
+  let jam = Math.floor(menit / 60);
+  let sisaMenit = menit % 60;
+
+  if (jam > 0 && sisaMenit > 0) {
+    return `${jam} j ${sisaMenit} m`;
+  } else if (jam > 0) {
+    return `${jam} j`;
+  } else {
+    return `${sisaMenit} m`;
+  }
 }

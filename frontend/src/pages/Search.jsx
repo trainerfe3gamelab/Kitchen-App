@@ -23,7 +23,7 @@ export default function Search() {
       <AdditionalInfoProvider>
         <SidebarFilter />
       </AdditionalInfoProvider>
-      <section className="mt-4 w-full">
+      <section className="mt-96 w-full md:mt-4">
         <header className="mb-6 flex flex-col gap-4">
           <h1 className="line-clamp-1 w-full font-medium text-primary">
             {`Menampilkan Hasil Pencarian "${searchParams().recipe ? decodeURIComponent(searchParams().recipe) : "All"}"`}
@@ -110,7 +110,7 @@ function ResultSearch() {
         </div>
       ) : (
         <>
-          <div className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-3">
+          <div className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3">
             {resultSearch.recipes?.map((item, index) => (
               <Card
                 key={index}
@@ -260,7 +260,7 @@ function SidebarFilter() {
     <>
       <Sidebar
         aria-label="sidebar-filter"
-        className="mt-4 max-w-[255px] rounded-lg border border-gray-300 bg-gray-100 shadow"
+        className="absolute z-40 mt-4 h-fit w-full max-w-[255px] rounded-lg border border-gray-300 bg-gray-100 shadow md:static"
       >
         <Sidebar.Items>
           {/* Filter Header */}

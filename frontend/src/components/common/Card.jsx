@@ -17,7 +17,7 @@ export default function Card(props) {
   };
   const handleEditClick = (e) => {
     e.stopPropagation();
-    console.log(`${props.id} edit clicked`);
+    navigate(`/recipe/edit/${props.id}`);
   };
 
   if (props.isLoad) {
@@ -49,7 +49,7 @@ export default function Card(props) {
         {/* time cook */}
         <div className="absolute left-3 top-3 flex w-fit items-center gap-1 rounded-full bg-accent-2 px-2 py-1 text-bg shadow-md">
           <Icon className="text-sm" icon="mingcute:time-line" />
-          <p className="text-xs">{props.time}</p>
+          <p className="text-xs">{formatMinute(parseInt(props.time))}</p>
         </div>
 
         {/* Edit */}
@@ -90,4 +90,17 @@ export default function Card(props) {
       </div>
     </div>
   );
+}
+
+function formatMinute(menit) {
+  let jam = Math.floor(menit / 60);
+  let sisaMenit = menit % 60;
+
+  if (jam > 0 && sisaMenit > 0) {
+    return `${jam} j ${sisaMenit} m`;
+  } else if (jam > 0) {
+    return `${jam} j`;
+  } else {
+    return `${sisaMenit} m`;
+  }
 }
