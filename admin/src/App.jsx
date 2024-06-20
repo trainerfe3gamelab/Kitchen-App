@@ -4,6 +4,7 @@ import ResepMakanan from './components/ResepMakanan';
 import DetailResep from './components/DetailResep';
 import SideNav from './components/SideNav';
 import User from './components/User';
+import DetailUser from './components/DetailUser'; // Import DetailUser
 
 const App = () => {
   const [open, setOpen] = useState(true); // State untuk mengontrol lebar SideNav
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/" element={<User />} />
           <Route path="/ResepMakanan" element={<ResepMakanan />} />
           <Route path="/DetailResep/:id" element={<DetailResep />} />
+          <Route path="/DetailUser/:id" element={<DetailUser />} /> {/* Tambah Route untuk DetailUser */}
         </Routes>
       </div>
     </div>

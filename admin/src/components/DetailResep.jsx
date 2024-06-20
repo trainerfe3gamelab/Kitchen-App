@@ -1,10 +1,11 @@
+// DetailResep.jsx
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const DetailResep = () => {
-    const [item, setItem] = useState(null); // Initialize state as null
-    const { id } = useParams(); // Ensure id is captured from URL parameters
+    const [item, setItem] = useState(null);
+    const { id } = useParams();
 
     useEffect(() => {
         if (id) {
@@ -12,9 +13,10 @@ const DetailResep = () => {
         }
     }, [id]);
 
-    const fetchRecipeDetail = async (recipeId) => {
+    const fetchRecipeDetail = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:4000/recipes/${recipeId}`);
+            const response = await axios.get(`http://localhost:3000/api/admin/recipe/${id}`);
+            console.log(response.data)
             setItem(response.data); // Set the fetched data to state
         } catch (error) {
             console.error("Error fetching data: ", error);
@@ -42,7 +44,7 @@ const DetailResep = () => {
                             <li key={index}>{step}</li>
                         ))}
                     </ol>
-                    <a href={item.video} target="_blank" rel="noopener noreferrer" className='text-blue-500 mt-4 inline-block'>Watch Video</a>
+                    <a href={item.video} rel="noopener noreferrer" className='text-blue-500 mt-4 inline-block'>Watch Video</a>
                 </div>
             ) : (
                 <p>Loading...</p>

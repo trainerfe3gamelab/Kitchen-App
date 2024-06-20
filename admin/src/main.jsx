@@ -1,9 +1,9 @@
 // main.jsx
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client'; // Corrected import statement
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import './index.css';  // Pastikan untuk mengimpor CSS jika ada
+import './index.css';  // Make sure to import CSS if it exists
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
