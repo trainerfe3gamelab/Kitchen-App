@@ -86,7 +86,15 @@ const Footer = () => {
                 </svg>
               </a>
             </div>
-            <button className="mt-4 rounded-full border border-black bg-white p-2 text-sm">
+            <button
+              onClick={() => {
+                window.open(
+                  "https://kitabisa.com/search/results?q=palestina",
+                  "_blank",
+                );
+              }}
+              className="mt-4 rounded-full border border-black bg-white p-2 text-sm"
+            >
               Support Palestine
             </button>
           </div>
