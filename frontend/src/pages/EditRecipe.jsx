@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/userContext";
 import { Icon } from "@iconify/react";
 import { Button, Modal, Label, Checkbox } from "flowbite-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import {
   AdditionalInfoContext,
   AdditionalInfoProvider,
@@ -44,7 +44,7 @@ const unitBahan = {
   ],
 };
 
-export default function InputRecipe() {
+export default function EditRecipe() {
   const navigate = useNavigate();
   const { isLogged } = useContext(UserContext);
   console.log("🚀 ~ InputRecipe ~ isLogged:", isLogged);
@@ -98,6 +98,7 @@ function Header({ tabActive, changeActiveTab }) {
 }
 
 function FormRecipe({ activeTab, changeActiveTab }) {
+  const { idRecipe } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [openAlert, setOpenAlert] = useState({
@@ -108,9 +109,27 @@ function FormRecipe({ activeTab, changeActiveTab }) {
     cancel: false,
     delete: false,
   });
-  const [formData, setFormData] = useState({});
-  // console.log(formData);
   const [selectedImage, setSelectedImage] = useState({ file: null, url: null });
+  const [formData, setFormData] = useState({});
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await axios.get(`/recipes/${idRecipe}`);
+        const recipe = data?.recipe;
+        console.log("🚀 ~ recipe:", recipe);
+        setFormData({
+          title: recipe.title,
+          description: recipe.description,
+          category: recipe.category,
+        });
+        setSelectedImage({ file: null, url: recipe.image });
+      } catch (error) {
+        navigate("/recipe");
+        return;
+      }
+    })();
+  }, []);
+
   const [waktu, setWaktu] = useState({ jam: 0, menit: 0 });
 
   // STATE BAHAN
@@ -264,8 +283,6 @@ function FormRecipe({ activeTab, changeActiveTab }) {
     formData.category?.map((item) => {
       data.append("category", item);
     });
-    console.log(formData);
-    // return;
 
     try {
       setLoading(true);
@@ -312,6 +329,7 @@ function FormRecipe({ activeTab, changeActiveTab }) {
             name="title"
             placeholder="Cth. Nasi Goreng Ayam Rumahan"
             onChange={(e) => handleChange("title", e.target.value)}
+            value={formData.title}
           />
           <div>
             <h1>Tambahkan Foto *</h1>
@@ -363,6 +381,7 @@ function FormRecipe({ activeTab, changeActiveTab }) {
             label="Deskripsi Untuk Resep Anda *"
             placeholder="Cth. Resep nasi goreng ayam rumahan yang lezat dan mudah dibuat. Cocok untuk ..."
             onChange={(e) => handleChange("description", e.target.value)}
+            value={formData.description}
           />
 
           <div id="time" className="flex flex-wrap gap-2">
@@ -507,6 +526,7 @@ function FormRecipe({ activeTab, changeActiveTab }) {
           <AdditionalInfoProvider>
             <FormTambahan
               getCategory={(data) => handleChange("category", data)}
+              setCategory={formData.category}
             />
           </AdditionalInfoProvider>
         </div>
@@ -797,7 +817,8 @@ function FormLangkah({ getSteps }) {
   );
 }
 
-function FormTambahan({ getCategory }) {
+function FormTambahan({ getCategory, setCategory }) {
+  console.log("🚀 ~ FormTambahan ~ setCategory:", setCategory);
   const { additionalInfo } = useContext(AdditionalInfoContext);
   const [checkedCategories, setCheckedCategories] = useState(
     additionalInfo?.kategori?.reduce((acc, category) => {
@@ -805,6 +826,19 @@ function FormTambahan({ getCategory }) {
       return acc;
     }, {}),
   );
+
+  useEffect(() => {
+    const setChecked = (cat) => {
+      setCheckedCategories((prevCheckedCategories) => ({
+        ...prevCheckedCategories,
+        [cat]: true,
+      }));
+    };
+    if (setCategory?.length > 0) {
+      setChecked(setCategory);
+    }
+  }, [setCategory?.length > 0]);
+
   useEffect(() => {
     if (getCategory) getCategory(getCheckedCategories());
   }, [checkedCategories]);
