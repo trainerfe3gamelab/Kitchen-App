@@ -30,7 +30,7 @@ axios.defaults.withCredentials = true;
 
 function App() {
   const showNavFoot =
-    useLocation().pathname !== "/edit-profile" &&
+    useLocation().pathname !== "/profile/edit" &&
     useLocation().pathname !== "/recipe/input" &&
     !useLocation().pathname.startsWith("/recipe/edit/");
 
@@ -42,13 +42,13 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/recipe/:id" element={<Recipe />} />
-        <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/recipe/input" element={<InputRecipe />} />
         <Route path="/recipe/edit/:idRecipe" element={<EditRecipe />} />
         <Route path="/about" element={<About />} />
         <Route path="/about/privasi" element={<Privasi />} />
         <Route path="/about/kontak-saran" element={<KontakSaran />} />
         <Route path="/user/:username" element={<User />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -98,7 +98,10 @@ export default function Profile() {
             )}
             {user.user?.bio && <p>{user.user?.bio}</p>}
           </div>
-          <button className="mt-2 flex h-fit w-fit items-center gap-2 rounded-full border border-primary px-4 py-2 transition-all hover:bg-primary hover:text-bg active:scale-95 sm:ml-auto">
+          <button
+            onClick={() => navigate("/profile/edit")}
+            className="mt-2 flex h-fit w-fit items-center gap-2 rounded-full border border-primary px-4 py-2 transition-all hover:bg-primary hover:text-bg active:scale-95 sm:ml-auto"
+          >
             <Icon icon="uil:setting" />
             Pengaturan
           </button>

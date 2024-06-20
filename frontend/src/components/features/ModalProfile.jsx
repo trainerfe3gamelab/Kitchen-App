@@ -67,7 +67,13 @@ function ModalProfileProvider({ children }) {
               Disimpan
             </button>
             <hr className="w-full border-[1px] border-primary border-opacity-20" />
-            <button className="flex w-full justify-start text-primary hover:text-opacity-60">
+            <button
+              onClick={() => {
+                navigate(`/profile/edit`);
+                setToggle(false);
+              }}
+              className="flex w-full justify-start text-primary hover:text-opacity-60"
+            >
               Pengaturan
             </button>
             <button
