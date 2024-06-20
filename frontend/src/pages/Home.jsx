@@ -9,8 +9,11 @@ import {
   AdditionalInfoContext,
   AdditionalInfoProvider,
 } from "../context/additionalInfoContext.jsx";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
     <main className="mx-auto my-24 w-full min-w-[360px] max-w-[1080px] px-5 py-1 lg:mx-auto lg:px-0">
       {/* Banner */}
@@ -41,6 +44,7 @@ export default function Home() {
             className="mx-auto mt-10"
             btnStroke
             name="Lihat resep menarik lainya"
+            onClick={() => navigate("/search")}
           />
         </div>
       </section>
@@ -52,7 +56,10 @@ export default function Home() {
           <BasedOnIngredients />
         </AdditionalInfoProvider>
         <div className="flex w-full justify-center">
-          <button className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95">
+          <button
+            className="mx-auto mt-4 font-semibold text-primary underline transition-all hover:text-opacity-75 active:scale-95"
+            onClick={() => navigate("/search")}
+          >
             Lihat Bahan Lainya
           </button>
         </div>
@@ -112,10 +119,17 @@ function PopularSection() {
 }
 
 function CategorySection() {
+  const navigate = useNavigate();
+  const urlSearchParams = new URLSearchParams(useLocation().search);
   const ref = useRef();
   const { events } = useDraggable(ref);
   const { additionalInfo, loading } = useContext(AdditionalInfoContext);
   const kategori = additionalInfo?.kategori;
+
+  const handleClick = (title) => {
+    urlSearchParams.set("category", title);
+    navigate(`/search?${urlSearchParams.toString()}`);
+  };
 
   if (loading) {
     return (
@@ -149,7 +163,12 @@ function CategorySection() {
     >
       <div className="flex w-full gap-3 whitespace-nowrap">
         {kategori.map((item, index) => (
-          <CategoryCard key={index} title={item.title} image={item.image} />
+          <CategoryCard
+            onClick={() => handleClick(item.title)}
+            key={index}
+            title={item.title}
+            image={item.image}
+          />
         ))}
       </div>
     </div>
