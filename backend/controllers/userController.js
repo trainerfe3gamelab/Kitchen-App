@@ -16,7 +16,7 @@ const registerUser = async (req, res) => {
         // Check if fullName was entered
         if (!fullName) {
             return res.status(400).json({
-                error: "Name is required"
+                error: "Fullname is required"
             });
         }
 
@@ -29,7 +29,6 @@ const registerUser = async (req, res) => {
 
         // Check if username was exists
         const unameExist = await User.findOne({ username });
-
         if (unameExist) {
             return res.status(400).json({
                 error: "username already exists"
@@ -38,15 +37,14 @@ const registerUser = async (req, res) => {
 
         // Check if email was exists
         const exist = await User.findOne({ email });
-
         if (exist) {
             return res.status(400).json({
                 error: "Email already exists"
             });
         }
 
-        const hashedPassword = await hashPassword(password);
         // Create new user
+        const hashedPassword = await hashPassword(password);
         const user = new User({
             username,
             fullName,
@@ -77,11 +75,14 @@ const getUser = async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select("-password");
 
+        // Check if user exists
         if (!user) {
             return res.status(404).json({
                 error: "User not found"
             });
         }
+
+        // Get user recipes
         const recipe = await Recipe.find({ user_id: user._id })
             .select("_id user_id title image total_time likes category")
 
@@ -164,16 +165,22 @@ const getUserLikedRecipes = async (req, res) => {
 const editUser = async (req, res) => {
     let imageUrl
     try {
+        // Check if data was provided
         if (Object.keys(req.body).length === 0) {
             return res.status(400).json({
                 error: "Please provide data to update"
             });
         }
+
+        // Check if the user inserts an image
         if (req.file) {
             const image = await uploadImages(`images/users/${req.params.username}.jpg`, req.file.buffer);
             imageUrl = image;
         }
+
+        // Find user by username
         const user = await User.findOne({ username: req.params.username }).select("-activity");
+
         // Update user profile
         user.image = imageUrl || user.image;
         user.username = req.body.username || user.username;
@@ -184,16 +191,18 @@ const editUser = async (req, res) => {
         user.password = user.password;
 
         await user.save();
+
         res.status(200).json({
             message: "User profile updated successfully"
         });
 
-
     } catch (error) {
+
         res.status(500).json({
             error: "Internal server error",
             message: error.message
         });
+
     }
 }
 
@@ -203,7 +212,6 @@ const deleteUser = async (req, res) => {
 
         // password is required to delete user
         const { password } = req.body;
-
         if (!password) {
             return res.status(400).json({
                 error: "Password is required"
@@ -212,16 +220,14 @@ const deleteUser = async (req, res) => {
 
         // Find user by username
         const user = await User.findOne({ username: req.params.username }).select("password");
-
         if (!user) {
             return res.status(404).json({
                 error: "User not found"
             });
         }
 
-        const isMatch = await comparePassword(password, user.password);
-
         // Check if password is correct
+        const isMatch = await comparePassword(password, user.password);
         if (!isMatch) {
             return res.status(400).json({
                 error: "Incorrect password"

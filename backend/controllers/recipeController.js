@@ -170,11 +170,13 @@ const createRecipe = async (req, res) => {
         if (req.files) {
             const images = req.files;
 
+            // Check if main image is available
             if (images.image?.length === 1) {
                 const image = await uploadImage(`images/recipes/${recipe._id}/main.jpg`, images.image[0].buffer);
                 recipe.image = image;
             }
 
+            // Check if step images are available
             if (images.stepImages?.length > 0) {
                 const stepImagesPromise = images.stepImages.map((image, order) => (uploadImage(`images/recipes/${recipe._id}/step-${order}.jpg`, image.buffer)));
                 const stepImages = await Promise.all(stepImagesPromise);
@@ -238,7 +240,6 @@ const editRecipe = async (req, res) => {
             // Get new nutrition data
             const newNutrition = await getNutrition(recipeId, ingredients);
 
-
             // Check if new nutrition data is available
             if (newNutrition?.total_cal) {
 
@@ -298,11 +299,13 @@ const editRecipe = async (req, res) => {
         if (req.files) {
             const images = req.files;
 
+            // Check if main image is available
             if (images.image?.length === 1) {
                 const image = await uploadImage(`images/recipes/${recipe._id}/main.jpg`, images.image[0].buffer);
                 recipe.image = image;
             }
 
+            // Check if step images are available
             if (images.stepImages?.length > 0) {
                 const stepImagesPromise = images.stepImages.map((image, order) => (uploadImage(`images/recipes/${recipe._id}/step-${order}.jpg`, image.buffer)));
                 const stepImages = await Promise.all(stepImagesPromise);
@@ -351,10 +354,10 @@ const deleteRecipe = async (req, res) => {
             });
         }
 
-        // Delete nutrition data
+        // Delete the recipe and related data
         await Nutrition.deleteOne({ recipe_id: req.params.id });
-
-        // Delete recipe
+        await Like.deleteMany({ recipe_id: req.params.id });
+        await SaveRecipe.deleteMany({ recipe_id: req.params.id });
         await recipe.deleteOne();
 
         // Send response
@@ -481,6 +484,7 @@ const saveRecipe = async (req, res) => {
 
 }
 
+// Function to get nutrition data from ingredients
 const getNutrition = async (recipeId, ingredients) => {
     try {
 
