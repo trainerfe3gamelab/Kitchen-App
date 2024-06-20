@@ -25,7 +25,7 @@ import User from "./pages/User";
 import { useLocation } from "react-router-dom";
 import EditRecipe from "./pages/EditRecipe";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_DEV;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 axios.defaults.withCredentials = true;
 
 function App() {
