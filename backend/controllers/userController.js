@@ -4,6 +4,8 @@ const SaveRecipe = require("../models/saveRecipe");
 const Like = require("../models/like");
 const { hashPassword, comparePassword } = require("../utils/hashPass");
 const uploadImages = require("../utils/uploadImage");
+const jwt = require('jsonwebtoken');
+
 
 // Create new user
 const registerUser = async (req, res) => {
@@ -182,10 +184,10 @@ const editUser = async (req, res) => {
         user.password = user.password;
 
         await user.save();
-
         res.status(200).json({
             message: "User profile updated successfully"
         });
+
 
     } catch (error) {
         res.status(500).json({
