@@ -68,7 +68,7 @@ const getPaginatedRecipes = async (req, res) => {
 const getRecipeById = async (req, res) => {
     try {
 
-        const recipe = await Recipe.findById(req.params.id).populate({ path: "user_id", select: "fullName image" });
+        const recipe = await Recipe.findById(req.params.id).populate({ path: "user_id", select: "fullName image username" });
         let nutrition = await Nutrition.find({ recipe_id: req.params.id });
 
         if (!nutrition[0]?.total_cal) {
