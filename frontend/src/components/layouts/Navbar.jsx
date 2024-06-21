@@ -32,6 +32,7 @@ export default function Navbar() {
       return;
     }
     urlSearchParams.set("recipe", input);
+    urlSearchParams.set("page", 1);
     navigate(`/search?${urlSearchParams.toString()}`);
     setSearchFocus(!searchFocus);
     console.log(input);
@@ -43,7 +44,7 @@ export default function Navbar() {
   const hoverNav = "hover:text-accent-2 transition-all";
 
   return (
-    <header className="fixed top-0 z-20 flex h-24 w-full items-center bg-bg shadow lg:justify-center lg:px-0">
+    <header className="fixed top-0 z-50 flex h-24 w-full items-center bg-bg shadow lg:justify-center lg:px-0">
       <MenuBar toggled={toggleHamburger} toggle={setToggleHamburger} />
       <div className="flex w-full min-w-[360px] items-center px-5 lg:mx-auto lg:max-w-[1080px] lg:justify-center lg:px-0">
         {/* Hamburger */}
@@ -299,7 +300,7 @@ function AuthButton() {
 
 function Profile() {
   const { toggle, setToggle } = useContext(ModalProfileContext);
-  const { user } = useContext(UserContext);
+  const { user, isLogged } = useContext(UserContext);
   const [profile, setProfile] = useState({});
   useEffect(() => {
     const getUser = async () => {
@@ -311,7 +312,7 @@ function Profile() {
       }
     };
     getUser();
-  }, [user]);
+  }, [isLogged, user]);
 
   return (
     <div className="flex w-fit min-w-fit cursor-pointer items-center gap-1 lg:ml-3">
@@ -337,6 +338,9 @@ function Profile() {
 }
 
 function MenuBar(props) {
+  const navigate = useNavigate();
+  const showNav = window.location.pathname === "/";
+
   return (
     <aside
       className={`fixed left-0 top-0 h-svh w-0 border bg-bg shadow transition-all duration-200 ${props.toggled ? "z-50 w-[70%]" : "invisible"}`}
@@ -357,54 +361,76 @@ function MenuBar(props) {
         />
       </div>
       <hr />
-      <nav
-        className={`mx-7 mt-4 flex flex-col gap-6 ${!props.toggled ? "hidden" : ""}`}
-      >
-        <Link
-          activeClass="text-accent-2"
-          to="banner"
-          spy={true}
-          smooth={true}
-          offset={-150}
-          className="cursor-pointer"
-          onClick={() => props.toggle(false)}
+      {showNav && (
+        <nav
+          className={`mx-7 mt-4 flex flex-col gap-6 ${!props.toggled ? "hidden" : ""}`}
         >
-          Beranda
-        </Link>
-        <Link
-          activeClass="text-accent-2"
-          to="popular"
-          spy={true}
-          smooth={true}
-          offset={-110}
-          className="cursor-pointer"
-          onClick={() => props.toggle(false)}
+          <Link
+            activeClass="text-accent-2"
+            to="banner"
+            spy={true}
+            smooth={true}
+            offset={-150}
+            className="cursor-pointer"
+            onClick={() => props.toggle(false)}
+          >
+            Beranda
+          </Link>
+          <Link
+            activeClass="text-accent-2"
+            to="popular"
+            spy={true}
+            smooth={true}
+            offset={-110}
+            className="cursor-pointer"
+            onClick={() => props.toggle(false)}
+          >
+            Terpopuler
+          </Link>
+          <Link
+            activeClass="text-accent-2"
+            to="category"
+            spy={true}
+            smooth={true}
+            offset={-110}
+            className="cursor-pointer"
+            onClick={() => props.toggle(false)}
+          >
+            Kategori
+          </Link>
+          <Link
+            activeClass="text-accent-2"
+            to="ingredients"
+            spy={true}
+            smooth={true}
+            offset={-120}
+            className="cursor-pointer"
+            onClick={() => props.toggle(false)}
+          >
+            Bahan Makanan
+          </Link>
+        </nav>
+      )}
+      {!showNav && (
+        <nav
+          className={`mx-7 mt-4 flex flex-col gap-6 ${!props.toggled ? "hidden" : ""}`}
         >
-          Terpopuler
-        </Link>
-        <Link
-          activeClass="text-accent-2"
-          to="category"
-          spy={true}
-          smooth={true}
-          offset={-110}
-          className="cursor-pointer"
-          onClick={() => props.toggle(false)}
-        >
-          Kategori
-        </Link>
-        <Link
-          activeClass="text-accent-2"
-          to="ingredients"
-          spy={true}
-          smooth={true}
-          offset={-120}
-          className="cursor-pointer"
-          onClick={() => props.toggle(false)}
-        >
-          Bahan Makanan
-        </Link>
-      </nav>
+          <Link
+            activeClass="text-accent-2"
+            to="banner"
+            spy={true}
+            smooth={true}
+            offset={-150}
+            className="cursor-pointer"
+            onClick={() => {
+              props.toggle(false);
+              navigate("/");
+            }}
+          >
+            Beranda
+          </Link>
+        </nav>
+      )}
       <div
         className={`absolute -right-full top-0 h-svh w-full bg-primary bg-opacity-5 backdrop-blur-[2px] ${!props.toggled ? "hidden" : ""}`}
         onClick={() => props.toggle(false)}
