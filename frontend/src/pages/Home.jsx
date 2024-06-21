@@ -73,7 +73,6 @@ function PopularSection() {
   const [popular, setPopular] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // console.log(popular);
 
   useEffect(() => {
     const fetchPopular = async () => {
@@ -103,7 +102,7 @@ function PopularSection() {
 
   return (
     <div className="mx-auto mt-2 grid w-full grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
-      {popular.map((item, index) => (
+      {popular?.map((item, index) => (
         <Card
           key={index}
           id={item._id}
@@ -186,7 +185,6 @@ function ForYouSection() {
       try {
         setLoading(true);
         const { data } = await axios.get("/for-you");
-        console.log("🚀 ~ fetchForYou ~ data:", data);
         setForYou(data.recipes);
       } catch (error) {
         console.error(error);
@@ -217,7 +215,7 @@ function ForYouSection() {
   }
   return (
     <div className="mx-auto mt-2 grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 md:grid-cols-4">
-      {forYou.map((item, index) => (
+      {forYou?.map((item, index) => (
         <Card
           key={index}
           id={item._id}

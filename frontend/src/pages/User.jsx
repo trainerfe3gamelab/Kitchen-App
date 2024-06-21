@@ -39,7 +39,7 @@ export default function User() {
         />
         <div className="flex flex-col justify-center gap-2">
           <h1 className="text-xl font-bold">
-            {user.user?.fullName || "User Full Name"}
+            {user.user?.fullName || "....."}
           </h1>
           {user.user?.website && (
             <a

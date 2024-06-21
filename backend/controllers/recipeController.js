@@ -323,7 +323,7 @@ const deleteRecipe = async (req, res) => {
         await SaveRecipe.deleteMany({ recipe_id: req.params.id });
         await recipe.deleteOne();
 
-        res.status(200).json({
+        res.status(204).json({
             message: "Recipe deleted successfully"
         });
 
