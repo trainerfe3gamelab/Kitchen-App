@@ -8,15 +8,11 @@ import { useEffect } from "react";
 import Footer from "./components/layouts/Footer";
 import Navbar from "./components/layouts/Navbar";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Search from "./pages/Search";
 import Recipe from "./pages/Recipe";
 import NotFound from "./pages/NotFound";
-import Simpan from "./pages/Simpan";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
-import Resep from "./pages/Resep";
 import InputRecipe from "./pages/InputRecipe";
 import About from "./pages/About";
 import KontakSaran from "./pages/KontakSaran";
@@ -25,7 +21,7 @@ import User from "./pages/User";
 import { useLocation } from "react-router-dom";
 import EditRecipe from "./pages/EditRecipe";
 
-axios.defaults.baseURL = "https://api-msib-6-kitchen-app-04.educalab.id/api";
+axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.withCredentials = true;
 
 function App() {
