@@ -81,7 +81,7 @@ export default function Card(props) {
             {props.delete === true && (
               <div>
                 <button
-                  className="invisible flex aspect-square w-9 items-center justify-center rounded-full bg-accent-1 p-1 text-bg opacity-0 shadow-md transition-opacity duration-200 hover:bg-red-500 group-hover:visible group-hover:opacity-100 lg:w-10"
+                  className="flex aspect-square w-9 items-center justify-center rounded-full bg-accent-1 p-1 text-bg shadow-md transition-opacity duration-200 lg:invisible hover:bg-red-500 group-hover:visible group-hover:opacity-100 lg:w-10 lg:opacity-0"
                   onClick={(e) => handleDelete(e)}
                 >
                   <Icon
