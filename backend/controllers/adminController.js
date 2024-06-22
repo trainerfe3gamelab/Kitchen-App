@@ -219,6 +219,7 @@ const loginAdmin = async (req, res) => {
             jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, {}, (err, token) => {
                 if (err) throw err;
                 res.cookie("token", token, {
+                    httpOnly: true,
                 });
                 res.status(200).json({
                     id: user._id,
