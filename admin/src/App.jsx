@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import ResepMakanan from './components/ResepMakanan';
 import DetailResep from './components/DetailResep';
 import SideNav from './components/SideNav';
 import User from './components/User';
 import DetailUser from './components/DetailUser'; // Import DetailUser
+import Login from '../../admin/src/pages/Login';
 
 const App = () => {
   const [open, setOpen] = useState(true); // State untuk mengontrol lebar SideNav
@@ -14,7 +15,8 @@ const App = () => {
       <SideNav open={open} setOpen={setOpen} />
       <div className={`flex-grow p-5 overflow-y-auto`}> {/* overflow-y-auto untuk membuat konten utama dapat digulir */}
         <Routes>
-          <Route path="/" element={<User />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/User" element={<User />} />
           <Route path="/ResepMakanan" element={<ResepMakanan />} />
           <Route path="/DetailResep/:id" element={<DetailResep />} />
           <Route path="/DetailUser/:id" element={<DetailUser />} /> {/* Tambah Route untuk DetailUser */}

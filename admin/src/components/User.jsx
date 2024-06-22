@@ -25,19 +25,21 @@ const User = () => {
     };
 
     const handleDeleteUser = async (id) => {
-        try {
-            const response = await axios.delete(`http://localhost:3000/api/admin/user/${id}`);
-
-            if (response.status === 200) {
-                // Hapus dari state items
-                const updatedItems = items.filter(item => item._id !== id);
-                setItems(updatedItems);
-                console.log("User deleted successfully.");
-            } else {
-                console.error("Failed to delete user.");
+        // Correctly check if the user confirms the deletion.
+        if (window.confirm("Are you sure you want to delete this user?")) {
+            try {
+                const response = await axios.delete(`http://localhost:3000/api/admin/user/${id}`);
+                if (response.status === 200) {
+                    // Delete from state items only if user confirmed
+                    const updatedItems = items.filter(item => item._id !== id);
+                    setItems(updatedItems);
+                    console.log("User deleted successfully.");
+                } else {
+                    console.error("Failed to delete user.");
+                }
+            } catch (error) {
+                console.error("Error deleting user: ", error);
             }
-        } catch (error) {
-            console.error("Error deleting user: ", error);
         }
     };
 
