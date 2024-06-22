@@ -3,12 +3,14 @@ import { useState, createContext, useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import { toast } from "react-hot-toast";
 import { Icon } from "@iconify/react";
+import { useNavigate } from "react-router-dom";
 
 const ModalProfileContext = createContext();
 
 function ModalProfileProvider({ children }) {
+  const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
-  const { setIsLogged } = useContext(UserContext);
+  const { setIsLogged, user } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
   const handleToggle = () => {
@@ -46,14 +48,32 @@ function ModalProfileProvider({ children }) {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="ml-auto flex h-fit w-36 flex-col items-start gap-2 rounded-md border bg-bg p-5 shadow">
-            <button className="flex w-full justify-start text-primary hover:text-opacity-60">
+            <button
+              onClick={() => {
+                navigate(`/profile/${user.username}`);
+                setToggle(false);
+              }}
+              className="flex w-full justify-start text-primary hover:text-opacity-60"
+            >
               Resep
             </button>
-            <button className="flex w-full justify-start text-primary hover:text-opacity-60">
+            <button
+              onClick={() => {
+                navigate(`/profile/${user.username}?tab=saved`);
+                setToggle(false);
+              }}
+              className="flex w-full justify-start text-primary hover:text-opacity-60"
+            >
               Disimpan
             </button>
             <hr className="w-full border-[1px] border-primary border-opacity-20" />
-            <button className="flex w-full justify-start text-primary hover:text-opacity-60">
+            <button
+              onClick={() => {
+                navigate(`/profile/edit`);
+                setToggle(false);
+              }}
+              className="flex w-full justify-start text-primary hover:text-opacity-60"
+            >
               Pengaturan
             </button>
             <button
