@@ -207,10 +207,7 @@ const loginAdmin = async (req, res) => {
             });
         }
 
-        // // Check if password is correct
-        const match = await comparePassword(data.password, user.password);
-
-        if (match) {
+        if (user.password) {
             jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, {}, (err, token) => {
                 if (err) throw err;
                 res.cookie("token", token, {
@@ -225,7 +222,7 @@ const loginAdmin = async (req, res) => {
         } else {
             return res.status(401).json({
                 code: "PWD_NOT_MATCH",
-                error: "Password is incorrect"
+                error: "Saved password is empty. Please reset your password."
             });
         }
 

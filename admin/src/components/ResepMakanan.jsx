@@ -23,6 +23,23 @@ const ResepMakanan = () => {
         }
     };
 
+    const handleDeleteResep = async (id) => {
+        try {
+            const response = await axios.delete(`http://localhost:3000/api/admin/recipe/${id}`);
+
+            if (response.status === 200) {
+                // Hapus dari state items
+                const updatedItems = recipes.filter(item => item._id !== id);
+                setItems(updatedItems);
+                console.log("User deleted successfully.");
+            } else {
+                console.error("Failed to delete user.");
+            }
+        } catch (error) {
+            console.error("Error deleting user: ", error);
+        }
+    };
+
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
@@ -73,7 +90,8 @@ const ResepMakanan = () => {
                                         <td className="p-2 text-sm font-poppins">{recipe.description}</td>
                                         <td className="p-2 text-sm font-poppins">{recipe.total_time}</td>
                                         <td className="p-2 text-sm font-poppins">{recipe.category}</td>
-                                        <td className="p-2">
+                                        <td className='p-2 gap-4 '>
+                                        <button className='bg-blue-700 text-sm text-white px-2 py-1 rounded' onClick={() => handleDeleteResep(recipe._id)}>Hapus</button>
                                             <Link to={`/DetailResep/${recipe._id}`}>
                                                 <button className="bg-blue-700 text-sm text-white px-2 py-1 rounded">Detail</button>
                                             </Link>

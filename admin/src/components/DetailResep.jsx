@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+
 const DetailResep = () => {
     const [item, setItem] = useState(null);
     const { id } = useParams();
@@ -17,7 +18,9 @@ const DetailResep = () => {
         try {
             const response = await axios.get(`http://localhost:3000/api/admin/recipe/${id}`);
             console.log(response.data)
-            setItem(response.data); // Set the fetched data to state
+
+            setItem(response.data.recipe); // Set the fetched data to state
+            
         } catch (error) {
             console.error("Error fetching data: ", error);
         }
@@ -39,12 +42,12 @@ const DetailResep = () => {
                         ))}
                     </ul>
                     <h2 className='text-xl font-bold mt-4'>Steps:</h2>
-                    <ol className='list-decimal pl-5'>
-                        {item.stepDescription && item.stepDescription.map((step, index) => (
-                            <li key={index}>{step}</li>
+                    <ol className='list-decimal pl-5 no-numbering'>
+                        {item.steps && item.steps.step.map((step, index) => (
+                            <li key={index}>{step.description}</li>
                         ))}
                     </ol>
-                    <a href={item.video} rel="noopener noreferrer" className='text-blue-500 mt-4 inline-block'>Watch Video</a>
+                    <a href={item.steps.video} rel="noopener noreferrer" className='text-blue-500 mt-4 inline-block'>Watch Video</a>
                 </div>
             ) : (
                 <p>Loading...</p>

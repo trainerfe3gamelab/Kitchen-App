@@ -46,3 +46,11 @@ html {
   padding: 1.25rem;
   /* Tailwind CSS class for padding */
 }
+.no-numbering {
+  list-style-type: none;
+  padding-left: 0; /* Optional: to remove default padding */
+}
+
+.no-numbering li::before {
+  content: "";
+}
