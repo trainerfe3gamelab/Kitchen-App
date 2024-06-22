@@ -2,6 +2,7 @@ const Recipe = require("../models/recipe");
 const Like = require("../models/like");
 const SaveRecipe = require("../models/saveRecipe");
 const Nutrition = require("../models/nutrition");
+const ReportRecipe = require("../models/reportRecipe");
 const deepl = require('deepl-node');
 const axios = require('axios');
 const uploadImage = require("../utils/uploadImage");
@@ -431,6 +432,40 @@ const saveRecipe = async (req, res) => {
 
 }
 
+// Crete report
+const reportRecipe = async (req, res) => {
+    try {
+
+        const recipe = await Recipe.findById(req.params.id);
+        if (!recipe) {
+            return res.status(404).json({
+                error: "Recipe not found"
+            })
+        }
+
+        const { reason, description } = req.body;
+
+        const report = new ReportRecipe({
+            user_id: req.user.id,
+            recipe_id: req.params.id,
+            reason,
+            description
+        })
+
+        await report.save();
+
+        res.json({
+            message: "Recipe has been reported"
+        })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+}
+
 // Function to get nutrition data from ingredients
 const getNutrition = async (recipeId, ingredients) => {
     try {
@@ -503,5 +538,6 @@ module.exports = {
     editRecipe,
     deleteRecipe,
     toggleLikeRecipe,
-    saveRecipe
+    saveRecipe,
+    reportRecipe
 };
