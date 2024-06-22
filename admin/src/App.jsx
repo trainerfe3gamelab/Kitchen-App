@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import ResepMakanan from './components/ResepMakanan';
 import DetailResep from './components/DetailResep';
 import SideNav from './components/SideNav';
