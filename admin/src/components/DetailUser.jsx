@@ -4,14 +4,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 const DetailUser = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const [editMode, setEditMode] = useState(false);
+    const [initialFormData, setInitialFormData] = useState({
+        username: '',
+        fullName: '',
+        email: ''
+    });
     const [formData, setFormData] = useState({
         username: '',
         fullName: '',
         email: ''
     });
+    const [editMode, setEditMode] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUserDetails();
@@ -21,6 +26,11 @@ const DetailUser = () => {
         try {
             const response = await axios.get(`http://localhost:3000/api/admin/user/${id}`);
             setUser(response.data);
+            setInitialFormData({
+                username: response.data.username,
+                fullName: response.data.fullName,
+                email: response.data.email
+            });
             setFormData({
                 username: response.data.username,
                 fullName: response.data.fullName,
@@ -31,8 +41,7 @@ const DetailUser = () => {
         }
     };
 
-    const handleDeleteUser = async (id) => {
-        // Check if the user confirms the deletion.
+    const handleDeleteUser = async () => {
         if (window.confirm("Are you sure you want to delete this user?")) {
             try {
                 const response = await axios.delete(`http://localhost:3000/api/admin/user/${id}`);
@@ -48,13 +57,15 @@ const DetailUser = () => {
         }
     };
 
-    const handleEditUser = async (id) => {
+    const handleEditUser = async (e) => {
+        e.preventDefault();
         try {
             const response = await axios.put(`http://localhost:3000/api/admin/user/${id}`, formData);
             if (response.status === 200) {
                 setUser(response.data);
                 setEditMode(false);
-                console.log("User updated successfully.");
+                alert("User updated successfully.");
+                setInitialFormData(formData); // Update initialFormData to the latest data after successful update
             } else {
                 console.error("Failed to update user.");
             }
@@ -70,6 +81,11 @@ const DetailUser = () => {
         });
     };
 
+    const handleCancel = () => {
+        setFormData(initialFormData);
+        setEditMode(false);
+    };
+
     if (!user) {
         return <div>Loading...</div>;
     }
@@ -78,10 +94,7 @@ const DetailUser = () => {
         <div className='w-full bg-white rounded-md p-5'>
             <h1 className='text-2xl font-bold'>Detail User</h1>
             {editMode ? (
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    handleEditUser(id);
-                }}>
+                <form onSubmit={handleEditUser}>
                     <div>
                         <label>Username:</label>
                         <input
@@ -112,8 +125,8 @@ const DetailUser = () => {
                             className="block w-full p-2 border rounded"
                         />
                     </div>
-                    <button type="submit" className='bg-blue-700 text-sm text-white px-2 py-1 rounded'>Save</button>
-                    <button type="button" className='bg-gray-500 text-sm text-white px-2 py-1 rounded ml-2' onClick={() => setEditMode(false)}>Cancel</button>
+                    <button type="submit" className='bg-blue-700 text-sm text-white px-2 py-1 rounded mt-2'>Save</button>
+                    <button type="button" className='bg-gray-500 text-sm text-white px-2 py-1 rounded ml-2 mt-2' onClick={handleCancel}>Cancel</button>
                 </form>
             ) : (
                 <>
@@ -122,7 +135,7 @@ const DetailUser = () => {
                     <p><strong>Email:</strong> {user.email}</p>
                     <div>
                         <button className='bg-blue-700 text-sm text-white px-2 py-1 rounded' onClick={() => setEditMode(true)}>Edit</button>
-                        <button className='bg-red-700 text-sm text-white px-2 py-1 rounded ml-2' onClick={() => handleDeleteUser(id)}>Delete</button>
+                        <button className='bg-red-700 text-sm text-white px-2 py-1 rounded ml-2' onClick={handleDeleteUser}>Delete</button>
                     </div>
                 </>
             )}

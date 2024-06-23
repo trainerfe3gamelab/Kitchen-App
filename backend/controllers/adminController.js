@@ -188,6 +188,29 @@ const getUsers = async (req, res) => {
     }
 }
 
+const editUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const updates = req.body; 
+
+        // Find the user and update their data
+        const user = await User.findByIdAndUpdate(userId, updates, { new: true });
+        if (!user) {
+            return res.status(404).json({
+                error: "User not found"
+            });
+        }
+
+        // Return the updated user data
+        res.status(200).json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+}
+
 const loginAdmin = async (req, res) => {
     try {
         let data
@@ -262,6 +285,7 @@ module.exports = {
     deleteRecipeAdmin,
     getAdmin,
     getUsers,
+    editUser,
     loginAdmin,
     logoutAdmin
 };
