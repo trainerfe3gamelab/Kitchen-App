@@ -83,7 +83,7 @@ const DetailResep = () => {
                 </div>
                 <div className='mt-6'>
                     <h2 className='text-2xl font-bold text-gray-800'>Steps:</h2>
-                    <ol className='list-decimal pl-5 mt-2'>
+                    <ol className='list-decimal pl-5 mt-2 no-numbering'>
                         {item.steps && item.steps.step.map((step, index) => (
                             <li key={index} className='mb-1'>{step.description}</li>
                         ))}
