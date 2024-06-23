@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const SideNav = ({ open, setOpen }) => {
     const [activeMenu, setActiveMenu] = useState('user');
     const navigate = useNavigate();
 
     const Menu = [
-        { title: "Informasi User", src: "userAdmin", id: "user", path: "/" },
+        { title: "Informasi User", src: "userAdmin", id: "user", path: "/User" },
         { title: "Data Makanan", src: "Resep", id: "Makanan", path: "/ResepMakanan" },
         { title: "Log Out", src: "logoutAdmin", id: "logout", path: "/logout" },
     ];
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        Swal.fire({
+            title: 'Logout Berhasil',
+            text: 'Anda telah berhasil logout!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            navigate('/');
+        });
+    };
 
     const handleMenuClick = (id, path) => {
         setActiveMenu(id);
@@ -18,11 +31,6 @@ const SideNav = ({ open, setOpen }) => {
         } else {
             navigate(path);
         }
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('authToken'); 
-        navigate('/login');
     };
 
     return (
@@ -36,7 +44,7 @@ const SideNav = ({ open, setOpen }) => {
             <div className="m-3">
                 <img
                     src="/src/assets/LOGO.png"
-                    alt=""
+                    alt="logo"
                     className={`${open ? 'w-30' : 'w-16'} cursor-pointer duration-500 p-2 bg-white border-green-600 rounded-sm`}
                     onClick={() => setOpen(!open)}
                 />

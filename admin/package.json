@@ -28,7 +28,8 @@
     "react-use-draggable-scroll": "^0.4.7",
     "resize-observer-polyfill": "^1.5.1",
     "simplebar": "^6.2.6",
-    "simplebar-react": "^3.2.5"
+    "simplebar-react": "^3.2.5",
+    "sweetalert2": "^11.12.0"
   },
   "devDependencies": {
     "@iconify/react": "^5.0.1",

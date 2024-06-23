@@ -21,6 +21,7 @@ const App = () => {
       <div className={`w-full h-auto`}> {/* overflow-y-auto untuk membuat konten utama dapat digulir */}
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/Login" element={<Login />} />
           <Route path="/User" element={<User />} />
           <Route path="/ResepMakanan" element={<ResepMakanan />} />
           <Route path="/DetailResep/:id" element={<DetailResep />} />
