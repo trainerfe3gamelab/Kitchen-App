@@ -13,6 +13,7 @@ export default function User() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchUser = async () => {
       try {
         setLoading(true);

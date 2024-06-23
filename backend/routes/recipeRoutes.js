@@ -16,7 +16,7 @@ router.get("/:id", authCheck, getRecipeById);
 router.post("/", authenticate, upload.fields([{ name: "image", maxCount: 1 }, { name: "stepImages" }]), createRecipe);
 
 // Edit recipe
-router.put("/:id", authenticate, verifyRecipeAuthor, editRecipe);
+router.put("/:id", authenticate, verifyRecipeAuthor, upload.fields([{ name: "image", maxCount: 1 }, { name: "stepImages" }]), editRecipe);
 
 // Delete recipe
 router.delete("/:id", authenticate, verifyRecipeAuthor, deleteRecipe);
