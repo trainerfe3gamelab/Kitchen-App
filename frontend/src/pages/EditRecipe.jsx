@@ -110,6 +110,7 @@ function FormRecipe({ activeTab, changeActiveTab }) {
   });
   const [selectedImage, setSelectedImage] = useState({ file: null, url: null });
   const [formData, setFormData] = useState({});
+  console.log("🚀 ~ FormRecipe ~ formData:", formData);
 
   // STATE BAHAN
   const [modalEditBahan, setModalEditBahan] = useState(false);
@@ -247,7 +248,7 @@ function FormRecipe({ activeTab, changeActiveTab }) {
       alertInput("Nama Resep belum terisi!");
       return;
     }
-    if (!formData.image) {
+    if (!formData.image && !selectedImage.url) {
       alertInput("Foto Resep belum terisi!");
       return;
     }
@@ -255,7 +256,7 @@ function FormRecipe({ activeTab, changeActiveTab }) {
       alertInput("Deskripsi Resep belum terisi!");
       return;
     }
-    if (!formData.time || formData.time === 0) {
+    if (!formData.total_time || formData.total_time === 0) {
       alertInput("Waktu Memasak belum terisi!");
       return;
     }
@@ -273,35 +274,37 @@ function FormRecipe({ activeTab, changeActiveTab }) {
     }
     const data = new FormData();
     data.append("title", formData.title);
-    data.append("image", formData.image);
+    if (formData.image) data.append("image", formData.image);
     data.append("description", formData.description);
-    data.append("total_time", formData.time);
+    data.append("total_time", parseInt(formData.total_time));
     formData.ingredients?.map((item) => {
       data.append("ingredients", item);
     });
-    data.append("video", formData.steps.video);
-    formData.steps.step.forEach((step, index) => {
-      data.append(`stepDescription`, step.description);
-      data.append(`stepImages`, step.image || "");
-    });
+    if (formData.steps) {
+      data.append("video", formData.steps.video);
+      formData.steps.step.forEach((step, index) => {
+        data.append(`stepDescription`, step.description);
+        data.append(`stepImages`, step.image || "");
+      });
+    }
     formData.category?.map((item) => {
       data.append("category", item);
     });
 
     try {
       setLoading(true);
-      const response = await axios.post("/recipes", data);
+      const response = await axios.put(`/recipes/${idRecipe}`, data);
       console.log(response);
       if (response.status == 200) {
         navigate(-1, { replace: true });
-        toast.success("Resep berhasil diunggah");
+        toast.success("Resep berhasil diedit");
       }
     } catch (error) {
       console.log("🚀 ~ handlingSimpan ~ error:", error);
       setOpenAlert({
         input: {
           open: true,
-          message: "Error Upload data, try again later",
+          message: "Error edit data, try again later",
         },
       });
       return;
