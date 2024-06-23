@@ -1,9 +1,11 @@
 // main.jsx
 import React from 'react';
-import ReactDOM from 'react-dom/client'; // Corrected import statement
+import ReactDOM from 'react-dom/client'; 
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import './index.css';  // Make sure to import CSS if it exists
+import './index.css';  
+import Login from './pages/Login'
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

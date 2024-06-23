@@ -26,7 +26,7 @@ const Login = () => {
             // Misalnya, jika respons mengandung token, simpan ke local storage
             // dan navigasi ke halaman dashboard
             localStorage.setItem('token', response.data.token); // Simpan token di local storage
-            navigate('/user'); // Navigasi ke halaman dashboard setelah login berhasil
+            navigate('/User'); // Navigasi ke halaman dashboard setelah login berhasil
         } catch (error) {
             console.error('Login failed', error);
             // Tambahkan logika untuk menampilkan pesan kesalahan kepada pengguna
@@ -36,7 +36,7 @@ const Login = () => {
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen">
+        <div className="w-full  bg-gray-100">
             {loading && (
                 <div className="fixed left-1/2 top-1/2 z-50 flex h-screen w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-primary bg-opacity-50">
                     <div className="flex h-40 w-40 flex-col items-center justify-center gap-2 rounded bg-bg font-medium">
@@ -49,7 +49,7 @@ const Login = () => {
                     <a href="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                         <img className="w-full mr-2" src="/src/assets/LOGO.png" alt="logo" />
                     </a>
-                    <div className="w-full shadow-md bg-white rounded-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                    <div className="w-full shadow-xl bg-white rounded-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                             <h1 className="text-xl text-center items-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                                 Sign in to your account

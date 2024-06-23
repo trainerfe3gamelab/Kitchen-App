@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 
 // middleware
 app.use(cors({
-    origin: process.env.CORS_ORIGIN_PROD,
+    origin: process.env.CORS_ORIGIN_LOCAL,
     credentials: true
 }));
 
