@@ -18,7 +18,7 @@ const App = () => {
   return (
     <div className="flex h-screen overflow-hidden"> {/* overflow-hidden untuk menghilangkan scroll bar */}
       {!isLoginPage && <SideNav open={open} setOpen={setOpen} />} {/* Tampilkan SideNav jika bukan halaman login */}
-      <div className={`w-full h-auto`}> {/* overflow-y-auto untuk membuat konten utama dapat digulir */}
+      <div className={`flex-grow p-5 overflow-y-auto`}> {/* overflow-y-auto untuk membuat konten utama dapat digulir */}
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/Login" element={<Login />} />
