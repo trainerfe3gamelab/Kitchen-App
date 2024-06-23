@@ -8,12 +8,21 @@ const SideNav = ({ open, setOpen }) => {
     const Menu = [
         { title: "Informasi User", src: "userAdmin", id: "user", path: "/" },
         { title: "Data Makanan", src: "Resep", id: "Makanan", path: "/ResepMakanan" },
-        { title: "Log Out", src: "logoutAdmin", path: "/logout" },
+        { title: "Log Out", src: "logoutAdmin", id: "logout", path: "/logout" },
     ];
 
     const handleMenuClick = (id, path) => {
         setActiveMenu(id);
-        navigate(path);
+        if (id === 'logout') {
+            handleLogout();
+        } else {
+            navigate(path);
+        }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken'); 
+        navigate('/login');
     };
 
     return (
