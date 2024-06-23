@@ -4,8 +4,9 @@ import ResepMakanan from './components/ResepMakanan';
 import DetailResep from './components/DetailResep';
 import SideNav from './components/SideNav';
 import User from './components/User';
-import DetailUser from './components/DetailUser';
-import Login from './pages/Login';
+
+import DetailUser from './components/DetailUser'; // Import DetailUser
+import Login from '../../admin/src/pages/Login';
 
 const App = () => {
   const [open, setOpen] = useState(true); // State untuk mengontrol lebar SideNav
@@ -19,8 +20,8 @@ const App = () => {
       {!isLoginPage && <SideNav open={open} setOpen={setOpen} />} {/* Tampilkan SideNav jika bukan halaman login */}
       <div className={`w-full h-auto`}> {/* overflow-y-auto untuk membuat konten utama dapat digulir */}
         <Routes>
-          <Route path="/" element={<Login />} /> {/* Halaman Login */}
-          <Route path="/User" element={<User />} /> {/* Halaman User */}
+          <Route path="/" element={<Login />} />
+          <Route path="/User" element={<User />} />
           <Route path="/ResepMakanan" element={<ResepMakanan />} />
           <Route path="/DetailResep/:id" element={<DetailResep />} />
           <Route path="/DetailUser/:id" element={<DetailUser />} /> {/* Tambah Route untuk DetailUser */}

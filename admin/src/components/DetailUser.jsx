@@ -32,16 +32,19 @@ const DetailUser = () => {
     };
 
     const handleDeleteUser = async (id) => {
-        try {
-            const response = await axios.delete(`http://localhost:3000/api/admin/user/${id}`);
-            if (response.status === 200) {
-                console.log("User deleted successfully.");
-                navigate('/'); // Navigate back to the user list
-            } else {
-                console.error("Failed to delete user.");
+        // Check if the user confirms the deletion.
+        if (window.confirm("Are you sure you want to delete this user?")) {
+            try {
+                const response = await axios.delete(`http://localhost:3000/api/admin/user/${id}`);
+                if (response.status === 200) {
+                    console.log("User deleted successfully.");
+                    navigate('/'); // Navigate back to the user list
+                } else {
+                    console.error("Failed to delete user.");
+                }
+            } catch (error) {
+                console.error("Error deleting user: ", error);
             }
-        } catch (error) {
-            console.error("Error deleting user: ", error);
         }
     };
 
