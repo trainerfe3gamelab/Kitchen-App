@@ -55,7 +55,7 @@ const User = () => {
     return (
         <>
             <div className='ml-10 mb-10'>
-                <h1 className='text-4xl font-bold font-poppins'>Selamat Datang</h1>
+                <h1 className='text-4xl font-bold font-poppins mt-5'>Selamat Datang</h1>
                 <h3 className='text-2xl font-bold font-poppins'>di Halaman Admin Kitchen Craft</h3>
                 <form className="w-[400px] mt-7" onSubmit={(e) => e.preventDefault()}>
                     <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
